@@ -1,0 +1,82 @@
+# Production Docker Compose for fides.website.
+#
+# Lives on the VPS at /srv/fides/current/docker/compose/compose.prod.yaml
+# (the symlinked release directory). Bring up with:
+#
+#   APP_IMAGE_TAG=sha-<sha7> docker compose \
+#     -f /srv/fides/current/docker/compose/compose.prod.yaml up -d
+#
+# Requires:
+#   * An external Docker network named `edge` (created once by the TLS
+#     reverse-proxy stack, e.g. Caddy).
+#   * /srv/fides/shared/.env       (production env, chmod 640)
+#   * /srv/fides/shared/database/database.sqlite (host UID 1000)
+#   * /srv/fides/shared/storage    (host UID 1000)
+name: fides
+
+services:
+  app:
+    image: ghcr.io/studio-guez/fides.website:${APP_IMAGE_TAG:-latest}
+    pull_policy: always
+    restart: unless-stopped
+    env_file:
+      - /srv/fides/shared/.env
+    volumes:
+      - /srv/fides/shared/database/database.sqlite:/var/www/html/database/database.sqlite
+      - /srv/fides/shared/storage:/var/www/html/storage
+      # Uncomment to allow editing content/users from the production CP.
+      # See README.md ("File-based Statamic users", Mode B) for the tradeoffs.
+      # - /srv/fides/shared/content:/var/www/html/content
+      # - /srv/fides/shared/users:/var/www/html/users
+    networks:
+      - internal
+      - edge
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    volumes:
+      - /srv/fides/current/docker/prod/nginx.conf:/etc/nginx/nginx.conf:ro
+      # Static assets live in the `app` image; share them read-only with nginx
+      # via a named volume that is repopulated from the image on every deploy.
+      - app-public:/var/www/html/public:ro
+    networks:
+      - internal
+      - edge
+    labels:
+      # Auto-discovered by caddy-docker-proxy in the separate `edge` stack.
+      caddy: ${APP_DOMAIN:-example.com}
+      caddy.reverse_proxy: "{{upstreams 80}}"
+
+  # OPTIONAL: enable when QUEUE_CONNECTION is not `sync`.
+  # worker:
+  #   image: ghcr.io/studio-guez/fides.website:${APP_IMAGE_TAG:-latest}
+  #   restart: unless-stopped
+  #   env_file: [/srv/fides/shared/.env]
+  #   command: ["php", "artisan", "queue:work", "--sleep=3", "--tries=3", "--max-time=3600"]
+  #   volumes:
+  #     - /srv/fides/shared/database/database.sqlite:/var/www/html/database/database.sqlite
+  #     - /srv/fides/shared/storage:/var/www/html/storage
+  #   networks: [internal]
+
+  # OPTIONAL: scheduler, more portable than a host cron.
+  # scheduler:
+  #   image: ghcr.io/studio-guez/fides.website:${APP_IMAGE_TAG:-latest}
+  #   restart: unless-stopped
+  #   env_file: [/srv/fides/shared/.env]
+  #   command: ["php", "artisan", "schedule:work"]
+  #   volumes:
+  #     - /srv/fides/shared/database/database.sqlite:/var/www/html/database/database.sqlite
+  #     - /srv/fides/shared/storage:/var/www/html/storage
+  #   networks: [internal]
+
+volumes:
+  app-public:
+
+networks:
+  internal:
+    driver: bridge
+  edge:
+    external: true
