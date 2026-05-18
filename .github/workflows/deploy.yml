@@ -47,7 +47,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure private Composer auth (optional)
-        if: ${{ env.COMPOSER_AUTH_JSON != '' }}
+        if: ${{ secrets.COMPOSER_AUTH != '' }}
         env:
           COMPOSER_AUTH_JSON: ${{ secrets.COMPOSER_AUTH }}
         run: printf '%s' "$COMPOSER_AUTH_JSON" > ./auth.json
@@ -152,14 +152,16 @@ jobs:
           fi
           echo "$IMAGE_TAG" > "$SHARED_DIR/current-tag.txt"
 
-          # Run migrations BEFORE swapping containers
+          # Run migrations BEFORE swapping containers.
+          # Bypass the image entrypoint so we don't double-run migrations
+          # (the entrypoint also handles RUN_MIGRATIONS=true on container boot).
           docker run --rm \
             --env-file "$SHARED_DIR/.env" \
-            -e RUN_MIGRATIONS=true \
+            --entrypoint php \
             -v "$SHARED_DIR/database/database.sqlite:/var/www/html/database/database.sqlite" \
             -v "$SHARED_DIR/storage:/var/www/html/storage" \
             "$IMAGE_REF" \
-            php artisan migrate --force
+            artisan migrate --force
 
           # Flip the `current` symlink atomically
           ln -sfn "$RELEASE_DIR" "$DEPLOY_PATH/current.tmp"

@@ -24,6 +24,10 @@ services:
     volumes:
       - /srv/fides/shared/database/database.sqlite:/var/www/html/database/database.sqlite
       - /srv/fides/shared/storage:/var/www/html/storage
+      # Shared with nginx so static assets (incl. /build, /vendor/statamic) are served.
+      # Docker seeds this named volume from THIS container's image on first start,
+      # which is why the mount must live on `app` (the app image), not on `nginx`.
+      - app-public:/var/www/html/public
       # Uncomment to allow editing content/users from the production CP.
       # See README.md ("File-based Statamic users", Mode B) for the tradeoffs.
       # - /srv/fides/shared/content:/var/www/html/content
@@ -39,8 +43,7 @@ services:
       - app
     volumes:
       - /srv/fides/current/docker/prod/nginx.conf:/etc/nginx/nginx.conf:ro
-      # Static assets live in the `app` image; share them read-only with nginx
-      # via a named volume that is repopulated from the image on every deploy.
+      # Read-only view of the public/ tree seeded by the `app` service above.
       - app-public:/var/www/html/public:ro
     networks:
       - internal

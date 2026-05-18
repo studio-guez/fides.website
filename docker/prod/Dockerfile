@@ -79,6 +79,19 @@ RUN mkdir -p storage/framework/cache/data storage/framework/sessions \
 
 COPY --chmod=0755 docker/prod/entrypoint.sh /usr/local/bin/entrypoint.sh
 
+# Publish vendor assets that the skeleton's composer post-install scripts would
+# normally publish. We ran `composer install --no-scripts` in the vendor stage
+# (because `statamic:install` needs the full app tree, which isn't present
+# there), so we replay the required steps here against the assembled app.
+#
+# - `statamic:install` publishes `public/vendor/statamic` (CP assets, etc.).
+# - `vendor:publish --tag=laravel-assets --force` publishes Laravel assets.
+# Run as root, then hand ownership back to www-data so the user switch below
+# still results in writable runtime dirs.
+RUN php artisan statamic:install --no-interaction \
+ && php artisan vendor:publish --tag=laravel-assets --ansi --force \
+ && chown -R www-data:www-data /var/www/html/public /var/www/html/storage /var/www/html/bootstrap/cache
+
 USER www-data
 
 EXPOSE 9000
