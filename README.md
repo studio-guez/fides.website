@@ -55,9 +55,15 @@ Mailpit UI: <http://localhost:8025>.
 ## File-based Statamic users and content
 
 Statamic uses a flat-file user repository (`config/statamic/users.php` →
-`'repository' => 'file'`) and flat-file content. `users/` and `content/` are
-**not tracked in git** — they are bind-mounted from the host at
-`/srv/fides/shared/{users,content}` so CP edits persist across deploys.
+`'repository' => 'file'`) and flat-file content.
+
+**Content config files** (`content/**/*` — collection definitions, global set schemas,
+asset container configs) are **tracked in git** and baked into the image; they are
+not bind-mounted.
+
+**Real content** (`content/**/**` — entries, localized globals, nav trees, etc.) and
+`users/` are **not tracked in git**. They are bind-mounted from the host so CP edits
+persist across deploys.
 
 Roles and groups (`resources/users/{roles,groups}.yaml`) are version-controlled.
 
@@ -76,7 +82,8 @@ Docker and a small TLS proxy stack.
     ├── .env                            # production env (chmod 640)
     ├── database/database.sqlite        # bind-mounted into app container
     ├── storage/                        # bind-mounted into app container
-    ├── content/                        # bind-mounted into app container (CP-editable)
+    ├── content/                        # real-content sub-dirs bind-mounted (CP-editable)
+    │                                   # config YAMLs (content/**/*) live in the image
     ├── users/                          # bind-mounted into app container (CP-editable)
     ├── current-tag.txt                 # image tag currently running
     ├── last-tag.txt                    # previous tag, for rollback
@@ -106,13 +113,15 @@ adduser --disabled-password --gecos "" deploy
 usermod -aG docker deploy
 
 sudo -u deploy mkdir -p \
-  /srv/fides/{releases,shared/{database,storage,backups,content,users}}
+  /srv/fides/{releases,shared/{database,storage,backups,users}} \
+  /srv/fides/shared/content/{collections/pages,globals/fr,trees/collections}
 
 # UID 1000 == www-data inside the production image
 sudo -u deploy touch /srv/fides/shared/database/database.sqlite
 sudo -u deploy sqlite3 /srv/fides/shared/database/database.sqlite \
   "PRAGMA journal_mode=WAL;"
 chown -R 1000:1000 /srv/fides/shared/{database,storage,content,users}
+# When adding a new collection/global-locale/tree dir, create it here and re-chown.
 
 # Production .env (copy + edit from .env.example, generate APP_KEY, etc.)
 sudo -u deploy install -m 640 /dev/null /srv/fides/shared/.env
@@ -238,14 +247,14 @@ off-site choice).
 | CSS/JS 404 after deploy       | The shared `app-public` volume wasn't refreshed: `docker volume rm fides_app-public && docker compose ... up -d`.  |
 | Stale opcache                 | The container is replaced every deploy; if you see staleness anyway, restart `app`.                                |
 | `docker pull` fails on VPS    | Re-authenticate to GHCR: `echo $PAT \| docker login ghcr.io -u <user> --password-stdin`                            |
-| Lost CP-edited users/content  | Check that `/srv/fides/shared/{users,content}` are bind-mounted and owned by UID 1000.                              |
+| Lost CP-edited users/content  | Check that the content sub-dirs (`collections/pages`, `globals/fr`, `trees/collections`) and `users/` are bind-mounted on the host and owned by UID 1000. |
 
 ## Repository layout
 
 ```
 .
 ├── app/ bootstrap/ config/ database/ public/ resources/ routes/ storage/
-├── content/                # flat-file Statamic content (host bind-mount, not versioned)
+├── content/                # config YAMLs versioned; entry dirs gitignored + bind-mounted
 ├── users/                  # flat-file Statamic users (host bind-mount, not versioned)
 ├── docker/
 │   ├── prod/               # Dockerfile, nginx.conf, php.ini, php-fpm.conf, entrypoint.sh

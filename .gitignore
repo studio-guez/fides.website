@@ -22,7 +22,7 @@
 /public/static
 /public/storage
 /public/vendor/statamic
-/content
+/content/*/*/
 /users
 /storage/*.key
 /storage/pail
