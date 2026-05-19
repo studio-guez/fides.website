@@ -83,7 +83,17 @@ return [
         */
 
         'presets' => [
-            // 'small' => ['w' => 200, 'h' => 200, 'q' => 75, 'fit' => 'crop'],
+            'favicon_16' => ['w' => 16, 'h' => 16, 'fit' => 'crop'],
+            'favicon_32' => ['w' => 32, 'h' => 32, 'fit' => 'crop'],
+            'favicon_57' => ['w' => 57, 'h' => 57, 'fit' => 'crop'],
+            'favicon_60' => ['w' => 60, 'h' => 60, 'fit' => 'crop'],
+            'favicon_72' => ['w' => 72, 'h' => 72, 'fit' => 'crop'],
+            'favicon_114' => ['w' => 114, 'h' => 114, 'fit' => 'crop'],
+            'favicon_120' => ['w' => 120, 'h' => 120, 'fit' => 'crop'],
+            'favicon_144' => ['w' => 144, 'h' => 144, 'fit' => 'crop'],
+            'favicon_152' => ['w' => 152, 'h' => 152, 'fit' => 'crop'],
+            'favicon_180' => ['w' => 180, 'h' => 180, 'fit' => 'crop'],
+            'favicon_192' => ['w' => 192, 'h' => 192, 'fit' => 'crop'],
         ],
 
         /*
