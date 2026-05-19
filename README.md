@@ -113,15 +113,13 @@ adduser --disabled-password --gecos "" deploy
 usermod -aG docker deploy
 
 sudo -u deploy mkdir -p \
-  /srv/fides/{releases,shared/{database,storage,backups,users}} \
-  /srv/fides/shared/content/{collections/pages,globals/fr,trees/collections}
+  /srv/fides/{releases,shared/{database,storage,backups,content,users}}
 
 # UID 1000 == www-data inside the production image
 sudo -u deploy touch /srv/fides/shared/database/database.sqlite
 sudo -u deploy sqlite3 /srv/fides/shared/database/database.sqlite \
   "PRAGMA journal_mode=WAL;"
 chown -R 1000:1000 /srv/fides/shared/{database,storage,content,users}
-# When adding a new collection/global-locale/tree dir, create it here and re-chown.
 
 # Production .env (copy + edit from .env.example, generate APP_KEY, etc.)
 sudo -u deploy install -m 640 /dev/null /srv/fides/shared/.env

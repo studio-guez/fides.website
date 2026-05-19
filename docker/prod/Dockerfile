@@ -69,6 +69,12 @@ RUN rm -rf /var/www/html/tests /var/www/html/node_modules \
            /var/www/html/phpunit.xml /var/www/html/.env \
            /var/www/html/.env.example
 
+# Snapshot content config files (content/**/* — collection/global/asset-container
+# definitions tracked in git) so the entrypoint can overlay them onto the
+# bind-mounted content/ volume at startup, regardless of how many collections
+# or site locales are added in future.
+RUN cp -r content .content-image
+
 # Ensure runtime dirs exist with correct permissions.
 # In production these are bind-mounted from the host, but we want sane defaults
 # in case the image is run standalone.
