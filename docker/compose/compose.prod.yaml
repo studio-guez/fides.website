@@ -28,10 +28,8 @@ services:
       # Docker seeds this named volume from THIS container's image on first start,
       # which is why the mount must live on `app` (the app image), not on `nginx`.
       - app-public:/var/www/html/public
-      # Uncomment to allow editing content/users from the production CP.
-      # See README.md ("File-based Statamic users", Mode B) for the tradeoffs.
-      # - /srv/fides/shared/content:/var/www/html/content
-      # - /srv/fides/shared/users:/var/www/html/users
+      - /srv/fides/shared/content:/var/www/html/content
+      - /srv/fides/shared/users:/var/www/html/users
     networks:
       - internal
       - edge

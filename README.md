@@ -52,27 +52,14 @@ Mailpit UI: <http://localhost:8025>.
 ./vendor/bin/sail shell         # bash inside the container
 ```
 
-## File-based Statamic users
+## File-based Statamic users and content
 
-We use Statamic's flat-file user repository (`config/statamic/users.php` →
-`'repository' => 'file'`). User account files live in `users/`. Two modes:
+Statamic uses a flat-file user repository (`config/statamic/users.php` →
+`'repository' => 'file'`) and flat-file content. `users/` and `content/` are
+**not tracked in git** — they are bind-mounted from the host at
+`/srv/fides/shared/{users,content}` so CP edits persist across deploys.
 
-### Mode A — fully version-controlled (default for this repo)
-
-- `users/` is **committed** to git and **baked into the production image**.
-- Production CP cannot create or edit users persistently.
-- To add a user: run `sail artisan statamic:make:user` locally, commit the
-  resulting YAML, deploy.
-
-### Mode B — editable in production
-
-- Add `/users/` to `.gitignore`.
-- Uncomment the `/srv/fides/shared/users:/var/www/html/users` bind mount in
-  `docker/compose/compose.prod.yaml`.
-- CP user management persists across deploys via the host bind mount.
-
-Roles and groups (`resources/users/{roles,groups}.yaml`) are **always**
-version-controlled in both modes.
+Roles and groups (`resources/users/{roles,groups}.yaml`) are version-controlled.
 
 ## Production deployment (Docker on VPS)
 
@@ -89,6 +76,8 @@ Docker and a small TLS proxy stack.
     ├── .env                            # production env (chmod 640)
     ├── database/database.sqlite        # bind-mounted into app container
     ├── storage/                        # bind-mounted into app container
+    ├── content/                        # bind-mounted into app container (CP-editable)
+    ├── users/                          # bind-mounted into app container (CP-editable)
     ├── current-tag.txt                 # image tag currently running
     ├── last-tag.txt                    # previous tag, for rollback
     └── backups/db-*.sqlite             # nightly DB backups
@@ -117,13 +106,13 @@ adduser --disabled-password --gecos "" deploy
 usermod -aG docker deploy
 
 sudo -u deploy mkdir -p \
-  /srv/fides/{releases,shared/{database,storage,backups}}
+  /srv/fides/{releases,shared/{database,storage,backups,content,users}}
 
 # UID 1000 == www-data inside the production image
 sudo -u deploy touch /srv/fides/shared/database/database.sqlite
 sudo -u deploy sqlite3 /srv/fides/shared/database/database.sqlite \
   "PRAGMA journal_mode=WAL;"
-chown -R 1000:1000 /srv/fides/shared/{database,storage}
+chown -R 1000:1000 /srv/fides/shared/{database,storage,content,users}
 
 # Production .env (copy + edit from .env.example, generate APP_KEY, etc.)
 sudo -u deploy install -m 640 /dev/null /srv/fides/shared/.env
@@ -249,15 +238,15 @@ off-site choice).
 | CSS/JS 404 after deploy       | The shared `app-public` volume wasn't refreshed: `docker volume rm fides_app-public && docker compose ... up -d`.  |
 | Stale opcache                 | The container is replaced every deploy; if you see staleness anyway, restart `app`.                                |
 | `docker pull` fails on VPS    | Re-authenticate to GHCR: `echo $PAT \| docker login ghcr.io -u <user> --password-stdin`                            |
-| Lost CP-edited users          | You're in Mode A. Commit the YAMLs and redeploy, or switch to Mode B.                                              |
+| Lost CP-edited users/content  | Check that `/srv/fides/shared/{users,content}` are bind-mounted and owned by UID 1000.                              |
 
 ## Repository layout
 
 ```
 .
 ├── app/ bootstrap/ config/ database/ public/ resources/ routes/ storage/
-├── content/                # flat-file Statamic content (versioned)
-├── users/                  # flat-file Statamic users (see modes above)
+├── content/                # flat-file Statamic content (host bind-mount, not versioned)
+├── users/                  # flat-file Statamic users (host bind-mount, not versioned)
 ├── docker/
 │   ├── prod/               # Dockerfile, nginx.conf, php.ini, php-fpm.conf, entrypoint.sh
 │   └── compose/

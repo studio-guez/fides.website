@@ -22,6 +22,8 @@
 /public/static
 /public/storage
 /public/vendor/statamic
+/content
+/users
 /storage/*.key
 /storage/pail
 /vendor
