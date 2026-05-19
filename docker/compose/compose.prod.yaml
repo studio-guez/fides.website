@@ -28,12 +28,9 @@ services:
       # Docker seeds this named volume from THIS container's image on first start,
       # which is why the mount must live on `app` (the app image), not on `nginx`.
       - app-public:/var/www/html/public
-      # Real content dirs (content/**/**) are bind-mounted; config YAMLs
-      # (content/**/*) are baked into the image from git.
-      # Add a line for each new collection handle, locale dir, or tree container.
-      - /srv/fides/shared/content/collections/pages:/var/www/html/content/collections/pages
-      - /srv/fides/shared/content/globals/fr:/var/www/html/content/globals/fr
-      - /srv/fides/shared/content/trees/collections:/var/www/html/content/trees/collections
+      # The entrypoint overlays content/**/* config YAMLs from the image on each
+      # start, so collection/global/locale additions never require compose changes.
+      - /srv/fides/shared/content:/var/www/html/content
       - /srv/fides/shared/users:/var/www/html/users
     networks:
       - internal
