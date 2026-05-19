@@ -33,10 +33,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup PHP 8.3
+      - name: Setup PHP 8.4
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           extensions: bcmath, exif, gd, intl, mbstring, pcntl, pdo_sqlite, zip
           coverage: none
           tools: composer:v2

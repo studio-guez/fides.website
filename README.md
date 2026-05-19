@@ -6,7 +6,7 @@ Statamic 6 site for fides.website.
 
 - **CMS:** Statamic 6 (flat-file content + flat-file users)
 - **Framework:** Laravel 13
-- **PHP:** 8.3 (FPM)
+- **PHP:** 8.4 (FPM)
 - **DB:** SQLite (local, CI, production — bind-mounted host file in prod)
 - **Local dev:** Laravel Sail (Docker)
 - **Production runtime:** Docker on a VPS — `app` (php-fpm) + `nginx` containers, no Sail
@@ -18,16 +18,27 @@ Statamic 6 site for fides.website.
 
 ## Local development
 
+1. `git clone https://github.com/Octoplus-Solutions/fides.website.git`
+1. `cd fides.website/`
+1. `cp .env.example .env`
+1. _Verifier config, surtout conflits ports dans_ `docker-compose.yml` _et_ `.env`
+1. Install Composer dependencies
+
 ```bash
-composer install
-cp .env.example .env
-./vendor/bin/sail up -d
-./vendor/bin/sail artisan key:generate
-./vendor/bin/sail artisan migrate
-./vendor/bin/sail npm install
-./vendor/bin/sail npm run build
-./vendor/bin/sail artisan statamic:make:user
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/opt \
+    -w /opt \
+    laravelsail/php84-composer:latest \
+    composer install --ignore-platform-reqs
 ```
+1. `./vendor/bin/sail up -d`
+1. `./vendor/bin/sail composer install`
+1. `./vendor/bin/sail artisan key:generate`
+1. `./vendor/bin/sail artisan migrate`
+1. `./vendor/bin/sail npm install`
+1. `./vendor/bin/sail npm run build`
+1. `./vendor/bin/sail artisan statamic:make:user`
 
 Open <http://localhost> (front) and <http://localhost/cp> (control panel).
 Mailpit UI: <http://localhost:8025>.
