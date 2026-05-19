@@ -1,0 +1,4 @@
+title: Assets
+disk: assets
+validate:
+  - 'mimes:svg,png,webp,jpg,jpeg'
