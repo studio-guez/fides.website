@@ -63,20 +63,18 @@ return [
 
         'favicons' => [
             'driver' => 'local',
-            'root' => public_path('favicons'),
-            'url' => '/favicons',
+            'root' => storage_path('app/public/favicons'),
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/') . '/storage/favicons',
             'visibility' => 'public',
             'throw' => false,
-            'report' => false,
         ],
 
         'assets' => [
             'driver' => 'local',
-            'root' => public_path('assets'),
-            'url' => '/assets',
+            'root' => storage_path('app/public/assets'),
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/') . '/storage/assets',
             'visibility' => 'public',
             'throw' => false,
-            'report' => false,
         ],
 
     ],
