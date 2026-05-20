@@ -67,12 +67,17 @@ tabs:
                     type: text
                     display: Lien
                     validate:
-                      - url
+                      - nullable
+                      - 'regex:/^(https?:\/\/|mailto:)/'
+                    instructions: 'https://example.com ou mailto:example@example.com'
+                    instructions_position: below
           -
             handle: banner_2
             field:
               type: group
               display: 'Bandeau 2'
+              collapsible: true
+              collapsed: true
               fields:
                 -
                   handle: text
@@ -85,7 +90,10 @@ tabs:
                     type: text
                     display: Lien
                     validate:
-                      - url
+                      - nullable
+                      - 'regex:/^(https?:\/\/|mailto:)/'
+                    instructions: 'https://example.com ou mailto:example@example.com'
+                    instructions_position: below
       -
         display: Introduction
         fields:
@@ -203,7 +211,9 @@ tabs:
               display: 'Lien CTA'
               validate:
                 - required
-                - url
+                - 'regex:/^(https?:\/\/|mailto:)/'
+              instructions: 'https://example.com ou mailto:example@example.com'
+              instructions_position: below
       -
         display: 'Colonne 2'
         collapsible: true
@@ -265,7 +275,9 @@ tabs:
               display: 'Lien CTA'
               validate:
                 - required
-                - url
+                - 'regex:/^(https?:\/\/|mailto:)/'
+              instructions: 'https://example.com ou mailto:example@example.com'
+              instructions_position: below
   realisations:
     display: 'Des réalisations collectives'
     sections:
@@ -346,7 +358,10 @@ tabs:
                     type: text
                     display: 'Lien CTA'
                     validate:
-                      - url
+                      - nullable
+                      - 'regex:/^(https?:\/\/|mailto:)/'
+                    instructions: 'https://example.com ou mailto:example@example.com'
+                    instructions_position: below
       -
         display: 'Carte 2'
         collapsible: true
@@ -415,7 +430,10 @@ tabs:
                     type: text
                     display: 'Lien CTA'
                     validate:
-                      - url
+                      - nullable
+                      - 'regex:/^(https?:\/\/|mailto:)/'
+                    instructions: 'https://example.com ou mailto:example@example.com'
+                    instructions_position: below
       -
         display: 'Carte 3'
         collapsible: true
@@ -484,7 +502,10 @@ tabs:
                     type: text
                     display: 'Lien CTA'
                     validate:
-                      - url
+                      - nullable
+                      - 'regex:/^(https?:\/\/|mailto:)/'
+                    instructions: 'https://example.com ou mailto:example@example.com'
+                    instructions_position: below
       -
         display: 'Carte 4'
         collapsible: true
@@ -553,7 +574,10 @@ tabs:
                     type: text
                     display: 'Lien CTA'
                     validate:
-                      - url
+                      - nullable
+                      - 'regex:/^(https?:\/\/|mailto:)/'
+                    instructions: 'https://example.com ou mailto:example@example.com'
+                    instructions_position: below
       -
         display: 'Carte 5'
         collapsible: true
@@ -622,7 +646,10 @@ tabs:
                     type: text
                     display: 'Lien CTA'
                     validate:
-                      - url
+                      - nullable
+                      - 'regex:/^(https?:\/\/|mailto:)/'
+                    instructions: 'https://example.com ou mailto:example@example.com'
+                    instructions_position: below
       -
         display: 'Carte 6'
         collapsible: true
@@ -691,7 +718,10 @@ tabs:
                     type: text
                     display: 'Lien CTA'
                     validate:
-                      - url
+                      - nullable
+                      - 'regex:/^(https?:\/\/|mailto:)/'
+                    instructions: 'https://example.com ou mailto:example@example.com'
+                    instructions_position: below
   history:
     display: Histoire
     sections:
