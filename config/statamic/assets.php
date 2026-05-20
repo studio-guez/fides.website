@@ -83,6 +83,22 @@ return [
         */
 
         'presets' => [
+            'full' => ['w' => 1920, 'q' => 80, 'fm' => 'webp'],
+            'full_2x' => ['w' => 3840, 'q' => 80, 'fm' => 'webp'],
+            'full_fallback' => ['w' => 1920, 'q' => 80],
+            'full_fallback_2x' => ['w' => 3840, 'q' => 80],
+            'half' => ['w' => 960, 'q' => 80, 'fm' => 'webp'],
+            'half_2x' => ['w' => 1920, 'q' => 80, 'fm' => 'webp'],
+            'half_fallback' => ['w' => 960, 'q' => 80],
+            'half_fallback_2x' => ['w' => 1920, 'q' => 80],
+            'third' => ['w' => 640, 'q' => 80, 'fm' => 'webp'],
+            'third_2x' => ['w' => 1280, 'q' => 80, 'fm' => 'webp'],
+            'third_fallback' => ['w' => 640, 'q' => 80],
+            'third_fallback_2x' => ['w' => 1280, 'q' => 80],
+            'thumbnail' => ['w' => 40, 'q' => 80, 'fm' => 'webp'],
+            'thumbnail_2x' => ['w' => 80, 'q' => 80, 'fm' => 'webp'],
+            'thumbnail_fallback' => ['w' => 40, 'q' => 80],
+            'thumbnail_fallback_2x' => ['w' => 80, 'q' => 80],
             'favicon_16' => ['w' => 16, 'h' => 16, 'fit' => 'crop'],
             'favicon_32' => ['w' => 32, 'h' => 32, 'fit' => 'crop'],
             'favicon_57' => ['w' => 57, 'h' => 57, 'fit' => 'crop'],
