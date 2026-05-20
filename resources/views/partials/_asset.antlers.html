@@ -1,0 +1,44 @@
+{{ asset :url="image" }}
+    {{ if is_video }}
+        <video
+        data-src="{{ url }}"
+        autoplay loop muted playsinline
+        aria-label="{{ alt_glide }}"
+        class="{{ class }}"
+        {{ attributes }}>
+        </video>
+    {{ else }}
+        {{ if extension == 'svg' || extension == 'gif' }}
+            <img {{ if lazy }}data-src{{ else }}src{{ /if }}="{{ url }}" alt="{{ alt_glide }}" class="{{ class }}" {{ attributes }}>
+        {{ else }}
+            {{ preset_2x = preset }}
+            {{ preset_2x .= '_2x' }}
+            {{ preset_fallback = preset }}
+            {{ preset_fallback .= '_fallback' }}
+            {{ preset_fallback_2x = preset_fallback }}
+            {{ preset_fallback_2x .= '_2x' }}
+            <picture class="{{ picture_class }}">
+                <source
+                    {{ if lazy }}data-srcset{{ else }}srcset{{ /if }}="
+                        {{ glide:image :preset='preset':crop='crop ?? null' }} 1x,
+                        {{ glide:image :preset='preset_2x':crop='crop ?? null' }} 2x"
+                    sizes="(max-width: 600px) 100vw, 50vw"
+                    type="image/webp"
+                >
+                <source
+                    {{ if lazy }}data-srcset{{ else }}srcset{{ /if }}="
+                        {{ glide:image :preset='preset_fallback':crop='crop ?? null' }} 1x,
+                        {{ glide:image :preset='preset_fallback_2x':crop='crop ?? null' }} 2x"
+                    sizes="(max-width: 600px) 100vw, 50vw"
+                    type="{{ mime_type }}"
+                >
+                <img
+                    {{ if lazy }}data-src{{ else }}src{{ /if }}="{{ glide:image :preset='preset_fallback_2x':crop='crop ?? null' }}"
+                    alt="{{ alt_glide }}"
+                    class="{{ class }}{{if lazy }} invisible{{ /if }}"
+                    {{ attributes }}
+                >
+            </picture>
+        {{ /if }}
+    {{ /if }}
+{{ /asset }}
