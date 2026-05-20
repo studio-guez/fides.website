@@ -98,6 +98,14 @@ tabs:
         display: Introduction
         fields:
           -
+            handle: intro_title
+            field:
+              type: text
+              display: Titre
+              instructions: "Ne s'affiche pas. Utile pour le SEO et les screen readers."
+              validate:
+                - required
+          -
             handle: intro
             field:
               buttons:
@@ -130,14 +138,6 @@ tabs:
               validate:
                 - required
                 - 'mimes:jpg,jpeg,png,webp,svg'
-          -
-            handle: intro_title
-            field:
-              type: text
-              display: Titre
-              instructions: "Ne s'affiche pas. Utile pour le SEO et les screen readers."
-              validate:
-                - required
   social_impact:
     display: "Au service de l'impact social"
     sections:
