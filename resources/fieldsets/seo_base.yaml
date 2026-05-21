@@ -10,7 +10,7 @@ fields:
     handle: meta_description
     field:
       type: textarea
-      display: 'Meta descricption'
+      display: 'Meta description'
       localizable: true
   -
     handle: meta_keywords
@@ -18,6 +18,8 @@ fields:
       type: textarea
       display: 'Meta mot-clés'
       localizable: true
+      instructions: 'Séparer les mots-clés par des virgules'
+      instructions_position: 'beyond'
   -
     handle: meta_image
     field:
