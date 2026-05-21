@@ -1,4 +1,9 @@
+@import './fonts.css' layer(base);
+
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @source "../views";
-@source "../../content";
+
+@theme {
+    --font-sans: 'CircularXX', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
