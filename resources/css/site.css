@@ -14,11 +14,16 @@
     --color-blue: #4584a9;
     --color-blue-light: #1c7ed6;
     --color-orange: #b9caea;
+
+    --container-8xl: 90rem; /* 1440px */
 }
 
 @layer utilities {
+    .px-base {
+        @apply px-8;
+    }
     .text-title-large{
-        @apply text-4xl md:text-7xl;
+        @apply text-4xl lg:text-5xl/[1.15] xl:text-7xl/[1.15] font-black;
     }
     .text-title-medium {
         @apply text-2xl md:text-4xl;
