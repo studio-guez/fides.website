@@ -1,7 +1,14 @@
-<header>
-    {{ partial:asset :image="header_logo:id" :alt_glide="header_logo:alt" preset="half" }}
-    <h1>{{ header_title }}</h1>
-    {{ partial:asset :image="header_image:id" :alt_glide="header_image:alt" preset="full" }}
+<header class="pt-20">
+    <div class="lg:grid lg:grid-cols-3 lg:gap-16 max-w-8xl mx-auto px-base py-20 items-center">
+        {{ partial:asset :image="header_logo:id" :alt_glide="header_logo:alt" preset="half" }}
+        <h1 class="text-title-large text-blue text-balance lg:col-span-2">{{ header_title }}</h1>
+    </div>
+    <div class="relative">
+        <div class="max-w-8xl mx-auto px-base">
+            {{ partial:asset :image="header_image:id" :alt_glide="header_image:alt" preset="full" class="" }}
+        </div>
+        <div class="absolute top-1/10 bottom-1/10 inset-x-0 w-full bg-gray-light -z-1"></div>
+    </div>
 </header>
 <main>
     {{ if banner_1:text || banner_2:text }}
