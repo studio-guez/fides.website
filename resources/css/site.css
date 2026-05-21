@@ -6,4 +6,45 @@
 
 @theme {
     --font-sans: 'CircularXX', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-black: #22272e;
+    --color-gray: #70706f;
+    --color-gray-light: #f1f1f1;
+    --color-white: #ffffff;
+    --color-blue: #4584a9;
+    --color-blue-light: #1c7ed6;
+    --color-orange: #b9caea;
+}
+
+@layer utilities {
+    .text-title-large{
+        @apply text-4xl md:text-7xl;
+    }
+    .text-title-medium {
+        @apply text-2xl md:text-4xl;
+    }
+    .text-title-small {
+        @apply text-lg md:text-2xl;
+    }
+    .text-body-xlarge {
+        @apply text-lg md:text-4xl;
+    }
+    .text-body-large {
+        @apply text-lg md:text-3xl;
+    }
+    .text-body-medium {
+        @apply text-lg md:text-2xl;
+    }
+    .text-body-small {
+        @apply text-lg md:text-xl;
+    }
+    .text-highlights {
+        @apply text-xl md:text-4xl;
+    }
+    .text-cta-large {
+        @apply text-lg md:text-2xl;
+    }
+    .text-cta-medium {
+        @apply text-lg md:text-xl;
+    }
 }
