@@ -73,29 +73,29 @@
         </div>
     </section>
     <section>
-        <h2>{{ social_impact_title }}</h2>
-        <div>
+        <h2 class="max-w-8xl mx-auto px-base text-title-large text-center mb-10">{{ social_impact_title }}</h2>
+        <div class="max-w-8xl mx-auto px-base lg:grid lg:grid-cols-2 lg:gap-8">
             <div>
-                <div>
-                    <h3>{{ social_impact_col_1_title }}</h3>
-                    <div>{{ social_impact_col_1_intro }}</div>
+                <div class="bg-gray-light p-3 rounded-tl-4xl rounded-br-4xl">
+                    <h3 class="text-title-medium text-center mb-3 text-balance">{{ social_impact_col_1_title }}</h3>
+                    <div class="bg-white p-6 rounded-tl-4xl text-body-medium text-center text-balance mb-3">{{ social_impact_col_1_intro }}</div>
                     {{ social_impact_col_1_cta_points }}
-                    <div>
-                        <h4>{{ title }}</h4>
-                        <p>{{ description }}</p>
+                    <div class="bg-blue-light p-6 rounded-tl-4xl rounded-br-4xl{{ if !loop:last }} mb-3 {{ /if }}">
+                        <h4 class="text-title-small">{{ title }}</h4>
+                        <p class="text-body-small">{{ description }}</p>
                     </div>
                     {{ /social_impact_col_1_cta_points }}
                 </div>
                 <a href="{{ social_impact_col_1_cta_link }}" target="_blank" rel="noopener">{{ social_impact_col_1_cta_text }}</a>
             </div>
             <div>
-                <div>
-                    <h3>{{ social_impact_col_2_title }}</h3>
-                    <div>{{ social_impact_col_2_intro }}</div>
+                <div class="bg-gray-light p-3 rounded-tl-4xl rounded-br-4xl">
+                    <h3 class="text-title-medium text-center mb-3 text-balance">{{ social_impact_col_2_title }}</h3>
+                    <div class="bg-white p-6 rounded-tl-4xl text-body-medium text-center text-balance mb-3">{{ social_impact_col_2_intro }}</div>
                     {{ social_impact_col_2_cta_points }}
-                    <div>
-                        <h4>{{ title }}</h4>
-                        <p>{{ description }}</p>
+                    <div class="bg-gray text-white p-6 rounded-tl-4xl rounded-br-4xl{{ if !last }} mb-3 {{ /if }}">
+                        <h4 class="text-title-small">{{ title }}</h4>
+                        <p class="text-body-small">{{ description }}</p>
                     </div>
                     {{ /social_impact_col_2_cta_points }}
                 </div>
