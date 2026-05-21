@@ -38,10 +38,10 @@
         @apply text-4xl lg:text-5xl/[1.15] xl:text-7xl/[1.15] font-black;
     }
     .text-title-medium {
-        @apply text-2xl md:text-4xl font-black;
+        @apply text-2xl md:text-4xl font-black uppercase;
     }
     .text-title-small {
-        @apply text-lg md:text-2xl font-black;
+        @apply text-lg md:text-2xl font-black uppercase;
     }
     .text-body-xlarge {
         @apply text-lg md:text-4xl font-bold;
