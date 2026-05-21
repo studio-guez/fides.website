@@ -12,13 +12,25 @@
     --color-gray-light: #f1f1f1;
     --color-white: #ffffff;
     --color-blue: #4584a9;
-    --color-blue-light: #1c7ed6;
+    --color-blue-light: #b9caea;
     --color-orange: #b9caea;
 
     --container-8xl: 90rem; /* 1440px */
 }
 
+@keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
 @layer utilities {
+    .animate-marquee {
+        animation: marquee 90s linear infinite;
+        will-change: transform;
+    }
+    .paused {
+        animation-play-state: paused;
+    }
     .px-base {
         @apply px-8;
     }
@@ -26,30 +38,30 @@
         @apply text-4xl lg:text-5xl/[1.15] xl:text-7xl/[1.15] font-black;
     }
     .text-title-medium {
-        @apply text-2xl md:text-4xl;
+        @apply text-2xl md:text-4xl font-black;
     }
     .text-title-small {
-        @apply text-lg md:text-2xl;
+        @apply text-lg md:text-2xl font-black;
     }
     .text-body-xlarge {
-        @apply text-lg md:text-4xl;
+        @apply text-lg md:text-4xl font-bold;
     }
     .text-body-large {
-        @apply text-lg md:text-3xl;
+        @apply text-lg md:text-3xl font-medium;
     }
     .text-body-medium {
-        @apply text-lg md:text-2xl;
+        @apply text-lg md:text-2xl font-medium;
     }
     .text-body-small {
         @apply text-lg md:text-xl;
     }
     .text-highlights {
-        @apply text-xl md:text-4xl;
+        @apply text-xl md:text-4xl font-medium;
     }
     .text-cta-large {
-        @apply text-lg md:text-2xl;
+        @apply text-lg md:text-2xl font-bold;
     }
     .text-cta-medium {
-        @apply text-lg md:text-xl;
+        @apply text-lg md:text-xl font-bold;
     }
 }
