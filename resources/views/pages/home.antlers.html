@@ -65,41 +65,51 @@
         <div class="text-body-medium max-w-8xl mx-auto px-base py-20 [&>p]:bg-gray-light [&>p]:p-6 [&>p]:rounded-4xl [&>p]:max-w-2xl [&>p:nth-child(4n+2)]:mx-auto [&>p:nth-child(4n)]:mx-auto [&>p:nth-child(4n+3)]:ml-auto">
             {{ intro }}
         </div>
-        <div class="relative pb-20 mb-20">
+        <div class="relative pb-20">
             <div class="max-w-8xl mx-auto px-base">
                 {{ partial:asset :image="intro_image:id" :alt_glide="intro_image:alt" preset="full" }}
             </div>
             <div class="absolute top-1/4 bottom-0 inset-x-0 w-full bg-gray-light -z-1"></div>
         </div>
     </section>
-    <section>
+    <section class="pt-20">
         <h2 class="max-w-8xl mx-auto px-base text-title-large text-center mb-10">{{ social_impact_title }}</h2>
         <div class="max-w-8xl mx-auto px-base lg:grid lg:grid-cols-2 lg:gap-8">
             <div>
-                <div class="bg-gray-light p-3 rounded-tl-4xl rounded-br-4xl">
+                <div class="bg-gray-light p-3 rounded-tl-4xl rounded-br-4xl mb-6">
                     <h3 class="text-title-medium text-center mb-3 text-balance">{{ social_impact_col_1_title }}</h3>
                     <div class="bg-white p-6 rounded-tl-4xl text-body-medium text-center text-balance mb-3">{{ social_impact_col_1_intro }}</div>
                     {{ social_impact_col_1_cta_points }}
-                    <div class="bg-blue-light p-6 rounded-tl-4xl rounded-br-4xl{{ if !loop:last }} mb-3 {{ /if }}">
+                    <div class="bg-blue-light p-6 rounded-tl-4xl rounded-br-4xl not-last:mb-3">
                         <h4 class="text-title-small">{{ title }}</h4>
                         <p class="text-body-small">{{ description }}</p>
                     </div>
                     {{ /social_impact_col_1_cta_points }}
                 </div>
-                <a href="{{ social_impact_col_1_cta_link }}" target="_blank" rel="noopener">{{ social_impact_col_1_cta_text }}</a>
+                <a href="{{ social_impact_col_1_cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-large flex w-fit items-center gap-2 transition-colors rounded-full pl-3 pr-6 py-3 mx-auto">
+                    <span class="bg-orange flex items-center justify-center rounded-full w-10 h-10 shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-6"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
+                    </span>
+                    {{ social_impact_col_1_cta_text }}
+                </a>
             </div>
             <div>
-                <div class="bg-gray-light p-3 rounded-tl-4xl rounded-br-4xl">
+                <div class="bg-gray-light p-3 rounded-tl-4xl rounded-br-4xl mb-6">
                     <h3 class="text-title-medium text-center mb-3 text-balance">{{ social_impact_col_2_title }}</h3>
                     <div class="bg-white p-6 rounded-tl-4xl text-body-medium text-center text-balance mb-3">{{ social_impact_col_2_intro }}</div>
                     {{ social_impact_col_2_cta_points }}
-                    <div class="bg-gray text-white p-6 rounded-tl-4xl rounded-br-4xl{{ if !last }} mb-3 {{ /if }}">
+                    <div class="bg-gray text-white p-6 rounded-tl-4xl rounded-br-4xl not-last:mb-3">
                         <h4 class="text-title-small">{{ title }}</h4>
                         <p class="text-body-small">{{ description }}</p>
                     </div>
                     {{ /social_impact_col_2_cta_points }}
                 </div>
-                <a href="{{ social_impact_col_2_cta_link }}" target="_blank" rel="noopener">{{ social_impact_col_2_cta_text }}</a>
+                <a href="{{ social_impact_col_1_cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-large flex w-fit items-center gap-2 transition-colors rounded-full pl-3 pr-6 py-3 mx-auto">
+                    <span class="bg-orange flex items-center justify-center rounded-full w-10 h-10 shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-6"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
+                    </span>
+                    {{ social_impact_col_2_cta_text }}
+                </a>
             </div>
         </div>
     </section>
