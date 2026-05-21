@@ -12,27 +12,49 @@
 </header>
 <main>
     {{ if banner_1:text || banner_2:text }}
-        <section>
+        <section class="pt-20">
             <h2 class="sr-only">{{ banners_title }}</h2>
             {{ if banner_1:text }}
                 {{ if banner_1:link }}
-                    <a href="{{ banner_1:link }}" target="_blank" rel="noopener">
-                        {{ banner_1:text }}
+                    <a href="{{ banner_1:link }}" target="_blank" rel="noopener"
+                        x-data="{ paused: false }"
+                        @mouseenter="paused = true" @mouseleave="paused = false"
+                        class="block bg-blue-light text-body-large py-3 overflow-hidden{{if banner_2:text }} mb-6{{ /if }}">
+                        <span class="animate-marquee flex w-max" :class="{ paused: paused }">
+                            <span class="flex gap-8 pr-8">{{ banner_1:text }}</span>
+                            <span class="flex gap-8 pr-8" aria-hidden="true"> ∙ {{ loop times="20" }}{{ banner_1:text }} ∙ {{ /loop }}</span>
+                        </span>
                     </a>
                 {{ else }}
-                    <div>
-                    {{ banner_1:text }}
+                    <div x-data="{ paused: false }"
+                        @mouseenter="paused = true" @mouseleave="paused = false"
+                        class="bg-blue-light text-body-large py-3 overflow-hidden{{if banner_2:text }} mb-6{{ /if }}">
+                        <span class="animate-marquee flex w-max" :class="{ paused: paused }">
+                            <span class="flex gap-8 pr-8">{{ banner_1:text }}</span>
+                            <span class="flex gap-8 pr-8" aria-hidden="true"> ∙ {{ loop times="20" }}{{ banner_1:text }} ∙ {{ /loop }}</span>
+                        </span>
                     </div>
                 {{ /if }}
             {{ /if }}
             {{ if banner_2:text }}
                 {{ if banner_2:link }}
-                    <a href="{{ banner_2:link }}" target="_blank" rel="noopener">
-                        {{ banner_2:text }}
+                    <a href="{{ banner_2:link }}" target="_blank" rel="noopener"
+                        x-data="{ paused: false }"
+                        @mouseenter="paused = true" @mouseleave="paused = false"
+                        class="block bg-blue text-white text-body-large py-3 overflow-hidden">
+                        <span class="animate-marquee flex w-max" :class="{ paused: paused }">
+                            <span class="flex gap-8 pr-8">{{ banner_2:text }}</span>
+                            <span class="flex gap-8 pr-8" aria-hidden="true"> ∙ {{ loop times="20" }}{{ banner_2:text }} ∙ {{ /loop }}</span>
+                        </span>
                     </a>
                 {{ else }}
-                    <div>
-                    {{ banner_2:text }}
+                    <div x-data="{ paused: false }"
+                        @mouseenter="paused = true" @mouseleave="paused = false"
+                        class="bg-blue text-white text-body-large py-3 overflow-hidden">
+                        <span class="animate-marquee flex w-max" :class="{ paused: paused }">
+                            <span class="flex gap-8 pr-8">{{ banner_2:text }}</span>
+                            <span class="flex gap-8 pr-8" aria-hidden="true"> ∙ {{ loop times="20" }}{{ banner_2:text }} ∙ {{ /loop }}</span>
+                        </span>
                     </div>
                 {{ /if }}
             {{ /if }}
@@ -40,10 +62,15 @@
     {{ /if }}
     <section>
         <h2 class="sr-only">{{ intro_title }}</h2>
-        <div>
+        <div class="text-body-medium max-w-8xl mx-auto px-base py-20 [&>p]:bg-gray-light [&>p]:p-6 [&>p]:rounded-4xl [&>p]:max-w-2xl [&>p:nth-child(4n+2)]:mx-auto [&>p:nth-child(4n)]:mx-auto [&>p:nth-child(4n+3)]:ml-auto">
             {{ intro }}
         </div>
-        {{ partial:asset :image="intro_image:id" :alt_glide="intro_image:alt" preset="full" }}
+        <div class="relative pb-20 mb-20">
+            <div class="max-w-8xl mx-auto px-base">
+                {{ partial:asset :image="intro_image:id" :alt_glide="intro_image:alt" preset="full" }}
+            </div>
+            <div class="absolute top-1/4 bottom-0 inset-x-0 w-full bg-gray-light -z-1"></div>
+        </div>
     </section>
     <section>
         <h2>{{ social_impact_title }}</h2>
