@@ -1,40 +1,51 @@
 # Production Docker Compose for fides.website.
 #
-# Lives on the VPS at /srv/fides/current/docker/compose/compose.prod.yaml
+# Lives on a target server at $DEPLOY_PATH/current/docker/compose/compose.prod.yaml
 # (the symlinked release directory). Bring up with:
 #
-#   APP_IMAGE_TAG=sha-<sha7> docker compose \
-#     -f /srv/fides/current/docker/compose/compose.prod.yaml up -d
+#   APP_IMAGE_TAG=<tag> docker compose \
+#     -f $DEPLOY_PATH/current/docker/compose/compose.prod.yaml up -d
 #
-# Requires:
-#   * An external Docker network named `edge` (created once by the TLS
-#     reverse-proxy stack, e.g. Caddy).
-#   * /srv/fides/shared/.env       (production env, chmod 640)
-#   * /srv/fides/shared/database/database.sqlite (host UID 1000)
-#   * /srv/fides/shared/storage    (host UID 1000)
+# This stack contains ONLY the application:
+#   * `app`   — php-fpm (the Statamic/Laravel app)
+#   * `nginx` — the app-level web server in front of php-fpm
+#
+# TLS termination and host-based routing are handled by a reverse proxy that
+# runs OUTSIDE this project, directly on the target server (e.g. system nginx,
+# Caddy, or Traefik installed on the host). That external reverse proxy is
+# expected to forward HTTP traffic to the port published below
+# (default: 127.0.0.1:${APP_HTTP_PORT:-8080}).
+#
+# Requires on the target server:
+#   * $DEPLOY_PATH/shared/.env                       (chmod 640)
+#   * $DEPLOY_PATH/shared/database/database.sqlite   (host UID 1000)
+#   * $DEPLOY_PATH/shared/storage                    (host UID 1000)
+#   * $DEPLOY_PATH/shared/content                    (host UID 1000)
+#   * $DEPLOY_PATH/shared/users                      (host UID 1000, optional)
+#   * A reverse proxy on the host forwarding the public domain to
+#     127.0.0.1:${APP_HTTP_PORT:-8080}
 name: fides
 
 services:
   app:
-    image: ghcr.io/studio-guez/fides.website:${APP_IMAGE_TAG:-latest}
+    image: ${APP_IMAGE:-ghcr.io/studio-guez/fides.website}:${APP_IMAGE_TAG:-latest}
     pull_policy: always
     restart: unless-stopped
     env_file:
-      - /srv/fides/shared/.env
+      - ${SHARED_PATH:-/srv/fides/shared}/.env
     volumes:
-      - /srv/fides/shared/database/database.sqlite:/var/www/html/database/database.sqlite
-      - /srv/fides/shared/storage:/var/www/html/storage
+      - ${SHARED_PATH:-/srv/fides/shared}/database/database.sqlite:/var/www/html/database/database.sqlite
+      - ${SHARED_PATH:-/srv/fides/shared}/storage:/var/www/html/storage
       # Shared with nginx so static assets (incl. /build, /vendor/statamic) are served.
       # Docker seeds this named volume from THIS container's image on first start,
       # which is why the mount must live on `app` (the app image), not on `nginx`.
       - app-public:/var/www/html/public
       # The entrypoint overlays content/**/* config YAMLs from the image on each
       # start, so collection/global/locale additions never require compose changes.
-      - /srv/fides/shared/content:/var/www/html/content
-      - /srv/fides/shared/users:/var/www/html/users
+      - ${SHARED_PATH:-/srv/fides/shared}/content:/var/www/html/content
+      - ${SHARED_PATH:-/srv/fides/shared}/users:/var/www/html/users
     networks:
       - internal
-      - edge
 
   nginx:
     image: nginx:1.27-alpine
@@ -42,16 +53,15 @@ services:
     depends_on:
       - app
     volumes:
-      - /srv/fides/current/docker/prod/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ${DEPLOY_PATH:-/srv/fides}/current/docker/prod/nginx.conf:/etc/nginx/nginx.conf:ro
       # Read-only view of the public/ tree seeded by the `app` service above.
       - app-public:/var/www/html/public:ro
+    # The host-level reverse proxy (out of scope for this repo) should forward
+    # public HTTPS traffic to this port on the loopback interface.
+    ports:
+      - "127.0.0.1:${APP_HTTP_PORT:-8080}:80"
     networks:
       - internal
-      - edge
-    labels:
-      # Auto-discovered by caddy-docker-proxy in the separate `edge` stack.
-      caddy: ${APP_DOMAIN:-example.com}
-      caddy.reverse_proxy: "{{upstreams 80}}"
 
 volumes:
   app-public:
@@ -59,5 +69,3 @@ volumes:
 networks:
   internal:
     driver: bridge
-  edge:
-    external: true
