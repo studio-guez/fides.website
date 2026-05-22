@@ -2,40 +2,69 @@ name: Deploy
 
 on:
   push:
-    branches: [main]
+    branches: [main, preprod]
     tags: ['v*']
   workflow_dispatch:
+    inputs:
+      target:
+        description: 'Deployment target'
+        required: true
+        default: preprod
+        type: choice
+        options: [preprod, production]
 
 permissions:
   contents: read
   packages: write
-
-concurrency:
-  group: deploy-production
-  cancel-in-progress: false
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  # ---------------------------------------------------------------------------
+  # Single build job, shared by both environments. The image we build is
+  # environment-agnostic: app source + built frontend assets + Composer prod
+  # deps. Environment-specific values come from each server's shared `.env`.
+  # ---------------------------------------------------------------------------
   build-image:
-    name: Build & push production image
+    name: Build & push image
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     outputs:
       image_tag: ${{ steps.meta.outputs.image_tag }}
       release_id: ${{ steps.meta.outputs.release_id }}
+      target: ${{ steps.meta.outputs.target }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set release identifiers
+      - name: Resolve deployment target and tags
         id: meta
         run: |
           SHA7=${GITHUB_SHA::7}
           TS=$(date -u +%Y%m%dT%H%M%SZ)
-          echo "image_tag=sha-$SHA7" >> "$GITHUB_OUTPUT"
-          echo "release_id=$TS-$SHA7" >> "$GITHUB_OUTPUT"
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TARGET="${{ inputs.target }}"
+          elif [ "${GITHUB_REF}" = "refs/heads/preprod" ]; then
+            TARGET="preprod"
+          else
+            # refs/heads/main or refs/tags/v*
+            TARGET="production"
+          fi
+
+          if [ "$TARGET" = "preprod" ]; then
+            IMAGE_TAG="preprod-sha-$SHA7"
+            FLOATING_TAG="preprod"
+          else
+            IMAGE_TAG="sha-$SHA7"
+            FLOATING_TAG="latest"
+          fi
+
+          echo "target=$TARGET"             >> "$GITHUB_OUTPUT"
+          echo "image_tag=$IMAGE_TAG"       >> "$GITHUB_OUTPUT"
+          echo "floating_tag=$FLOATING_TAG" >> "$GITHUB_OUTPUT"
+          echo "release_id=$TS-$SHA7"       >> "$GITHUB_OUTPUT"
 
       - uses: docker/setup-buildx-action@v3
 
@@ -61,7 +90,7 @@ jobs:
           provenance: false
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.image_tag }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.floating_tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
@@ -77,114 +106,76 @@ jobs:
           path: compose-bundle.tgz
           retention-days: 7
 
-  deploy:
-    name: Deploy to VPS
+  # ---------------------------------------------------------------------------
+  # Preprod deploy. Only runs for the `preprod` branch (or workflow_dispatch
+  # with target=preprod). Uses ONLY secrets scoped to the `preprod` GitHub
+  # Environment.
+  # ---------------------------------------------------------------------------
+  deploy-preprod:
+    name: Deploy to preproduction
     needs: build-image
+    if: needs.build-image.outputs.target == 'preprod'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
-    environment: production
-    env:
-      IMAGE_TAG: ${{ needs.build-image.outputs.image_tag }}
-      RELEASE_ID: ${{ needs.build-image.outputs.release_id }}
-      DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-      SSH_HOST: ${{ secrets.SSH_HOST }}
-      SSH_USER: ${{ secrets.SSH_USER }}
-      SSH_PORT: ${{ secrets.SSH_PORT }}
-      GHCR_USER: ${{ secrets.GHCR_PULL_USER || github.actor }}
-      GHCR_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+    environment: preprod
+    concurrency:
+      group: deploy-preprod
+      cancel-in-progress: false
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4.1.7
         with:
           name: compose-${{ needs.build-image.outputs.release_id }}
           path: /tmp
 
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -p "${SSH_PORT:-22}" -H "$SSH_HOST" >> ~/.ssh/known_hosts
+      - name: Remote deploy (preprod)
+        uses: ./.github/actions/remote-deploy
+        with:
+          ssh_host:         ${{ secrets.SSH_HOST }}
+          ssh_user:         ${{ secrets.SSH_USER }}
+          ssh_port:         ${{ secrets.SSH_PORT }}
+          ssh_private_key:  ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh_known_hosts:  ${{ secrets.SSH_KNOWN_HOSTS }}
+          deploy_path:      ${{ secrets.DEPLOY_PATH }}
+          ghcr_user:        ${{ secrets.GHCR_PULL_USER || github.actor }}
+          ghcr_token:       ${{ secrets.GHCR_PULL_TOKEN }}
+          image_tag:        ${{ needs.build-image.outputs.image_tag }}
+          release_id:       ${{ needs.build-image.outputs.release_id }}
+          bundle_path:      /tmp/compose-bundle.tgz
 
-      - name: Compute image reference
-        run: |
-          SHA7=${GITHUB_SHA::7}
-          echo "IMAGE_REF=ghcr.io/${GITHUB_REPOSITORY}:sha-${SHA7}" >> "$GITHUB_ENV"
+  # ---------------------------------------------------------------------------
+  # Production deploy. Only runs for `main` / `v*` tag (or workflow_dispatch
+  # with target=production). Uses ONLY secrets scoped to the `production`
+  # GitHub Environment.
+  # ---------------------------------------------------------------------------
+  deploy-production:
+    name: Deploy to production
+    needs: build-image
+    if: needs.build-image.outputs.target == 'production'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: production
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4.1.7
+        with:
+          name: compose-${{ needs.build-image.outputs.release_id }}
+          path: /tmp
 
-      - name: Upload compose bundle
-        run: |
-          scp -P "${SSH_PORT:-22}" /tmp/compose-bundle.tgz \
-            "$SSH_USER@$SSH_HOST:/tmp/compose-$RELEASE_ID.tgz"
-
-      - name: Execute remote deploy
-        run: |
-          ssh -p "${SSH_PORT:-22}" "$SSH_USER@$SSH_HOST" \
-            "DEPLOY_PATH='$DEPLOY_PATH' RELEASE_ID='$RELEASE_ID' \
-             IMAGE_TAG='$IMAGE_TAG' IMAGE_REF='$IMAGE_REF' \
-             GHCR_USER='$GHCR_USER' GHCR_TOKEN='$GHCR_TOKEN' \
-             bash -s" <<'REMOTE'
-          set -euo pipefail
-
-          RELEASE_DIR="$DEPLOY_PATH/releases/$RELEASE_ID"
-          SHARED_DIR="$DEPLOY_PATH/shared"
-          CURRENT="$DEPLOY_PATH/current"
-
-          mkdir -p "$RELEASE_DIR" "$SHARED_DIR/backups" "$SHARED_DIR/database" "$SHARED_DIR/storage"
-          tar -xzf "/tmp/compose-$RELEASE_ID.tgz" -C "$RELEASE_DIR"
-          rm -f "/tmp/compose-$RELEASE_ID.tgz"
-
-          # Login to GHCR (idempotent)
-          echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
-
-          # Pre-flight DB backup (online-safe)
-          TS=$(date -u +%Y%m%dT%H%M%SZ)
-          if [ -f "$SHARED_DIR/database/database.sqlite" ]; then
-            sqlite3 "$SHARED_DIR/database/database.sqlite" \
-              ".backup '$SHARED_DIR/backups/db-$TS.sqlite'"
-            ls -1t "$SHARED_DIR/backups"/db-*.sqlite | tail -n +31 | xargs -r rm --
-          fi
-
-          # Pull new image
-          docker pull "$IMAGE_REF"
-
-          # Record previous tag for one-line rollback
-          if [ -f "$SHARED_DIR/current-tag.txt" ]; then
-            cp "$SHARED_DIR/current-tag.txt" "$SHARED_DIR/last-tag.txt"
-          fi
-          echo "$IMAGE_TAG" > "$SHARED_DIR/current-tag.txt"
-
-          # Run migrations BEFORE swapping containers.
-          # Bypass the image entrypoint so we don't double-run migrations
-          # (the entrypoint also handles RUN_MIGRATIONS=true on container boot).
-          docker run --rm \
-            --env-file "$SHARED_DIR/.env" \
-            --entrypoint php \
-            -v "$SHARED_DIR/database/database.sqlite:/var/www/html/database/database.sqlite" \
-            -v "$SHARED_DIR/storage:/var/www/html/storage" \
-            "$IMAGE_REF" \
-            artisan migrate --force
-
-          # Flip the `current` symlink atomically
-          ln -sfn "$RELEASE_DIR" "$DEPLOY_PATH/current.tmp"
-          mv -Tf "$DEPLOY_PATH/current.tmp" "$CURRENT"
-
-          # Force-rebuild the shared nginx public volume from the new image
-          docker volume rm fides_app-public 2>/dev/null || true
-
-          # Bring up the stack with the new image tag
-          APP_IMAGE_TAG="$IMAGE_TAG" docker compose \
-            -f "$CURRENT/docker/compose/compose.prod.yaml" \
-            up -d --remove-orphans
-
-          # Post-boot cache warm (entrypoint also runs these; this is explicit verification)
-          docker compose -f "$CURRENT/docker/compose/compose.prod.yaml" exec -T app sh -c "
-            php artisan config:cache && \
-            php artisan route:cache && \
-            php artisan view:cache && \
-            php artisan event:cache && \
-            php artisan statamic:stache:warm
-          "
-
-          # Prune
-          docker image prune -f --filter "until=168h"
-          ls -1dt "$DEPLOY_PATH/releases"/* | tail -n +6 | xargs -r rm -rf
-          REMOTE
+      - name: Remote deploy (production)
+        uses: ./.github/actions/remote-deploy
+        with:
+          ssh_host:         ${{ secrets.SSH_HOST }}
+          ssh_user:         ${{ secrets.SSH_USER }}
+          ssh_port:         ${{ secrets.SSH_PORT }}
+          ssh_private_key:  ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh_known_hosts:  ${{ secrets.SSH_KNOWN_HOSTS }}
+          deploy_path:      ${{ secrets.DEPLOY_PATH }}
+          ghcr_user:        ${{ secrets.GHCR_PULL_USER || github.actor }}
+          ghcr_token:       ${{ secrets.GHCR_PULL_TOKEN }}
+          image_tag:        ${{ needs.build-image.outputs.image_tag }}
+          release_id:       ${{ needs.build-image.outputs.release_id }}
+          bundle_path:      /tmp/compose-bundle.tgz
