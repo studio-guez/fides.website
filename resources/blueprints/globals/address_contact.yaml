@@ -1,0 +1,94 @@
+tabs:
+  main:
+    display: Contact/Adresse
+    sections:
+      -
+        fields:
+          -
+            handle: phone
+            field:
+              type: text
+              display: Téléphone
+          -
+            handle: email
+            field:
+              type: text
+              display: E-mail
+          -
+            handle: street_address
+            field:
+              type: text
+              display: Rue
+              localizable: true
+              validate:
+                - required
+          -
+            handle: postal_code
+            field:
+              type: text
+              display: 'Code postal'
+              validate:
+                - required
+          -
+            handle: city
+            field:
+              type: text
+              display: Ville
+              localizable: true
+              validate:
+                - required
+          -
+            handle: country
+            field:
+              type: text
+              display: Pays
+              localizable: true
+              validate:
+                - required
+          -
+            handle: country_code
+            field:
+              type: text
+              display: 'Code pays'
+              validate:
+                - required
+          -
+            handle: google_maps_url
+            field:
+              input_type: url
+              type: text
+              display: 'Lien Google Maps'
+              validate:
+                - url
+  social:
+    display: 'Réseaux sociaux'
+    sections:
+      -
+        fields:
+          -
+            handle: social_networks
+            field:
+              type: replicator
+              display: 'Réseaux sociaux'
+              sets:
+                social_networks:
+                  display: 'Réseaux sociaux'
+                  sets:
+                    social_network:
+                      display: 'Réseau social'
+                      fields:
+                        -
+                          handle: title
+                          field:
+                            type: text
+                            display: Titre
+                            validate:
+                              - required
+                        -
+                          handle: link
+                          field:
+                            type: text
+                            display: Lien
+                            validate:
+                              - required
+                              - url

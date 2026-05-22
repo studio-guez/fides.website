@@ -1,0 +1,108 @@
+tabs:
+  main:
+    display: Principal
+    sections:
+      -
+        fields:
+          -
+            handle: site_name
+            field:
+              type: text
+              display: 'Nom du site'
+              localizable: true
+              validate:
+                - required
+      -
+        display: 'Favicon light'
+        fields:
+          -
+            handle: favicon_light_png
+            field:
+              max_files: 1
+              min_files: 1
+              container: favicons
+              show_set_alt: false
+              type: assets
+              display: 'Favicon light PNG 512x512'
+              validate:
+                - required
+                - 'mimes:png'
+                - 'dimensions:min_width=512,min_height=512,max_width=512,max_height=512'
+          -
+            handle: favicon_light_svg
+            field:
+              max_files: 1
+              min_files: 1
+              container: favicons
+              show_set_alt: false
+              type: assets
+              display: 'Favicon light SVG'
+              validate:
+                - required
+                - 'mimes:svg'
+      -
+        display: 'Favicon dark'
+        fields:
+          -
+            handle: favicon_dark_png
+            field:
+              max_files: 1
+              min_files: 1
+              container: favicons
+              show_set_alt: false
+              type: assets
+              display: 'Favicon dark PNG 512x512'
+              validate:
+                - required
+                - 'mimes:png'
+                - 'dimensions:min_width=512,min_height=512,max_width=512,max_height=512'
+          -
+            handle: favicon_dark_svg
+            field:
+              max_files: 1
+              min_files: 1
+              container: favicons
+              show_set_alt: false
+              type: assets
+              display: 'Favicon dark SVG'
+              validate:
+                - required
+                - 'mimes:svg'
+  seo:
+    display: SEO
+    sections:
+      -
+        fields:
+          -
+            handle: logo
+            field:
+              container: assets
+              max_files: 1
+              min_files: 1
+              type: assets
+              display: Logo
+              validate:
+                - required
+                - 'mimes:png,svg,webp,jpg,jpeg'
+          -
+            handle: legal_name
+            field:
+              type: text
+              display: 'Nom légal'
+              validate:
+                - required
+          -
+            handle: founding_date
+            field:
+              type: text
+              display: 'Date de fondation'
+              validate:
+                - required
+          -
+            handle: area_served
+            field:
+              type: text
+              display: 'Zone desservie'
+              localizable: true
+              validate:
+                - required
