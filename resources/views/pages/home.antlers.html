@@ -348,17 +348,73 @@
         <div class="absolute top-1/4 h-1/5 right-0 left-10 bg-gray-light -z-1"></div>
         <div class="absolute bottom-0 h-1/5 right-10 left-0 bg-gray-light -z-1"></div>
     </section>
-    <section>
-        <h2>{{ history_title }}</h2>
-        <div>
-            {{ history_dates }}
-            <div>
-                <h3>{{ title }}</h3>
-                <div>{{ point_1 }}</div>
-                <div>{{ point_2 }}</div>
-                <div>{{ point_3 }}</div>
+    <section class="py-20">
+        <h2 class="max-w-8xl mx-auto px-base text-title-large text-center mb-10">{{ history_title }}</h2>
+        <div x-data="historyCarousel" x-cloak tabindex="0" role="region" aria-label="{{ history_title }}" @keydown.left.prevent="prev()" @keydown.right.prevent="next()" class="max-w-8xl mx-auto px-base">
+            <div class="hidden" aria-hidden="true">
+                {{ history_dates }}
+                    <div data-history-slide data-year="{{ year }}">
+                        <div data-history-point="point_1">{{ point_1 }}</div>
+                        <div data-history-point="point_2">{{ point_2 }}</div>
+                        <div data-history-point="point_3">{{ point_3 }}</div>
+                    </div>
+                {{ /history_dates }}
             </div>
-            {{ /history_dates }}
+            <div class="relative px-14 md:px-18 lg:px-20">
+                <button type="button" @click="prev()" :disabled="phase !== 'idle'" aria-label="Previous year" class="absolute left-0 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center text-gray-light transition-colors duration-300 hover:text-orange disabled:opacity-30">
+                    <svg viewBox="0 0 24 24" class="h-10 w-10 rotate-180 fill-current" aria-hidden="true">
+                        <polygon points="8,4 20,12 8,20" />
+                    </svg>
+                </button>
+                <div class="grid min-h-112 overflow-hidden lg:min-h-96 lg:grid-cols-2 lg:grid-rows-2">
+                    <div class="flex flex-col items-center justify-center gap-5 px-6 py-10 text-center lg:px-12">
+                        <h3 x-text="items[active]?.year || ''" class="text-6xl md:text-8xl tabular-nums text-orange font-black leading-none"></h3>
+                        <div class="flex items-center gap-3" aria-label="History years">
+                            <template x-for="(carouselYear, index) in years" :key="carouselYear + index">
+                                <button type="button" @click="go(index)" :disabled="phase !== 'idle'" :aria-current="active === index ? 'true' : 'false'" :aria-label="'Go to year ' + carouselYear" class="h-3 w-3 rounded-full bg-gray-light transition-colors duration-300" :class="{ 'bg-orange': active === index }"></button>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="history-panel">
+                        <template x-if="phase === 'idle'">
+                            <div class="history-panel-face text-highlights" :class="panelColorClass('point_1') + ' ' + panelShapeClass('point_1')" x-html="display.point_1.current"></div>
+                        </template>
+                        <template x-if="phase !== 'idle'">
+                            <div class="history-panel-track" :class="panelTrackClass()">
+                                <div class="history-panel-face text-highlights" :class="panelTopClass('point_1')" x-html="panelTop('point_1')"></div>
+                                <div class="history-panel-face text-highlights" :class="panelBottomClass('point_1')" x-html="panelBottom('point_1')"></div>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="history-panel">
+                        <template x-if="phase === 'idle'">
+                            <div class="history-panel-face text-highlights" :class="panelColorClass('point_2') + ' ' + panelShapeClass('point_2')" x-html="display.point_2.current"></div>
+                        </template>
+                        <template x-if="phase !== 'idle'">
+                            <div class="history-panel-track" :class="panelTrackClass()">
+                                <div class="history-panel-face text-highlights" :class="panelTopClass('point_2')" x-html="panelTop('point_2')"></div>
+                                <div class="history-panel-face text-highlights" :class="panelBottomClass('point_2')" x-html="panelBottom('point_2')"></div>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="history-panel">
+                        <template x-if="phase === 'idle'">
+                            <div class="history-panel-face text-highlights" :class="panelColorClass('point_3') + ' ' + panelShapeClass('point_3')" x-html="display.point_3.current"></div>
+                        </template>
+                        <template x-if="phase !== 'idle'">
+                            <div class="history-panel-track" :class="panelTrackClass()">
+                                <div class="history-panel-face text-highlights" :class="panelTopClass('point_3')" x-html="panelTop('point_3')"></div>
+                                <div class="history-panel-face text-highlights" :class="panelBottomClass('point_3')" x-html="panelBottom('point_3')"></div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <button type="button" @click="next()" :disabled="phase !== 'idle'" aria-label="Next year" class="absolute right-0 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center text-gray-light transition-colors duration-300 hover:text-orange disabled:opacity-30">
+                    <svg viewBox="0 0 24 24" class="h-10 w-10 fill-current" aria-hidden="true">
+                        <polygon points="8,4 20,12 8,20" />
+                    </svg>
+                </button>
+            </div>
         </div>
     </section>
 </main>
@@ -477,6 +533,45 @@
             L .2 1
             L .8 1
             A .2 .25 0 0 0 1 .75 Z
+        " />
+    </clipPath>
+    <clipPath id="history-1" clipPathUnits="objectBoundingBox">
+        <path d="
+            M 0 .5
+            A .3333333 .5 0 0 1 .3333333 0
+            L 1 0
+            L 1 .5
+            A .3333333 .5 0 0 1 .6666667 1
+            L 0 1 Z
+        " />
+    </clipPath>
+    <clipPath id="history-2" clipPathUnits="objectBoundingBox">
+        <path d="
+            M 0 0
+            L 1 0
+            L 1 .5
+            A .3333333 .5 0 0 1 .6666667 1
+            L 0 1 Z
+        " />
+    </clipPath>
+    <clipPath id="history-3" clipPathUnits="objectBoundingBox">
+        <path d="
+            M 0 0
+            L .6666667 0
+            L 1 .5
+            L 1 1
+            L 0 1 Z
+        " />
+    </clipPath>
+    <clipPath id="history-4" clipPathUnits="objectBoundingBox">
+        <path d="
+            M .3333333 0
+            L .6666667 0
+            A .3333333 .5 0 0 1 1 .5
+            A .3333333 .5 0 0 1 .6666667 1
+            L .3333333 1
+            A .3333333 .5 0 0 1 0 .5
+            A .3333333 .5 0 0 1 .3333333 0 Z
         " />
     </clipPath>
 </svg>
