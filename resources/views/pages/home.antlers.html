@@ -384,7 +384,7 @@
                         <div class="history-panel-face text-highlights" :class="panelColorClass('point_1') + ' ' + panelShapeClass('point_1')" x-html="display.point_1.current"></div>
                     </template>
                     <template x-if="phase !== 'idle'">
-                        <div class="history-panel-track" :class="panelTrackClass()">
+                        <div class="history-panel-track" :class="panelTrackClass()" :style="panelDelayStyle('point_1')">
                             <div class="history-panel-face text-highlights" :class="panelTopClass('point_1')" x-html="panelTop('point_1')"></div>
                             <div class="history-panel-face text-highlights" :class="panelBottomClass('point_1')" x-html="panelBottom('point_1')"></div>
                         </div>
@@ -395,7 +395,7 @@
                         <div class="history-panel-face text-highlights" :class="panelColorClass('point_2') + ' ' + panelShapeClass('point_2')" x-html="display.point_2.current"></div>
                     </template>
                     <template x-if="phase !== 'idle'">
-                        <div class="history-panel-track" :class="panelTrackClass()">
+                        <div class="history-panel-track" :class="panelTrackClass()" :style="panelDelayStyle('point_2')">
                             <div class="history-panel-face text-highlights" :class="panelTopClass('point_2')" x-html="panelTop('point_2')"></div>
                             <div class="history-panel-face text-highlights" :class="panelBottomClass('point_2')" x-html="panelBottom('point_2')"></div>
                         </div>
@@ -406,7 +406,7 @@
                         <div class="history-panel-face text-highlights" :class="panelColorClass('point_3') + ' ' + panelShapeClass('point_3')" x-html="display.point_3.current"></div>
                     </template>
                     <template x-if="phase !== 'idle'">
-                        <div class="history-panel-track" :class="panelTrackClass()">
+                        <div class="history-panel-track" :class="panelTrackClass()" :style="panelDelayStyle('point_3')">
                             <div class="history-panel-face text-highlights" :class="panelTopClass('point_3')" x-html="panelTop('point_3')"></div>
                             <div class="history-panel-face text-highlights" :class="panelBottomClass('point_3')" x-html="panelBottom('point_3')"></div>
                         </div>

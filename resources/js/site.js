@@ -6,6 +6,8 @@ document.addEventListener('alpine:init', () => {
 	Alpine.data('historyCarousel', () => ({
 		active: 0,
 		displayIndex: 0,
+		animationMs: 700,
+		staggerMs: 80,
 		items: [],
 		years: [],
 		phase: 'idle',
@@ -90,6 +92,12 @@ document.addEventListener('alpine:init', () => {
 
 			return 'translate-y-0';
 		},
+		panelDelayStyle(key) {
+			return `transition-delay: ${this.panelOffset(key) * this.staggerMs}ms;`;
+		},
+		totalAnimationMs() {
+			return this.animationMs + (this.staggerMs * 2);
+		},
 		go(next, direction = null) {
 			if (this.phase !== 'idle' || next === this.active || next < 0 || next >= this.items.length) {
 				return;
@@ -112,7 +120,7 @@ document.addEventListener('alpine:init', () => {
 				this.syncDisplay(nextItem);
 				this.displayIndex = next;
 				this.phase = 'idle';
-			}, 700);
+			}, this.totalAnimationMs());
 		},
 		next() {
 			this.go(this.active === this.items.length - 1 ? 0 : this.active + 1, 1);
