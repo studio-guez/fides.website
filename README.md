@@ -257,8 +257,11 @@ mkdir -p /tmp/fides-shared/{database,storage,content,users,backups}
 touch /tmp/fides-shared/database/database.sqlite
 cp .env.example /tmp/fides-shared/.env   # then edit APP_KEY etc.
 
+mkdir -p /tmp/fides-deploy
+ln -sfn "$(pwd)" /tmp/fides-deploy/current
+
 APP_IMAGE_TAG=latest \
-DEPLOY_PATH=$(pwd) \
+DEPLOY_PATH=/tmp/fides-deploy \
 SHARED_PATH=/tmp/fides-shared \
 APP_HTTP_PORT=8080 \
 docker compose -f docker/compose/compose.prod.yaml up
