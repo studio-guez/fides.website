@@ -34,6 +34,7 @@ option('with-content', 'c', InputOption::VALUE_NONE, 'Deploy with content');
 option('content-path', null, InputOption::VALUE_OPTIONAL, 'Only deploy a specific subfolder within content (e.g. collections/blog)');
 
 add('shared_files', [
+    'database/database.sqlite',
     'public/robots.txt',
     'public/.htaccess',
 ]);
@@ -59,6 +60,19 @@ after('deploy:failed', 'deploy:unlock');
 
 // Copy robots.txt and .htaccess to shared if they don't exist
 task('deploy:shared_public', function () {
+    $sharedDatabasePath = '{{deploy_path}}/shared/database';
+    run("mkdir -p {$sharedDatabasePath}");
+
+    if (!test("[ -f {$sharedDatabasePath}/database.sqlite ]")) {
+        if (test('[ -f {{release_path}}/database/database.sqlite ]')) {
+            run("cp {{release_path}}/database/database.sqlite {$sharedDatabasePath}/database.sqlite");
+            writeln('✅ database.sqlite copied to shared folder');
+        } else {
+            run("touch {$sharedDatabasePath}/database.sqlite");
+            writeln('✅ Created shared database.sqlite file');
+        }
+    }
+
     $sharedPath = '{{deploy_path}}/shared/public';
     run("mkdir -p {$sharedPath}");
 
