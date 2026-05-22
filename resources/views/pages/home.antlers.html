@@ -350,7 +350,17 @@
     </section>
     <section class="py-20">
         <h2 class="max-w-8xl mx-auto px-base text-title-large text-center mb-10">{{ history_title }}</h2>
-        <div x-data="historyCarousel" x-cloak tabindex="0" role="region" aria-label="{{ history_title }}" @keydown.left.prevent="prev()" @keydown.right.prevent="next()" class="max-w-8xl mx-auto px-base">
+        <div x-data="historyCarousel" x-cloak tabindex="0" role="region" aria-label="{{ history_title }}" @keydown.left.prevent="prev()" @keydown.right.prevent="next()" class="max-w-8xl mx-auto px-base relative">
+            <button type="button" @click="prev()" :disabled="phase !== 'idle'" aria-label="Previous year" class="absolute left-0 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 -translate-x-1/2 items-center justify-center text-orange hover:-translate-x-5/8 transition-transform duration-300 cursor-pointer">
+                <svg viewBox="0 0 24 24" class="h-20 w-10 rotate-180 fill-current" aria-hidden="true">
+                    <polygon points="8,4 20,12 8,20" />
+                </svg>
+            </button>
+            <button type="button" @click="next()" :disabled="phase !== 'idle'" aria-label="Next year" class="absolute right-0 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 translate-x-1/2 items-center justify-center text-orange hover:translate-x-5/8 transition-transform duration-300 cursor-pointer">
+                <svg viewBox="0 0 24 24" class="h-20 w-10 fill-current" aria-hidden="true">
+                    <polygon points="8,4 20,12 8,20" />
+                </svg>
+            </button>
             <div class="hidden" aria-hidden="true">
                 {{ history_dates }}
                     <div data-history-slide data-year="{{ year }}">
@@ -360,60 +370,53 @@
                     </div>
                 {{ /history_dates }}
             </div>
-            <div class="relative px-14 md:px-18 lg:px-20">
-                <button type="button" @click="prev()" :disabled="phase !== 'idle'" aria-label="Previous year" class="absolute left-0 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center text-gray-light transition-colors duration-300 hover:text-orange disabled:opacity-30">
-                    <svg viewBox="0 0 24 24" class="h-10 w-10 rotate-180 fill-current" aria-hidden="true">
-                        <polygon points="8,4 20,12 8,20" />
-                    </svg>
-                </button>
-                <div class="grid min-h-112 overflow-hidden lg:min-h-96 lg:grid-cols-2 lg:grid-rows-2">
-                    <div class="flex flex-col items-center justify-center gap-5 px-6 py-10 text-center lg:px-12">
-                        <h3 x-text="items[active]?.year || ''" class="text-6xl md:text-8xl tabular-nums text-orange font-black leading-none"></h3>
-                        <div class="flex items-center gap-3" aria-label="History years">
-                            <template x-for="(carouselYear, index) in years" :key="carouselYear + index">
-                                <button type="button" @click="go(index)" :disabled="phase !== 'idle'" :aria-current="active === index ? 'true' : 'false'" :aria-label="'Go to year ' + carouselYear" class="h-3 w-3 rounded-full bg-gray-light transition-colors duration-300" :class="{ 'bg-orange': active === index }"></button>
-                            </template>
-                        </div>
-                    </div>
-                    <div class="history-panel">
-                        <template x-if="phase === 'idle'">
-                            <div class="history-panel-face text-highlights" :class="panelColorClass('point_1') + ' ' + panelShapeClass('point_1')" x-html="display.point_1.current"></div>
-                        </template>
-                        <template x-if="phase !== 'idle'">
-                            <div class="history-panel-track" :class="panelTrackClass()">
-                                <div class="history-panel-face text-highlights" :class="panelTopClass('point_1')" x-html="panelTop('point_1')"></div>
-                                <div class="history-panel-face text-highlights" :class="panelBottomClass('point_1')" x-html="panelBottom('point_1')"></div>
-                            </div>
-                        </template>
-                    </div>
-                    <div class="history-panel">
-                        <template x-if="phase === 'idle'">
-                            <div class="history-panel-face text-highlights" :class="panelColorClass('point_2') + ' ' + panelShapeClass('point_2')" x-html="display.point_2.current"></div>
-                        </template>
-                        <template x-if="phase !== 'idle'">
-                            <div class="history-panel-track" :class="panelTrackClass()">
-                                <div class="history-panel-face text-highlights" :class="panelTopClass('point_2')" x-html="panelTop('point_2')"></div>
-                                <div class="history-panel-face text-highlights" :class="panelBottomClass('point_2')" x-html="panelBottom('point_2')"></div>
-                            </div>
-                        </template>
-                    </div>
-                    <div class="history-panel">
-                        <template x-if="phase === 'idle'">
-                            <div class="history-panel-face text-highlights" :class="panelColorClass('point_3') + ' ' + panelShapeClass('point_3')" x-html="display.point_3.current"></div>
-                        </template>
-                        <template x-if="phase !== 'idle'">
-                            <div class="history-panel-track" :class="panelTrackClass()">
-                                <div class="history-panel-face text-highlights" :class="panelTopClass('point_3')" x-html="panelTop('point_3')"></div>
-                                <div class="history-panel-face text-highlights" :class="panelBottomClass('point_3')" x-html="panelBottom('point_3')"></div>
-                            </div>
+            <div class="grid min-h-112 overflow-hidden lg:min-h-96 lg:grid-cols-2 lg:grid-rows-2">
+                <div class="flex flex-col items-center justify-center gap-5 px-6 py-10 text-center lg:px-12">
+                    <h3 x-text="items[active]?.year || ''" class="text-6xl md:text-8xl tabular-nums text-orange font-black leading-none"></h3>
+                    <div class="flex items-center gap-3 max-md:hidden" aria-label="History years">
+                        <template x-for="(carouselYear, index) in years" :key="carouselYear + index">
+                            <button type="button" @click="go(index)" :disabled="phase !== 'idle'" :aria-current="active === index ? 'true' : 'false'" :aria-label="'Go to year ' + carouselYear" class="h-3 w-3 rounded-full bg-gray-light transition-colors duration-300 cursor-pointer" :class="{ 'bg-orange': active === index }"></button>
                         </template>
                     </div>
                 </div>
-                <button type="button" @click="next()" :disabled="phase !== 'idle'" aria-label="Next year" class="absolute right-0 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center text-gray-light transition-colors duration-300 hover:text-orange disabled:opacity-30">
-                    <svg viewBox="0 0 24 24" class="h-10 w-10 fill-current" aria-hidden="true">
-                        <polygon points="8,4 20,12 8,20" />
-                    </svg>
-                </button>
+                <div class="history-panel">
+                    <template x-if="phase === 'idle'">
+                        <div class="history-panel-face text-highlights" :class="panelColorClass('point_1') + ' ' + panelShapeClass('point_1')" x-html="display.point_1.current"></div>
+                    </template>
+                    <template x-if="phase !== 'idle'">
+                        <div class="history-panel-track" :class="panelTrackClass()">
+                            <div class="history-panel-face text-highlights" :class="panelTopClass('point_1')" x-html="panelTop('point_1')"></div>
+                            <div class="history-panel-face text-highlights" :class="panelBottomClass('point_1')" x-html="panelBottom('point_1')"></div>
+                        </div>
+                    </template>
+                </div>
+                <div class="history-panel">
+                    <template x-if="phase === 'idle'">
+                        <div class="history-panel-face text-highlights" :class="panelColorClass('point_2') + ' ' + panelShapeClass('point_2')" x-html="display.point_2.current"></div>
+                    </template>
+                    <template x-if="phase !== 'idle'">
+                        <div class="history-panel-track" :class="panelTrackClass()">
+                            <div class="history-panel-face text-highlights" :class="panelTopClass('point_2')" x-html="panelTop('point_2')"></div>
+                            <div class="history-panel-face text-highlights" :class="panelBottomClass('point_2')" x-html="panelBottom('point_2')"></div>
+                        </div>
+                    </template>
+                </div>
+                <div class="history-panel">
+                    <template x-if="phase === 'idle'">
+                        <div class="history-panel-face text-highlights" :class="panelColorClass('point_3') + ' ' + panelShapeClass('point_3')" x-html="display.point_3.current"></div>
+                    </template>
+                    <template x-if="phase !== 'idle'">
+                        <div class="history-panel-track" :class="panelTrackClass()">
+                            <div class="history-panel-face text-highlights" :class="panelTopClass('point_3')" x-html="panelTop('point_3')"></div>
+                            <div class="history-panel-face text-highlights" :class="panelBottomClass('point_3')" x-html="panelBottom('point_3')"></div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+            <div class="flex items-center justify-center gap-3 md:hidden mt-6" aria-label="History years">
+                <template x-for="(carouselYear, index) in years" :key="carouselYear + index">
+                    <button type="button" @click="go(index)" :disabled="phase !== 'idle'" :aria-current="active === index ? 'true' : 'false'" :aria-label="'Go to year ' + carouselYear" class="h-3 w-3 rounded-full bg-gray-light transition-colors duration-300 cursor-pointer" :class="{ 'bg-orange': active === index }"></button>
+                </template>
             </div>
         </div>
     </section>
