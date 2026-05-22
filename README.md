@@ -221,16 +221,17 @@ environment under **Settings → Environments → `preprod`** and
 **Settings → Environments → `production`** with the same key names but the
 environment-appropriate values:
 
-| Secret              | Scope                 | Purpose                                                 |
-| ------------------- | --------------------- | ------------------------------------------------------- |
-| `SSH_HOST`          | per environment       | Target server hostname/IP                               |
-| `SSH_USER`          | per environment       | usually `deploy`                                        |
-| `SSH_PORT`          | per environment       | usually `22`                                            |
-| `SSH_PRIVATE_KEY`   | per environment       | ed25519 deploy key authorised on that server only       |
-| `DEPLOY_PATH`       | per environment       | e.g. `/srv/fides`                                       |
-| `GHCR_PULL_TOKEN`   | per environment       | PAT with `read:packages`, used by the server to pull    |
-| `GHCR_PULL_USER`    | per environment (opt) | GHCR username for the pull token (defaults to actor)    |
-| `COMPOSER_AUTH`     | repository (optional) | JSON for private Composer packages, used at build time  |
+| Secret              | Scope                 | Purpose                                                              |
+| ------------------- | --------------------- | -------------------------------------------------------------------- |
+| `SSH_HOST`          | per environment       | Target server hostname/IP                                            |
+| `SSH_USER`          | per environment       | usually `deploy`                                                     |
+| `SSH_PORT`          | per environment       | usually `22`                                                         |
+| `SSH_PRIVATE_KEY`   | per environment       | ed25519 deploy key authorised on that server only                    |
+| `SSH_KNOWN_HOSTS`   | per environment       | Pinned host key entry — run `ssh-keyscan -H <host>` to obtain it    |
+| `DEPLOY_PATH`       | per environment       | e.g. `/srv/fides`                                                    |
+| `GHCR_PULL_TOKEN`   | per environment       | PAT with `read:packages`, used by the server to pull                 |
+| `GHCR_PULL_USER`    | per environment (opt) | GHCR username for the pull token (defaults to actor)                 |
+| `COMPOSER_AUTH`     | repository (optional) | JSON for private Composer packages, used at build time               |
 
 All app secrets (`APP_KEY`, mail credentials, Statamic license, etc.) live
 in `$DEPLOY_PATH/shared/.env` on each target server — **never** in workflow
@@ -257,11 +258,7 @@ mkdir -p /tmp/fides-shared/{database,storage,content,users,backups}
 touch /tmp/fides-shared/database/database.sqlite
 cp .env.example /tmp/fides-shared/.env   # then edit APP_KEY etc.
 
-mkdir -p /tmp/fides-deploy
-ln -sfn "$(pwd)" /tmp/fides-deploy/current
-
 APP_IMAGE_TAG=latest \
-DEPLOY_PATH=/tmp/fides-deploy \
 SHARED_PATH=/tmp/fides-shared \
 APP_HTTP_PORT=8080 \
 docker compose -f docker/compose/compose.prod.yaml up
@@ -276,7 +273,6 @@ Then browse to <http://127.0.0.1:8080>.
 ssh deploy@<server>
 PREV=$(cat /srv/fides/shared/last-tag.txt)
 APP_IMAGE_TAG=$PREV \
-DEPLOY_PATH=/srv/fides \
 SHARED_PATH=/srv/fides/shared \
 docker compose -f /srv/fides/current/docker/compose/compose.prod.yaml up -d
 

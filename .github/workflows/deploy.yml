@@ -17,11 +17,6 @@ permissions:
   contents: read
   packages: write
 
-concurrency:
-  # One deploy at a time per environment (preprod vs production).
-  group: deploy-${{ github.ref }}
-  cancel-in-progress: false
-
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -123,6 +118,9 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     environment: preprod
+    concurrency:
+      group: deploy-preprod
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4.1.7
@@ -133,16 +131,17 @@ jobs:
       - name: Remote deploy (preprod)
         uses: ./.github/actions/remote-deploy
         with:
-          ssh_host:        ${{ secrets.SSH_HOST }}
-          ssh_user:        ${{ secrets.SSH_USER }}
-          ssh_port:        ${{ secrets.SSH_PORT }}
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          deploy_path:     ${{ secrets.DEPLOY_PATH }}
-          ghcr_user:       ${{ secrets.GHCR_PULL_USER || github.actor }}
-          ghcr_token:      ${{ secrets.GHCR_PULL_TOKEN }}
-          image_tag:       ${{ needs.build-image.outputs.image_tag }}
-          release_id:      ${{ needs.build-image.outputs.release_id }}
-          bundle_path:     /tmp/compose-bundle.tgz
+          ssh_host:         ${{ secrets.SSH_HOST }}
+          ssh_user:         ${{ secrets.SSH_USER }}
+          ssh_port:         ${{ secrets.SSH_PORT }}
+          ssh_private_key:  ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh_known_hosts:  ${{ secrets.SSH_KNOWN_HOSTS }}
+          deploy_path:      ${{ secrets.DEPLOY_PATH }}
+          ghcr_user:        ${{ secrets.GHCR_PULL_USER || github.actor }}
+          ghcr_token:       ${{ secrets.GHCR_PULL_TOKEN }}
+          image_tag:        ${{ needs.build-image.outputs.image_tag }}
+          release_id:       ${{ needs.build-image.outputs.release_id }}
+          bundle_path:      /tmp/compose-bundle.tgz
 
   # ---------------------------------------------------------------------------
   # Production deploy. Only runs for `main` / `v*` tag (or workflow_dispatch
@@ -156,6 +155,9 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     environment: production
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4.1.7
@@ -166,13 +168,14 @@ jobs:
       - name: Remote deploy (production)
         uses: ./.github/actions/remote-deploy
         with:
-          ssh_host:        ${{ secrets.SSH_HOST }}
-          ssh_user:        ${{ secrets.SSH_USER }}
-          ssh_port:        ${{ secrets.SSH_PORT }}
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          deploy_path:     ${{ secrets.DEPLOY_PATH }}
-          ghcr_user:       ${{ secrets.GHCR_PULL_USER || github.actor }}
-          ghcr_token:      ${{ secrets.GHCR_PULL_TOKEN }}
-          image_tag:       ${{ needs.build-image.outputs.image_tag }}
-          release_id:      ${{ needs.build-image.outputs.release_id }}
-          bundle_path:     /tmp/compose-bundle.tgz
+          ssh_host:         ${{ secrets.SSH_HOST }}
+          ssh_user:         ${{ secrets.SSH_USER }}
+          ssh_port:         ${{ secrets.SSH_PORT }}
+          ssh_private_key:  ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh_known_hosts:  ${{ secrets.SSH_KNOWN_HOSTS }}
+          deploy_path:      ${{ secrets.DEPLOY_PATH }}
+          ghcr_user:        ${{ secrets.GHCR_PULL_USER || github.actor }}
+          ghcr_token:       ${{ secrets.GHCR_PULL_TOKEN }}
+          image_tag:        ${{ needs.build-image.outputs.image_tag }}
+          release_id:       ${{ needs.build-image.outputs.release_id }}
+          bundle_path:      /tmp/compose-bundle.tgz
