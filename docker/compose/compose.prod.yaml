@@ -21,7 +21,7 @@
 #   * $DEPLOY_PATH/shared/database/database.sqlite   (host UID 1000)
 #   * $DEPLOY_PATH/shared/storage                    (host UID 1000)
 #   * $DEPLOY_PATH/shared/content                    (host UID 1000)
-#   * $DEPLOY_PATH/shared/users                      (host UID 1000, optional)
+#   * $DEPLOY_PATH/shared/users                      (host UID 1000, Mode B only — see compose file)
 #   * A reverse proxy on the host forwarding the public domain to
 #     127.0.0.1:${APP_HTTP_PORT:-8080}
 name: fides
@@ -43,7 +43,9 @@ services:
       # The entrypoint overlays content/**/* config YAMLs from the image on each
       # start, so collection/global/locale additions never require compose changes.
       - ${SHARED_PATH:-/srv/fides/shared}/content:/var/www/html/content
-      - ${SHARED_PATH:-/srv/fides/shared}/users:/var/www/html/users
+      # Mode B: uncomment to persist users/ on-host (outside the image).
+      # Requires $SHARED_PATH/users to exist with UID 1000 before starting.
+      # - ${SHARED_PATH:-/srv/fides/shared}/users:/var/www/html/users
     networks:
       - internal
 
@@ -53,7 +55,7 @@ services:
     depends_on:
       - app
     volumes:
-      - ${DEPLOY_PATH:-/srv/fides}/current/docker/prod/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../prod/nginx.conf:/etc/nginx/nginx.conf:ro
       # Read-only view of the public/ tree seeded by the `app` service above.
       - app-public:/var/www/html/public:ro
     # The host-level reverse proxy (out of scope for this repo) should forward
