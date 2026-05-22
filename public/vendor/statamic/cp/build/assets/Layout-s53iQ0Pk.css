@@ -1,0 +1,1 @@
+body:has([data-max-width-wrapper]>:is(.max-w-page,.max-w-5xl,.max-w-4xl,.max-w-3xl,[class*=max-\[])) [data-expand-layout-control]{display:none}[data-max-width-enabled=false] [data-max-width-wrapper]{width:100%;max-width:none}
