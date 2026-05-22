@@ -242,7 +242,7 @@ per environment.
 You can smoke-test the built image without any reverse proxy:
 
 ```bash
-docker run --rm -p 8080:80 \
+docker run --rm \
   -v $(pwd)/database/database.sqlite:/var/www/html/database/database.sqlite \
   ghcr.io/studio-guez/fides.website:latest
 ```
