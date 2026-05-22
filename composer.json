@@ -16,6 +16,7 @@
         "statamic/cms": "^6.0"
     },
     "require-dev": {
+        "deployer/deployer": "^8.0",
         "fakerphp/faker": "^1.23",
         "fruitcake/laravel-debugbar": "^4.0",
         "laravel/pail": "^1.2.5",
