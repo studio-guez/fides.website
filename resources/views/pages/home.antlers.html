@@ -86,7 +86,7 @@
                     </div>
                     {{ /social_impact_col_1_cta_points }}
                 </div>
-                <a href="{{ social_impact_col_1_cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-large flex w-fit items-center gap-2 transition-colors rounded-full pl-3 pr-6 py-3 mx-auto">
+                <a href="{{ social_impact_col_1_cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-large flex w-fit items-center gap-2 transition-colors duration-300 rounded-full pl-3 pr-6 py-3 mx-auto">
                     <span class="bg-orange flex items-center justify-center rounded-full w-10 h-10 shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-6"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
                     </span>
@@ -104,7 +104,7 @@
                     </div>
                     {{ /social_impact_col_2_cta_points }}
                 </div>
-                <a href="{{ social_impact_col_1_cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-large flex w-fit items-center gap-2 transition-colors rounded-full pl-3 pr-6 py-3 mx-auto">
+                <a href="{{ social_impact_col_2_cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-large flex w-fit items-center gap-2 transition-colors duration-300 rounded-full pl-3 pr-6 py-3 mx-auto">
                     <span class="bg-orange flex items-center justify-center rounded-full w-10 h-10 shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-6"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
                     </span>
@@ -113,124 +113,240 @@
             </div>
         </div>
     </section>
-    <section>
-        <h2>{{ realisations_title }}</h2>
-        <div>
-            <div>
-                <div>
-                    <h3>{{ realisations_card_1_recto:title }}</h3>
-                    {{ if realisations_card_1_recto:intro }}
-                        <p>{{ realisations_card_1_recto:intro }}</p>
-                    {{ /if }}
-                </div>
-                <div>
-                    {{ if realisations_card_1_verso:title }}
-                        <h4>{{ realisations_card_1_verso:title }}</h4>
-                    {{ /if }}
-                    {{ if realisations_card_1_verso:description }}
-                        {{ realisations_card_1_verso:description }}
-                    {{ /if }}
-                    {{ if realisations_card_1_verso:cta_link }}
-                        <a href="{{ realisations_card_1_verso:cta_link }}" target="_blank" rel="noopener">{{ realisations_card_1_verso:cta_text ?? realisations_card_1_verso:cta_link }}</a>
-                    {{ /if }}
-                </div>
-            </div>
-            <div>
-                <div>
-                    <h3>{{ realisations_card_2_recto:title }}</h3>
-                    {{ if realisations_card_2_recto:intro }}
-                        <p>{{ realisations_card_2_recto:intro }}</p>
-                    {{ /if }}
-                </div>
-                <div>
-                    {{ if realisations_card_2_verso:title }}
-                        <h4>{{ realisations_card_2_verso:title }}</h4>
-                    {{ /if }}
-                    {{ if realisations_card_2_verso:description }}
-                        {{ realisations_card_2_verso:description }}
-                    {{ /if }}
-                    {{ if realisations_card_2_verso:cta_link }}
-                        <a href="{{ realisations_card_2_verso:cta_link }}" target="_blank" rel="noopener">{{ realisations_card_2_verso:cta_text ?? realisations_card_2_verso:cta_link }}</a>
-                    {{ /if }}
-                </div>
-            </div>
-            <div>
-                <div>
-                    <h3>{{ realisations_card_3_recto:title }}</h3>
-                    {{ if realisations_card_3_recto:intro }}
-                        <p>{{ realisations_card_3_recto:intro }}</p>
-                    {{ /if }}
-                </div>
-                <div>
-                    {{ if realisations_card_3_verso:title }}
-                        <h4>{{ realisations_card_3_verso:title }}</h4>
-                    {{ /if }}
-                    {{ if realisations_card_3_verso:description }}
-                        {{ realisations_card_3_verso:description }}
-                    {{ /if }}
-                    {{ if realisations_card_3_verso:cta_link }}
-                        <a href="{{ realisations_card_3_verso:cta_link }}" target="_blank" rel="noopener">{{ realisations_card_3_verso:cta_text ?? realisations_card_3_verso:cta_link }}</a>
-                    {{ /if }}
+    <section class="py-20 relative">
+        <h2 class="max-w-8xl mx-auto px-base text-title-large text-center mb-10">{{ realisations_title }}</h2>
+        <div class="max-w-8xl mx-auto px-base lg:grid lg:grid-cols-2">
+            <div class="card card-1"
+                x-data="{ flipped: false }"
+                :class="{ 'is-flipped': flipped }"
+                @click="flipped = !flipped"
+                @keyup.enter="flipped = !flipped"
+                @keyup.space.prevent="flipped = !flipped"
+                role="button"
+                tabindex="0">
+                <div class="card-inner h-full">
+                    <div class="card-recto pt-[5%] pl-[30%] pr-[5%] pb-[15%] group">
+                        <h3 class="text-title-medium text-balance mb-3">{{ realisations_card_1_recto:title }}</h3>
+                        {{ if realisations_card_1_recto:intro }}
+                            <p class="text-body-medium text-balance mb-3">{{ realisations_card_1_recto:intro }}</p>
+                        {{ /if }}
+                        <span class="bg-orange flex items-center justify-center rounded-full w-10 h-10 shrink-0 group-hover:translate-x-1/4 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-6"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
+                        </span>
+                    </div>
+                    <div class="card-verso pt-[5%] pl-[5%] pr-[30%] pb-[15%]">
+                        {{ if realisations_card_1_verso:title }}
+                            <h4 class="text-title-medium text-balance mb-3">{{ realisations_card_1_verso:title }}</h4>
+                        {{ /if }}
+                        {{ if realisations_card_1_verso:description }}
+                        <div class="[&>p:not(:last-child)]:mb-[.5lh] mb-3 text-body-small">
+                            {{ realisations_card_1_verso:description }}
+                        </div>
+                        {{ /if }}
+                        {{ if realisations_card_1_verso:cta_link }}
+                            <a href="{{ realisations_card_1_verso:cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-medium flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
+                                <span class="bg-orange flex items-center justify-center rounded-full w-6 h-6 shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-4"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
+                                </span>
+                                {{ realisations_card_1_verso:cta_text ?? realisations_card_1_verso:cta_link }}
+                            </a>
+                        {{ /if }}
+                    </div>
                 </div>
             </div>
-            <div>
-                <div>
-                    <h3>{{ realisations_card_4_recto:title }}</h3>
-                    {{ if realisations_card_4_recto:intro }}
-                        <p>{{ realisations_card_4_recto:intro }}</p>
-                    {{ /if }}
-                </div>
-                <div>
-                    {{ if realisations_card_4_verso:title }}
-                        <h4>{{ realisations_card_4_verso:title }}</h4>
-                    {{ /if }}
-                    {{ if realisations_card_4_verso:description }}
-                        {{ realisations_card_4_verso:description }}
-                    {{ /if }}
-                    {{ if realisations_card_4_verso:cta_link }}
-                        <a href="{{ realisations_card_4_verso:cta_link }}" target="_blank" rel="noopener">{{ realisations_card_4_verso:cta_text ?? realisations_card_4_verso:cta_link }}</a>
-                    {{ /if }}
+            <div class="card card-2"
+                x-data="{ flipped: false }"
+                :class="{ 'is-flipped': flipped }"
+                @click="flipped = !flipped"
+                @keyup.enter="flipped = !flipped"
+                @keyup.space.prevent="flipped = !flipped"
+                role="button"
+                tabindex="0">
+                <div class="card-inner h-full">
+                    <div class="card-recto pt-[25%] pl-[15%] pr-[10%] pb-[5%] group">
+                        <h3 class="text-title-medium text-balance mb-3">{{ realisations_card_2_recto:title }}</h3>
+                        {{ if realisations_card_2_recto:intro }}
+                            <p class="text-body-medium text-balance mb-3">{{ realisations_card_2_recto:intro }}</p>
+                        {{ /if }}
+                        <span class="bg-orange flex items-center justify-center rounded-full w-10 h-10 shrink-0 group-hover:translate-x-1/4 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-6"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
+                        </span>
+                    </div>
+                    <div class="card-verso pt-[25%] pl-[10%] pr-[15%] pb-[5%]">
+                        {{ if realisations_card_2_verso:title }}
+                            <h4 class="text-title-medium text-balance mb-3">{{ realisations_card_2_verso:title }}</h4>
+                        {{ /if }}
+                        {{ if realisations_card_2_verso:description }}
+                        <div class="[&>p:not(:last-child)]:mb-[.5lh] mb-3 text-body-small">
+                            {{ realisations_card_2_verso:description }}
+                        </div>
+                        {{ /if }}
+                        {{ if realisations_card_2_verso:cta_link }}
+                            <a href="{{ realisations_card_2_verso:cta_link }}" target="_blank" rel="noopener"class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-medium flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
+                                <span class="bg-orange flex items-center justify-center rounded-full w-6 h-6 shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-4"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
+                                </span>
+                                {{ realisations_card_2_verso:cta_text ?? realisations_card_2_verso:cta_link }}
+                            </a>
+                        {{ /if }}
+                    </div>
                 </div>
             </div>
-            <div>
-                <div>
-                    <h3>{{ realisations_card_5_recto:title }}</h3>
-                    {{ if realisations_card_5_recto:intro }}
-                        <p>{{ realisations_card_5_recto:intro }}</p>
-                    {{ /if }}
-                </div>
-                <div>
-                    {{ if realisations_card_5_verso:title }}
-                        <h4>{{ realisations_card_5_verso:title }}</h4>
-                    {{ /if }}
-                    {{ if realisations_card_5_verso:description }}
-                        {{ realisations_card_5_verso:description }}
-                    {{ /if }}
-                    {{ if realisations_card_5_verso:cta_link }}
-                        <a href="{{ realisations_card_5_verso:cta_link }}" target="_blank" rel="noopener">{{ realisations_card_5_verso:cta_text ?? realisations_card_5_verso:cta_link }}</a>
-                    {{ /if }}
+            <div class="card card-3"
+                x-data="{ flipped: false }"
+                :class="{ 'is-flipped': flipped }"
+                @click="flipped = !flipped"
+                @keyup.enter="flipped = !flipped"
+                @keyup.space.prevent="flipped = !flipped"
+                role="button"
+                tabindex="0">
+                <div class="card-inner h-full">
+                    <div class="card-recto pt-[5%] pl-[15%] pr-[5%] pb-[30%] group">
+                        <h3 class="text-title-medium text-balance mb-3">{{ realisations_card_3_recto:title }}</h3>
+                        {{ if realisations_card_3_recto:intro }}
+                            <p class="text-body-medium text-balance mb-3">{{ realisations_card_3_recto:intro }}</p>
+                        {{ /if }}
+                        <span class="bg-orange flex items-center justify-center rounded-full w-10 h-10 shrink-0 group-hover:translate-x-1/4 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-6"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
+                        </span>
+                    </div>
+                    <div class="card-verso pt-[5%] pl-[5%] pr-[15%] pb-[30%]">
+                        {{ if realisations_card_3_verso:title }}
+                            <h4 class="text-title-medium text-balance mb-3">{{ realisations_card_3_verso:title }}</h4>
+                        {{ /if }}
+                        {{ if realisations_card_3_verso:description }}
+                        <div class="[&>p:not(:last-child)]:mb-[.5lh] mb-3 text-body-small">
+                            {{ realisations_card_3_verso:description }}
+                        </div>
+                        {{ /if }}
+                        {{ if realisations_card_3_verso:cta_link }}
+                            <a href="{{ realisations_card_3_verso:cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-medium flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
+                                <span class="bg-orange flex items-center justify-center rounded-full w-6 h-6 shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-4"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
+                                </span>
+                                {{ realisations_card_3_verso:cta_text ?? realisations_card_3_verso:cta_link }}
+                            </a>
+                        {{ /if }}
+                    </div>
                 </div>
             </div>
-            <div>
-                <div>
-                    <h3>{{ realisations_card_6_recto:title }}</h3>
-                    {{ if realisations_card_6_recto:intro }}
-                        <p>{{ realisations_card_6_recto:intro }}</p>
-                    {{ /if }}
+            <div class="card card-4"
+                x-data="{ flipped: false }"
+                :class="{ 'is-flipped': flipped }"
+                @click="flipped = !flipped"
+                @keyup.enter="flipped = !flipped"
+                @keyup.space.prevent="flipped = !flipped"
+                role="button"
+                tabindex="0">
+                <div class="card-inner h-full">
+                    <div class="card-recto pt-[30%] pl-[5%] pr-[15%] pb-[5%] group">
+                        <h3 class="text-title-medium text-balance mb-3">{{ realisations_card_4_recto:title }}</h3>
+                        {{ if realisations_card_4_recto:intro }}
+                            <p class="text-body-medium text-balance mb-3">{{ realisations_card_4_recto:intro }}</p>
+                        {{ /if }}
+                        <span class="bg-orange border-2 border-white flex items-center justify-center rounded-full w-10 h-10 shrink-0 group-hover:translate-x-1/4 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-6"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
+                        </span>
+                    </div>
+                    <div class="card-verso pt-[30%] pl-[20%] pr-[20%] pb-[10%]">
+                        {{ if realisations_card_4_verso:title }}
+                            <h4 class="text-title-medium text-balance mb-3">{{ realisations_card_4_verso:title }}</h4>
+                        {{ /if }}
+                        {{ if realisations_card_4_verso:description }}
+                        <div class="[&>p:not(:last-child)]:mb-[.5lh] mb-3 text-body-small">
+                            {{ realisations_card_4_verso:description }}
+                        </div>
+                        {{ /if }}
+                        {{ if realisations_card_4_verso:cta_link }}
+                            <a href="{{ realisations_card_4_verso:cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-medium flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
+                                <span class="bg-orange flex items-center justify-center rounded-full w-6 h-6 shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-4"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
+                                </span>
+                                {{ realisations_card_4_verso:cta_text ?? realisations_card_4_verso:cta_link }}
+                            </a>
+                        {{ /if }}
+                    </div>
                 </div>
-                <div>
-                    {{ if realisations_card_6_verso:title }}
-                        <h4>{{ realisations_card_6_verso:title }}</h4>
-                    {{ /if }}
-                    {{ if realisations_card_6_verso:description }}
-                        {{ realisations_card_6_verso:description }}
-                    {{ /if }}
-                    {{ if realisations_card_6_verso:cta_link }}
-                        <a href="{{ realisations_card_6_verso:cta_link }}" target="_blank" rel="noopener">{{ realisations_card_6_verso:cta_text ?? realisations_card_6_verso:cta_link }}</a>
-                    {{ /if }}
+            </div>
+            <div class="card card-5"
+                x-data="{ flipped: false }"
+                :class="{ 'is-flipped': flipped }"
+                @click="flipped = !flipped"
+                @keyup.enter="flipped = !flipped"
+                @keyup.space.prevent="flipped = !flipped"
+                role="button"
+                tabindex="0">
+                <div class="card-inner h-full">
+                    <div class="card-recto pt-[20%] pl-[25%] pr-[5%] pb-[10%] group">
+                        <h3 class="text-title-medium text-balance mb-3">{{ realisations_card_5_recto:title }}</h3>
+                        {{ if realisations_card_5_recto:intro }}
+                            <p class="text-body-medium text-balance mb-3">{{ realisations_card_5_recto:intro }}</p>
+                        {{ /if }}
+                        <span class="bg-orange flex items-center justify-center rounded-full w-10 h-10 shrink-0 group-hover:translate-x-1/4 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-6"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
+                        </span>
+                    </div>
+                    <div class="card-verso pt-[20%] pl-[5%] pr-[20%] pb-[10%]">
+                        {{ if realisations_card_5_verso:title }}
+                            <h4 class="text-title-medium text-balance mb-3">{{ realisations_card_5_verso:title }}</h4>
+                        {{ /if }}
+                        {{ if realisations_card_5_verso:description }}
+                        <div class="[&>p:not(:last-child)]:mb-[.5lh] mb-3 text-body-small">
+                            {{ realisations_card_5_verso:description }}
+                        </div>
+                        {{ /if }}
+                        {{ if realisations_card_5_verso:cta_link }}
+                            <a href="{{ realisations_card_5_verso:cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-medium flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
+                                <span class="bg-orange flex items-center justify-center rounded-full w-6 h-6 shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-4"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
+                                </span>
+                                {{ realisations_card_5_verso:cta_text ?? realisations_card_5_verso:cta_link }}
+                            </a>
+                        {{ /if }}
+                    </div>
+                </div>
+            </div>
+            <div class="card card-6"
+                x-data="{ flipped: false }"
+                :class="{ 'is-flipped': flipped }"
+                @click="flipped = !flipped"
+                @keyup.enter="flipped = !flipped"
+                @keyup.space.prevent="flipped = !flipped"
+                role="button"
+                tabindex="0">
+                <div class="card-inner h-full">
+                    <div class="card-recto pt-[15%] pl-[5%] pr-[20%] pb-[15%] group">
+                        <h3 class="text-title-medium text-balance mb-3">{{ realisations_card_6_recto:title }}</h3>
+                        {{ if realisations_card_6_recto:intro }}
+                            <p class="text-body-medium text-balance mb-3">{{ realisations_card_6_recto:intro }}</p>
+                        {{ /if }}
+                        <span class="bg-orange flex items-center justify-center rounded-full w-10 h-10 shrink-0 group-hover:translate-x-1/4 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-6"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
+                        </span>
+                    </div>
+                    <div class="card-verso pt-[15%] pl-[20%] pr-[5%] pb-[15%]">
+                        {{ if realisations_card_6_verso:title }}
+                            <h4 class="text-title-medium text-balance mb-3">{{ realisations_card_6_verso:title }}</h4>
+                        {{ /if }}
+                        {{ if realisations_card_6_verso:description }}
+                        <div class="[&>p:not(:last-child)]:mb-[.5lh] mb-3 text-body-small">
+                            {{ realisations_card_6_verso:description }}
+                        </div>
+                        {{ /if }}
+                        {{ if realisations_card_6_verso:cta_link }}
+                            <a href="{{ realisations_card_6_verso:cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-medium flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
+                                <span class="bg-orange flex items-center justify-center rounded-full w-6 h-6 shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-4"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
+                                </span>
+                                {{ realisations_card_6_verso:cta_text ?? realisations_card_6_verso:cta_link }}
+                            </a>
+                        {{ /if }}
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="absolute top-1/4 h-1/5 right-0 left-10 bg-gray-light -z-1"></div>
+        <div class="absolute bottom-0 h-1/5 right-10 left-0 bg-gray-light -z-1"></div>
     </section>
     <section>
         <h2>{{ history_title }}</h2>
@@ -246,3 +362,121 @@
         </div>
     </section>
 </main>
+<svg width="0" height="0" aria-hidden="true">
+    <clipPath id="card-1" clipPathUnits="objectBoundingBox">
+        <path d="
+            M 0 .25
+            A .20 .25 0 0 1 .20 0
+            L 1 0
+            L 1 1
+            L .40 1
+            L 0 .50 Z
+        " />
+    </clipPath>
+    <clipPath id="card-1-flipped" clipPathUnits="objectBoundingBox">
+        <path d="
+            M 1 .25
+            A .20 .25 0 0 0 .80 0
+            L 0 0
+            L 0 1
+            L .60 1
+            L 1 .50 Z
+        " />
+    </clipPath>
+    <clipPath id="card-2" clipPathUnits="objectBoundingBox">
+        <path d="
+            M 0 .25
+            L .4 0
+            L .6 0
+            A .4 .5 0 0 1 1 .5
+            L 1 1
+            L 0 1 Z
+        " />
+    </clipPath>
+    <clipPath id="card-2-flipped" clipPathUnits="objectBoundingBox">
+        <path d="
+            M 1 .25
+            L .6 0
+            L .4 0
+            A .4 .5 0 0 0 0 .5
+            L 0 1
+            L 1 1 Z
+        " />
+    </clipPath>
+    <clipPath id="card-3" clipPathUnits="objectBoundingBox">
+        <path d="
+            M 0 0
+            L 1 0
+            L 1 1
+            L .40 1
+            L 0 .50 Z
+        " />
+    </clipPath>
+    <clipPath id="card-3-flipped" clipPathUnits="objectBoundingBox">
+        <path d="
+            M 1 0
+            L 0 0
+            L 0 1
+            L .60 1
+            L 1 .50 Z
+        " />
+    </clipPath>
+    <clipPath id="card-4" clipPathUnits="objectBoundingBox">
+        <path d="
+            M 0 0
+            L .6 0
+            L 1 .5
+            L 1 1
+            L 0 1 Z
+        " />
+    </clipPath>
+    <clipPath id="card-4-flipped" clipPathUnits="objectBoundingBox">
+        <path d="
+            M 1 0
+            L .4 0
+            L 0 .5
+            L 0 1
+            L 1 1 Z
+        " />
+    </clipPath>
+    <clipPath id="card-5" clipPathUnits="objectBoundingBox">
+        <path d="
+            M 0 .5
+            L .4 0
+            L 1 0
+            L 1 .5
+            L .8 1
+            L 0 1 Z
+        " />
+    </clipPath>
+    <clipPath id="card-5-flipped" clipPathUnits="objectBoundingBox">
+        <path d="
+            M 1 .5
+            L .6 0
+            L 0 0
+            L 0 .5
+            L .2 1
+            L 1 1 Z
+        " />
+    </clipPath>
+    <clipPath id="card-6" clipPathUnits="objectBoundingBox">
+        <path d="
+            M 0 0
+            L .8 0
+            L 1 .5
+            L .8 1
+            L .2 1
+            A .2 .25 0 0 1 0 .75 Z
+        " />
+    </clipPath>
+    <clipPath id="card-6-flipped" clipPathUnits="objectBoundingBox">
+        <path d="
+            M 1 0
+            L .2 0
+            L 0 .5
+            L .2 1
+            L .8 1
+            A .2 .25 0 0 0 1 .75 Z
+        " />
+    </clipPath>
+</svg>

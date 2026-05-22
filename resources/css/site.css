@@ -62,6 +62,94 @@
         @apply text-lg md:text-2xl font-bold;
     }
     .text-cta-medium {
-        @apply text-lg md:text-xl font-bold;
+        @apply text-base md:text-lg font-bold;
+    }
+}
+
+@layer components {
+    .card {
+        @apply aspect-[5/4] relative cursor-pointer;
+        perspective: 100000px;
+    }
+    .card-inner {
+        @apply absolute inset-0;
+        transform-style: preserve-3d;
+        transition: transform 0.6s ease;
+        will-change: transform;
+    }
+    .card.is-flipped .card-inner {
+        transform: rotateY(180deg);
+    }
+    .card-recto,
+    .card-verso {
+        @apply absolute inset-0;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .card-verso {
+        transform: rotateY(180deg);
+    }
+    .card-1 .card-recto {
+        @apply bg-blue-light;
+        clip-path: url(#card-1);
+        -webkit-clip-path: url(#card-1);
+    }
+    .card-1 .card-verso {
+        @apply bg-blue-light;
+        clip-path: url(#card-1-flipped);
+        -webkit-clip-path: url(#card-1-flipped);
+    }
+    .card-2 .card-recto {
+        @apply bg-blue text-white;
+        clip-path: url(#card-2);
+        -webkit-clip-path: url(#card-2);
+    }
+    .card-2 .card-verso {
+        @apply bg-blue text-white;
+        clip-path: url(#card-2-flipped);
+        -webkit-clip-path: url(#card-2-flipped);
+    }
+    .card-3 .card-recto {
+        @apply bg-blue text-white;
+        clip-path: url(#card-3);
+        -webkit-clip-path: url(#card-3);
+    }
+    .card-3 .card-verso {
+        @apply bg-blue text-white;
+        clip-path: url(#card-3-flipped);
+        -webkit-clip-path: url(#card-3-flipped);
+    }
+    .card-4 .card-recto {
+        @apply bg-orange text-white;
+        clip-path: url(#card-4);
+        -webkit-clip-path: url(#card-4);
+    }
+    .card-4 .card-verso {
+        @apply bg-orange text-white;
+        clip-path: url(#card-4-flipped);
+        -webkit-clip-path: url(#card-4-flipped);
+    }
+    .card-5 .card-recto {
+        @apply bg-blue-light;
+        clip-path: url(#card-5);
+        -webkit-clip-path: url(#card-5);
+    }
+    .card-5 .card-verso {
+        @apply bg-blue-light;
+        clip-path: url(#card-5-flipped);
+        -webkit-clip-path: url(#card-5-flipped);
+    }
+    .card-6 .card-recto {
+        @apply bg-blue text-white;
+        clip-path: url(#card-6);
+        -webkit-clip-path: url(#card-6);
+    }
+    .card-6 .card-verso {
+        @apply bg-blue text-white;
+        clip-path: url(#card-6-flipped);
+        -webkit-clip-path: url(#card-6-flipped);
     }
 }
