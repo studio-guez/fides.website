@@ -1,6 +1,6 @@
 <header class="pt-20">
     <div class="lg:grid lg:grid-cols-3 lg:gap-16 max-w-8xl mx-auto px-base pb-20 items-center">
-        {{ partial:asset :image="header_logo:id" :alt_glide="header_logo:alt" preset="half" }}
+        {{ partial:asset :image="header_logo:id" :alt_glide="header_logo:alt" preset="half" class="max-md:w-30 max-lg:w-60 max-lg:max-w-full max-lg:mb-6" }}
         <h1 class="text-title-large text-blue text-balance lg:col-span-2">{{ header_title }}</h1>
     </div>
     <div class="relative">
@@ -62,8 +62,10 @@
     {{ /if }}
     <section>
         <h2 class="sr-only">{{ intro_title }}</h2>
-        <div class="text-body-medium max-w-8xl mx-auto px-base py-20 [&>p]:bg-gray-light [&>p]:p-6 [&>p]:rounded-4xl [&>p]:max-w-2xl [&>p:nth-child(4n+2)]:mx-auto [&>p:nth-child(4n)]:mx-auto [&>p:nth-child(4n+3)]:ml-auto">
-            {{ intro }}
+        <div class="max-w-8xl mx-auto px-base py-20">
+            <div class="text-body-medium max-lg:bg-gray-light max-lg:rounded-4xl max-lg:p-6 [&>p]:max-lg:not-last:mb-[.75lh] [&>p]:lg:bg-gray-light [&>p]:lg:p-6 [&>p]:lg:rounded-4xl [&>p]:lg:max-w-2xl [&>p:nth-child(4n+2)]:lg:mx-auto [&>p:nth-child(4n)]:lg:mx-auto [&>p:nth-child(4n+3)]:lg:ml-auto">
+                {{ intro }}
+            </div>
         </div>
         <div class="relative pb-20">
             <div class="max-w-8xl mx-auto px-base">
@@ -75,7 +77,7 @@
     <section class="pt-20">
         <h2 class="max-w-8xl mx-auto px-base text-title-large text-center mb-10">{{ social_impact_title }}</h2>
         <div class="max-w-8xl mx-auto px-base lg:grid lg:grid-cols-2 lg:gap-8">
-            <div>
+            <div class="max-lg:mb-20">
                 <div class="bg-gray-light p-3 rounded-tl-4xl rounded-br-4xl mb-6">
                     <h3 class="text-title-medium text-center mb-3 text-balance">{{ social_impact_col_1_title }}</h3>
                     <div class="bg-white p-6 rounded-tl-4xl text-body-medium text-center text-balance mb-3">{{ social_impact_col_1_intro }}</div>
@@ -372,8 +374,8 @@
             </div>
             <div class="grid min-h-112 overflow-hidden lg:min-h-96 lg:grid-cols-2 lg:grid-rows-2">
                 <div class="flex flex-col items-center justify-center gap-5 px-6 py-10 text-center lg:px-12">
-                    <h3 x-text="items[active]?.year || ''" class="text-6xl md:text-8xl tabular-nums text-orange font-black leading-none"></h3>
-                    <div class="flex items-center gap-3 max-md:hidden" aria-label="History years">
+                    <h3 x-text="items[active]?.year || ''" class="text-7xl md:text-8xl tabular-nums text-orange font-black leading-none"></h3>
+                    <div class="flex items-center gap-3 max-lg:hidden" aria-label="History years">
                         <template x-for="(carouselYear, index) in years" :key="carouselYear + index">
                             <button type="button" @click="go(index)" :disabled="phase !== 'idle'" :aria-current="active === index ? 'true' : 'false'" :aria-label="'Go to year ' + carouselYear" class="h-3 w-3 rounded-full bg-gray-light transition-colors duration-300 cursor-pointer" :class="{ 'bg-orange': active === index }"></button>
                         </template>
@@ -384,7 +386,7 @@
                         <div class="history-panel-face text-highlights" :class="panelColorClass('point_1') + ' ' + panelShapeClass('point_1')" x-html="display.point_1.current"></div>
                     </template>
                     <template x-if="phase !== 'idle'">
-                        <div class="history-panel-track" :class="panelTrackClass()">
+                        <div class="history-panel-track" :class="panelTrackClass()" :style="panelDelayStyle('point_1')">
                             <div class="history-panel-face text-highlights" :class="panelTopClass('point_1')" x-html="panelTop('point_1')"></div>
                             <div class="history-panel-face text-highlights" :class="panelBottomClass('point_1')" x-html="panelBottom('point_1')"></div>
                         </div>
@@ -395,7 +397,7 @@
                         <div class="history-panel-face text-highlights" :class="panelColorClass('point_2') + ' ' + panelShapeClass('point_2')" x-html="display.point_2.current"></div>
                     </template>
                     <template x-if="phase !== 'idle'">
-                        <div class="history-panel-track" :class="panelTrackClass()">
+                        <div class="history-panel-track" :class="panelTrackClass()" :style="panelDelayStyle('point_2')">
                             <div class="history-panel-face text-highlights" :class="panelTopClass('point_2')" x-html="panelTop('point_2')"></div>
                             <div class="history-panel-face text-highlights" :class="panelBottomClass('point_2')" x-html="panelBottom('point_2')"></div>
                         </div>
@@ -406,14 +408,14 @@
                         <div class="history-panel-face text-highlights" :class="panelColorClass('point_3') + ' ' + panelShapeClass('point_3')" x-html="display.point_3.current"></div>
                     </template>
                     <template x-if="phase !== 'idle'">
-                        <div class="history-panel-track" :class="panelTrackClass()">
+                        <div class="history-panel-track" :class="panelTrackClass()" :style="panelDelayStyle('point_3')">
                             <div class="history-panel-face text-highlights" :class="panelTopClass('point_3')" x-html="panelTop('point_3')"></div>
                             <div class="history-panel-face text-highlights" :class="panelBottomClass('point_3')" x-html="panelBottom('point_3')"></div>
                         </div>
                     </template>
                 </div>
             </div>
-            <div class="flex items-center justify-center gap-3 md:hidden mt-6" aria-label="History years">
+            <div class="flex items-center justify-center gap-3 lg:hidden mt-6" aria-label="History years">
                 <template x-for="(carouselYear, index) in years" :key="carouselYear + index">
                     <button type="button" @click="go(index)" :disabled="phase !== 'idle'" :aria-current="active === index ? 'true' : 'false'" :aria-label="'Go to year ' + carouselYear" class="h-3 w-3 rounded-full bg-gray-light transition-colors duration-300 cursor-pointer" :class="{ 'bg-orange': active === index }"></button>
                 </template>
