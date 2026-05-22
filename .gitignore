@@ -16,12 +16,8 @@
 /docker-compose.override.yaml
 /docker-compose.override.yml
 /node_modules
-/public/build
-/public/fonts-manifest.dev.json
 /public/hot
-/public/static
 /public/storage
-/public/vendor/statamic
 /content/*/*/
 /users
 /storage/*.key
