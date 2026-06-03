@@ -1,0 +1,1 @@
+import{B as e,J as t,T as n,_ as r}from"./vue.esm-bundler-hI_yHiJp.js";import{t as i}from"./_plugin-vue_export-helper-BOai-rQB.js";var a={props:{html:{type:String,required:!0}},computed:{dynamicComponent(){return n({template:this.html})}}};function o(n,i,a,o,s,c){return e(),r(t(c.dynamicComponent))}var s=i(a,[[`render`,o]]);export{s as t};
