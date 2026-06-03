@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7091a39d34b6e554b39689f0bc1fbd35",
+    "content-hash": "3080d7114575fec64ce901e5c34c36fc",
     "packages": [
         {
             "name": "ajthinking/archetype",
@@ -5231,16 +5231,16 @@
         },
         {
             "name": "statamic/cms",
-            "version": "v6.19.0",
+            "version": "v6.20.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/statamic/cms.git",
-                "reference": "509fd1b454f898bc1015915fc79e6fa45b5fe91e"
+                "reference": "ae63c74586e93018594023de774ec29c91202e21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/statamic/cms/zipball/509fd1b454f898bc1015915fc79e6fa45b5fe91e",
-                "reference": "509fd1b454f898bc1015915fc79e6fa45b5fe91e",
+                "url": "https://api.github.com/repos/statamic/cms/zipball/ae63c74586e93018594023de774ec29c91202e21",
+                "reference": "ae63c74586e93018594023de774ec29c91202e21",
                 "shasum": ""
             },
             "require": {
@@ -5254,7 +5254,7 @@
                 "laravel/framework": "^12.40.0 || ^13.0",
                 "laravel/prompts": "^0.3.0",
                 "league/commonmark": "^2.2",
-                "league/csv": "^9.0",
+                "league/csv": "^9.1",
                 "league/glide": "^3.0",
                 "maennchen/zipstream-php": "^3.1",
                 "michelf/php-smartypants": "^1.8.1",
@@ -5352,7 +5352,7 @@
             ],
             "support": {
                 "issues": "https://github.com/statamic/cms/issues",
-                "source": "https://github.com/statamic/cms/tree/v6.19.0"
+                "source": "https://github.com/statamic/cms/tree/v6.20.1"
             },
             "funding": [
                 {
@@ -5360,7 +5360,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-13T20:16:25+00:00"
+            "time": "2026-06-02T21:28:47+00:00"
         },
         {
             "name": "statamic/stringy",
@@ -12069,5 +12069,5 @@
         "php": "^8.4"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
