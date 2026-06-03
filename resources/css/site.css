@@ -78,9 +78,14 @@
         @apply flex h-[200%] flex-col transition-transform duration-700 ease-in-out will-change-transform;
     }
     .history-panel-face {
-        @apply flex flex-1 items-center justify-center p-[10%] h-full;
+        @apply flex flex-1 items-center justify-center p-[15%] h-full;
+
+        p {
+            @apply mb-3;
+        }
+
         ul, ol {
-            @apply list-inside;
+            @apply list-outside;
             p {
                 @apply inline;
             }
