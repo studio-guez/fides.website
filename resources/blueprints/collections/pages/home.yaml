@@ -825,5 +825,4 @@ tabs:
       -
         display: SEO
         fields:
-          -
-            import: seo_base
+          - import: seo_base
