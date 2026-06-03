@@ -352,14 +352,14 @@
     </section>
     <section class="py-20">
         <h2 class="max-w-8xl mx-auto px-base text-title-large text-center mb-10">{{ history_title }}</h2>
-        <div x-data="historyCarousel" x-cloak tabindex="0" role="region" aria-label="{{ history_title }}" @keydown.left.prevent="prev()" @keydown.right.prevent="next()" class="max-w-8xl mx-auto px-base relative">
-            <button type="button" @click="prev()" :disabled="phase !== 'idle'" aria-label="Previous year" class="absolute left-0 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 -translate-x-1/2 items-center justify-center text-orange hover:-translate-x-5/8 transition-transform duration-300 cursor-pointer">
-                <svg viewBox="0 0 24 24" class="h-20 w-10 rotate-180 fill-current" aria-hidden="true">
+        <div x-data="historyCarousel" x-cloak tabindex="0" role="region" aria-label="{{ history_title }}" @keydown.left.prevent="prev()" @keydown.right.prevent="next()" @touchstart="onTouchStart($event)" @touchend="onTouchEnd($event)" class="max-w-8xl mx-auto px-base relative">
+            <button type="button" @click="prev()" :disabled="phase !== 'idle'" aria-label="Previous year" class="absolute left-0 top-1/2 z-10 flex h-6 w-6 md:h-12 md:w-12 -translate-y-1/2 md:-translate-x-1/2 items-center justify-center text-orange hover:-translate-x-5/8 transition-transform duration-300 cursor-pointer">
+                <svg viewBox="0 0 24 24" class="h-10 w-5 md:h-20 md:w-10 rotate-180 fill-current" aria-hidden="true">
                     <polygon points="8,4 20,12 8,20" />
                 </svg>
             </button>
-            <button type="button" @click="next()" :disabled="phase !== 'idle'" aria-label="Next year" class="absolute right-0 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 translate-x-1/2 items-center justify-center text-orange hover:translate-x-5/8 transition-transform duration-300 cursor-pointer">
-                <svg viewBox="0 0 24 24" class="h-20 w-10 fill-current" aria-hidden="true">
+            <button type="button" @click="next()" :disabled="phase !== 'idle'" aria-label="Next year" class="absolute right-0 top-1/2 z-10 flex h-6 w-6 md:h-12 md:w-12 -translate-y-1/2 md:translate-x-1/2 items-center justify-center text-orange hover:translate-x-5/8 transition-transform duration-300 cursor-pointer">
+                <svg viewBox="0 0 24 24" class="h-10 w-5 md:h-20 md:w-10 fill-current" aria-hidden="true">
                     <polygon points="8,4 20,12 8,20" />
                 </svg>
             </button>
@@ -381,7 +381,24 @@
                         </template>
                     </div>
                 </div>
-                <div class="history-panel">
+                <div class="col-span-full overflow-hidden lg:hidden">
+                    <div class="flex transition-transform duration-700 ease-in-out" :style="`transform: translateX(calc(-${active} * 100%))`">
+                        <template x-for="(item, index) in items" :key="index">
+                            <div class="w-full shrink-0 flex flex-col">
+                                <div class="history-panel">
+                                    <div class="history-panel-face text-title-medium text-balance" :class="panelColorClass('title', index) + ' ' + panelShapeClass('title', index)" x-html="item.title"></div>
+                                </div>
+                                <div class="history-panel">
+                                    <div class="history-panel-face text-body-medium" :class="panelColorClass('point_1', index) + ' ' + panelShapeClass('point_1', index)" x-html="item.point_1"></div>
+                                </div>
+                                <div class="history-panel">
+                                    <div class="history-panel-face text-body-medium" :class="panelColorClass('point_2', index) + ' ' + panelShapeClass('point_2', index)" x-html="item.point_2"></div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <div class="history-panel hidden lg:block">
                     <template x-if="phase === 'idle'">
                         <div class="history-panel-face text-title-medium text-balance" :class="panelColorClass('title') + ' ' + panelShapeClass('title')" x-html="display.title.current"></div>
                     </template>
@@ -392,7 +409,7 @@
                         </div>
                     </template>
                 </div>
-                <div class="history-panel">
+                <div class="history-panel hidden lg:block">
                     <template x-if="phase === 'idle'">
                         <div class="history-panel-face text-body-medium" :class="panelColorClass('point_1') + ' ' + panelShapeClass('point_1')" x-html="display.point_1.current"></div>
                     </template>
@@ -403,7 +420,7 @@
                         </div>
                     </template>
                 </div>
-                <div class="history-panel">
+                <div class="history-panel hidden lg:block">
                     <template x-if="phase === 'idle'">
                         <div class="history-panel-face text-body-medium" :class="panelColorClass('point_2') + ' ' + panelShapeClass('point_2')" x-html="display.point_2.current"></div>
                     </template>
@@ -417,7 +434,7 @@
             </div>
             <div class="flex items-center justify-center gap-3 lg:hidden mt-6" aria-label="History years">
                 <template x-for="(carouselYear, index) in years" :key="carouselYear + index">
-                    <button type="button" @click="go(index)" :disabled="phase !== 'idle'" :aria-current="active === index ? 'true' : 'false'" :aria-label="'Go to year ' + carouselYear" class="h-3 w-3 rounded-full bg-gray-light transition-colors duration-300 cursor-pointer" :class="{ 'bg-orange': active === index }"></button>
+                    <button type="button" @click="go(index)" :disabled="phase !== 'idle'" :aria-current="active === index ? 'true' : 'false'" :aria-label="'Go to year ' + carouselYear" class="h-2 w-2 rounded-full bg-gray-light transition-colors duration-300 cursor-pointer" :class="{ 'bg-orange': active === index }"></button>
                 </template>
             </div>
         </div>
