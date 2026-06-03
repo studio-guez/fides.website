@@ -85,11 +85,11 @@
         {{ yield:structured_data }}
     </head>
     <body class="font-sans bg-white text-black">
-        <nav x-data="{ open: false }" @keydown.escape.window="open = false" class="fixed top-0 inset-x-0 z-50">
-            <div class="max-w-8xl mx-auto px-base flex items-center justify-end py-4 bg-white">
+        <nav x-data="{ open: false }" @keydown.escape.window="open = false" class="fixed top-0 inset-x-0 z-50 flex flex-col max-sm:h-dvh">
+            <div class="max-w-8xl mx-auto px-base flex items-center justify-end py-4 bg-white w-full">
                 <button
                     type="button"
-                    @click="open = !open"
+                    @click="open = !open; if (open) { $nextTick(() => document.body.classList.add('max-sm:overflow-hidden')) } else { document.body.classList.remove('max-sm:overflow-hidden') }"
                     :aria-expanded="open.toString()"
                     aria-label="Menu"
                     class="flex flex-col justify-center items-end gap-1.5 w-10 h-10 cursor-pointer text-orange hover:text-black transition-colors duration-300"
@@ -103,12 +103,12 @@
                 x-show="open"
                 x-cloak
                 x-transition.opacity.duration.300ms.ease-out
-                class="bg-white"
+                class="bg-white flex-1 overflow-y-auto lg:flex-none"
             >
-                <div class="max-w-8xl mx-auto px-base py-8">
-                    <ul class="flex flex-col gap-4 text-right">
+                <div class="max-w-8xl mx-auto px-base py-8 h-full flex flex-col lg:block">
+                    <ul class="flex flex-col gap-4 text-right lg:gap-4">
                         {{ nav:menu }}
-                        <li>
+                        <li class="text-balance">
                             <a href="{{ url }}" @click="open = false" class="text-title-large text-orange hover:text-black transition-colors duration-300">{{ title }}</a>
                         </li>
                         {{ /nav:menu }}
