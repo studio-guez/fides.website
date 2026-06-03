@@ -77,36 +77,36 @@
     <section class="pt-20">
         <h2 class="max-w-8xl mx-auto px-base text-title-large text-center mb-10">{{ social_impact_title }}</h2>
         <div class="max-w-8xl mx-auto px-base lg:grid lg:grid-cols-2 lg:gap-8">
-            <div class="max-lg:mb-20">
-                <div class="bg-gray-light p-3 rounded-tl-4xl rounded-br-4xl mb-6">
-                    <h3 class="text-title-medium text-center mb-3 text-balance">{{ social_impact_col_1_title }}</h3>
-                    <div class="bg-white p-6 rounded-tl-4xl text-body-medium text-center text-balance mb-3">{{ social_impact_col_1_intro }}</div>
+            <div class="max-lg:mb-20 lg:flex lg:flex-col">
+                <div class="bg-gray-light p-4 rounded-tl-4xl rounded-br-4xl mb-6 lg:grow lg:flex lg:flex-col">
+                    <h3 class="text-title-medium text-center mb-4 text-balance">{{ social_impact_col_1_title }}</h3>
+                    <div class="bg-white p-6 rounded-tl-4xl text-body-medium text-center text-balance mb-4">{{ social_impact_col_1_intro }}</div>
                     {{ social_impact_col_1_cta_points }}
-                    <div class="bg-blue-light p-6 rounded-tl-4xl rounded-br-4xl not-last:mb-3">
+                    <div class="bg-blue-light p-6 rounded-tl-4xl rounded-br-4xl not-last:mb-4 lg:last:grow">
                         <h4 class="text-title-small">{{ title }}</h4>
                         <p class="text-body-small">{{ description }}</p>
                     </div>
                     {{ /social_impact_col_1_cta_points }}
                 </div>
-                <a href="{{ social_impact_col_1_cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-large flex w-fit items-center gap-2 transition-colors duration-300 rounded-full pl-3 pr-6 py-3 mx-auto">
+                <a href="{{ social_impact_col_1_cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5 mx-auto">
                     <span class="bg-orange flex items-center justify-center rounded-full w-10 h-10 shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-6"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
                     </span>
                     {{ social_impact_col_1_cta_text }}
                 </a>
             </div>
-            <div>
-                <div class="bg-gray-light p-3 rounded-tl-4xl rounded-br-4xl mb-6">
-                    <h3 class="text-title-medium text-center mb-3 text-balance">{{ social_impact_col_2_title }}</h3>
-                    <div class="bg-white p-6 rounded-tl-4xl text-body-medium text-center text-balance mb-3">{{ social_impact_col_2_intro }}</div>
+            <div class="lg:flex lg:flex-col">
+                <div class="bg-gray-light p-4 rounded-tl-4xl rounded-br-4xl mb-6 lg:grow lg:flex lg:flex-col">
+                    <h3 class="text-title-medium text-center mb-4 text-balance">{{ social_impact_col_2_title }}</h3>
+                    <div class="bg-white p-6 rounded-tl-4xl text-body-medium text-center text-balance mb-4">{{ social_impact_col_2_intro }}</div>
                     {{ social_impact_col_2_cta_points }}
-                    <div class="bg-gray text-white p-6 rounded-tl-4xl rounded-br-4xl not-last:mb-3">
+                    <div class="bg-gray text-white p-6 rounded-tl-4xl rounded-br-4xl not-last:mb-4 lg:last:grow">
                         <h4 class="text-title-small">{{ title }}</h4>
                         <p class="text-body-small">{{ description }}</p>
                     </div>
                     {{ /social_impact_col_2_cta_points }}
                 </div>
-                <a href="{{ social_impact_col_2_cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-large flex w-fit items-center gap-2 transition-colors duration-300 rounded-full pl-3 pr-6 py-3 mx-auto">
+                <a href="{{ social_impact_col_2_cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5 mx-auto">
                     <span class="bg-orange flex items-center justify-center rounded-full w-10 h-10 shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-6"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
                     </span>
@@ -146,7 +146,7 @@
                         </div>
                         {{ /if }}
                         {{ if realisations_card_1_verso:cta_link }}
-                            <a href="{{ realisations_card_1_verso:cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-medium flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
+                            <a href="{{ realisations_card_1_verso:cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
                                 <span class="bg-orange flex items-center justify-center rounded-full w-6 h-6 shrink-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-4"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
                                 </span>
@@ -184,7 +184,7 @@
                         </div>
                         {{ /if }}
                         {{ if realisations_card_2_verso:cta_link }}
-                            <a href="{{ realisations_card_2_verso:cta_link }}" target="_blank" rel="noopener"class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-medium flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
+                            <a href="{{ realisations_card_2_verso:cta_link }}" target="_blank" rel="noopener"class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
                                 <span class="bg-orange flex items-center justify-center rounded-full w-6 h-6 shrink-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-4"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
                                 </span>
@@ -222,7 +222,7 @@
                         </div>
                         {{ /if }}
                         {{ if realisations_card_3_verso:cta_link }}
-                            <a href="{{ realisations_card_3_verso:cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-medium flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
+                            <a href="{{ realisations_card_3_verso:cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
                                 <span class="bg-orange flex items-center justify-center rounded-full w-6 h-6 shrink-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-4"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
                                 </span>
@@ -260,7 +260,7 @@
                         </div>
                         {{ /if }}
                         {{ if realisations_card_4_verso:cta_link }}
-                            <a href="{{ realisations_card_4_verso:cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-medium flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
+                            <a href="{{ realisations_card_4_verso:cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
                                 <span class="bg-orange flex items-center justify-center rounded-full w-6 h-6 shrink-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-4"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
                                 </span>
@@ -298,7 +298,7 @@
                         </div>
                         {{ /if }}
                         {{ if realisations_card_5_verso:cta_link }}
-                            <a href="{{ realisations_card_5_verso:cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-medium flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
+                            <a href="{{ realisations_card_5_verso:cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
                                 <span class="bg-orange flex items-center justify-center rounded-full w-6 h-6 shrink-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-4"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
                                 </span>
@@ -336,7 +336,7 @@
                         </div>
                         {{ /if }}
                         {{ if realisations_card_6_verso:cta_link }}
-                            <a href="{{ realisations_card_6_verso:cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta-medium flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
+                            <a href="{{ realisations_card_6_verso:cta_link }}" target="_blank" rel="noopener" class="bg-gray-light text-gray hover:bg-gray hover:text-gray-light text-cta flex w-fit items-center gap-1 transition-colors duration-300 rounded-full pl-1.5 pr-3 py-1.5">
                                 <span class="bg-orange flex items-center justify-center rounded-full w-6 h-6 shrink-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-4"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
                                 </span>
