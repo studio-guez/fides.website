@@ -86,18 +86,20 @@
     </head>
     <body class="font-sans bg-white text-black">
         <nav x-data="{ open: false }" @keydown.escape.window="open = false" class="fixed top-0 inset-x-0 z-50 flex flex-col max-sm:h-dvh">
-            <div class="max-w-8xl mx-auto px-base flex items-center justify-end py-4 bg-white w-full">
-                <button
-                    type="button"
-                    @click="open = !open; if (open) { $nextTick(() => document.body.classList.add('max-sm:overflow-hidden')) } else { document.body.classList.remove('max-sm:overflow-hidden') }"
-                    :aria-expanded="open.toString()"
-                    aria-label="Menu"
-                    class="flex flex-col justify-center items-end gap-1.5 w-10 h-10 cursor-pointer text-orange hover:text-black transition-colors duration-300"
-                >
-                    <span class="block w-6 h-0.5 bg-current transition-all duration-300 origin-center" :class="open ? 'translate-y-2 rotate-45' : ''"></span>
-                    <span class="block w-6 h-0.5 bg-current transition-all duration-300" :class="open ? 'opacity-0' : ''"></span>
-                    <span class="block w-6 h-0.5 bg-current transition-all duration-300 origin-center" :class="open ? '-translate-y-2 -rotate-45' : ''"></span>
-                </button>
+            <div class="w-full bg-white">
+                <div class="max-w-8xl mx-auto px-base flex items-center justify-end py-4">
+                    <button
+                        type="button"
+                        @click="open = !open; if (open) { $nextTick(() => document.body.classList.add('max-sm:overflow-hidden')) } else { document.body.classList.remove('max-sm:overflow-hidden') }"
+                        :aria-expanded="open.toString()"
+                        aria-label="Menu"
+                        class="flex flex-col justify-center items-end gap-1.5 w-10 h-10 cursor-pointer text-orange hover:text-black transition-colors duration-300"
+                    >
+                        <span class="block w-6 h-0.5 bg-current transition-all duration-300 origin-center" :class="open ? 'translate-y-2 rotate-45' : ''"></span>
+                        <span class="block w-6 h-0.5 bg-current transition-all duration-300" :class="open ? 'opacity-0' : ''"></span>
+                        <span class="block w-6 h-0.5 bg-current transition-all duration-300 origin-center" :class="open ? '-translate-y-2 -rotate-45' : ''"></span>
+                    </button>
+                </div>
             </div>
             <div
                 x-show="open"
