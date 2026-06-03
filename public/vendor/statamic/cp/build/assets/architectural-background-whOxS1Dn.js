@@ -1,0 +1,1 @@
+import{L as e,N as t,R as n}from"./vue.esm-bundler-hI_yHiJp.js";var r=`bg-architectural-lines`,i=`content-card`;function a(){t(()=>document.getElementById(i).classList.add(r))}function o(){t(()=>document.getElementById(i).classList.remove(r))}function s(){e(()=>a()),n(()=>o())}function c(e){e?a():o(),n(()=>o())}export{s as n,c as t};

@@ -1,0 +1,1 @@
+import{L as e,R as t}from"./vue.esm-bundler-hI_yHiJp.js";function n(n){n=n.split(` `),e(()=>document.body.classList.add(...n)),t(()=>document.body.classList.remove(...n))}export{n as t};
