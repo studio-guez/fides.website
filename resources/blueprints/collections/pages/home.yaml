@@ -758,6 +758,11 @@ tabs:
                             validate:
                               - required
                         -
+                          handle: title
+                          field:
+                            type: text
+                            display: Titre
+                        -
                           handle: point_1
                           field:
                             buttons:
@@ -778,8 +783,6 @@ tabs:
                             remove_empty_nodes: trim
                             type: bard
                             display: 'Point 1'
-                            validate:
-                              - required
                         -
                           handle: point_2
                           field:
@@ -801,31 +804,6 @@ tabs:
                             remove_empty_nodes: trim
                             type: bard
                             display: 'Point 2'
-                            validate:
-                              - required
-                        -
-                          handle: point_3
-                          field:
-                            buttons:
-                              - bold
-                              - italic
-                              - anchor
-                              - underline
-                              - strikethrough
-                              - superscript
-                              - subscript
-                              - unorderedlist
-                              - orderedlist
-                            smart_typography: true
-                            link_noopener: true
-                            link_noreferrer: true
-                            target_blank: true
-                            save_html: true
-                            remove_empty_nodes: trim
-                            type: bard
-                            display: 'Point 3'
-                            validate:
-                              - required
   sidebar:
     display: Sidebar
     sections:
