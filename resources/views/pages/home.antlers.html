@@ -12,7 +12,7 @@
 </header>
 <main>
     {{ if banner_1:text || banner_2:text }}
-        <section class="pt-20">
+        <section class="pt-20" id="bannieres">
             <h2 class="sr-only">{{ banners_title }}</h2>
             {{ if banner_1:text }}
                 {{ if banner_1:link }}
@@ -60,7 +60,7 @@
             {{ /if }}
         </section>
     {{ /if }}
-    <section>
+    <section id="introduction">
         <h2 class="sr-only">{{ intro_title }}</h2>
         <div class="max-w-8xl mx-auto px-base py-20">
             <div class="text-body-medium max-lg:bg-gray-light max-lg:rounded-4xl max-lg:p-6 [&>p]:max-lg:not-last:mb-[.75lh] [&>p]:lg:bg-gray-light [&>p]:lg:p-6 [&>p]:lg:rounded-4xl [&>p]:lg:max-w-2xl [&>p:nth-child(4n+2)]:lg:mx-auto [&>p:nth-child(4n)]:lg:mx-auto [&>p:nth-child(4n+3)]:lg:ml-auto">
@@ -74,7 +74,7 @@
             <div class="absolute top-1/4 bottom-0 inset-x-0 w-full bg-gray-light -z-1"></div>
         </div>
     </section>
-    <section class="pt-20">
+    <section class="pt-20" id="impact-societal">
         <h2 class="max-w-8xl mx-auto px-base text-title-large text-center mb-10">{{ social_impact_title }}</h2>
         <div class="max-w-8xl mx-auto px-base lg:grid lg:grid-cols-2 lg:gap-8">
             <div class="max-lg:mb-20 lg:flex lg:flex-col">
@@ -115,7 +115,7 @@
             </div>
         </div>
     </section>
-    <section class="py-20 relative">
+    <section class="py-20 relative" id="realisations-collectives">
         <h2 class="max-w-8xl mx-auto px-base text-title-large text-center mb-10">{{ realisations_title }}</h2>
         <div class="max-w-8xl mx-auto px-base lg:grid lg:grid-cols-2">
             <div class="card card-1 lg:order-1"
@@ -350,7 +350,7 @@
         <div class="absolute top-1/4 h-1/5 right-0 left-10 bg-gray-light -z-1"></div>
         <div class="absolute bottom-0 h-1/5 right-10 left-0 bg-gray-light -z-1"></div>
     </section>
-    <section class="py-20">
+    <section class="py-20" id="histoire">
         <h2 class="max-w-8xl mx-auto px-base text-title-large text-center mb-10">{{ history_title }}</h2>
         <div x-data="historyCarousel" x-cloak tabindex="0" role="region" aria-label="{{ history_title }}" @keydown.left.prevent="prev()" @keydown.right.prevent="next()" @touchstart="onTouchStart($event)" @touchend="onTouchEnd($event)" class="max-w-8xl mx-auto px-base relative">
             <button type="button" @click="prev()" :disabled="phase !== 'idle'" aria-label="Previous year" class="absolute left-0 top-1/2 z-10 flex h-6 w-6 md:h-12 md:w-12 -translate-y-1/2 md:-translate-x-1/2 items-center justify-center text-orange hover:-translate-x-5/8 transition-transform duration-300 cursor-pointer">
