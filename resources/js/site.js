@@ -13,6 +13,8 @@ document.addEventListener('alpine:init', () => {
 		phase: 'idle',
 		direction: 1,
 		timer: null,
+		touchStartX: null,
+		touchStartY: null,
 		display: {
 			title: { current: '', incoming: '' },
 			point_1: { current: '', incoming: '' },
@@ -54,7 +56,7 @@ document.addEventListener('alpine:init', () => {
 			return this.direction === 1 ? this.display[key].incoming : this.display[key].current;
 		},
 		panelOffset(key) {
-			return key === 'title' ? 0 : Number(key.split('_')[1]) - 1;
+			return key === 'title' ? 0 : Number(key.split('_')[1]);
 		},
 		panelColorClass(key, itemIndex = this.displayIndex) {
 			const tones = [
@@ -128,6 +130,20 @@ document.addEventListener('alpine:init', () => {
 		},
 		prev() {
 			this.go(this.active === 0 ? this.items.length - 1 : this.active - 1, -1);
+		},
+		onTouchStart(e) {
+			this.touchStartX = e.touches[0].clientX;
+			this.touchStartY = e.touches[0].clientY;
+		},
+		onTouchEnd(e) {
+			if (this.touchStartX === null) return;
+			const dx = e.changedTouches[0].clientX - this.touchStartX;
+			const dy = e.changedTouches[0].clientY - this.touchStartY;
+			if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+				dx < 0 ? this.next() : this.prev();
+			}
+			this.touchStartX = null;
+			this.touchStartY = null;
 		},
 	}));
 });
