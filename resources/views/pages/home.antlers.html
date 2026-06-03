@@ -366,9 +366,9 @@
             <div class="hidden" aria-hidden="true">
                 {{ history_dates }}
                     <div data-history-slide data-year="{{ year }}">
+                        <div data-history-point="title">{{ title }}</div>
                         <div data-history-point="point_1">{{ point_1 }}</div>
                         <div data-history-point="point_2">{{ point_2 }}</div>
-                        <div data-history-point="point_3">{{ point_3 }}</div>
                     </div>
                 {{ /history_dates }}
             </div>
@@ -383,34 +383,34 @@
                 </div>
                 <div class="history-panel">
                     <template x-if="phase === 'idle'">
-                        <div class="history-panel-face text-highlights" :class="panelColorClass('point_1') + ' ' + panelShapeClass('point_1')" x-html="display.point_1.current"></div>
+                        <div class="history-panel-face text-title-medium text-balance" :class="panelColorClass('title') + ' ' + panelShapeClass('title')" x-html="display.title.current"></div>
+                    </template>
+                    <template x-if="phase !== 'idle'">
+                        <div class="history-panel-track" :class="panelTrackClass()" :style="panelDelayStyle('title')">
+                            <div class="history-panel-face text-title-medium text-balance" :class="panelTopClass('title')" x-html="panelTop('title')"></div>
+                            <div class="history-panel-face text-title-medium text-balance" :class="panelBottomClass('title')" x-html="panelBottom('title')"></div>
+                        </div>
+                    </template>
+                </div>
+                <div class="history-panel">
+                    <template x-if="phase === 'idle'">
+                        <div class="history-panel-face text-body-medium" :class="panelColorClass('point_1') + ' ' + panelShapeClass('point_1')" x-html="display.point_1.current"></div>
                     </template>
                     <template x-if="phase !== 'idle'">
                         <div class="history-panel-track" :class="panelTrackClass()" :style="panelDelayStyle('point_1')">
-                            <div class="history-panel-face text-highlights" :class="panelTopClass('point_1')" x-html="panelTop('point_1')"></div>
-                            <div class="history-panel-face text-highlights" :class="panelBottomClass('point_1')" x-html="panelBottom('point_1')"></div>
+                            <div class="history-panel-face text-body-medium" :class="panelTopClass('point_1')" x-html="panelTop('point_1')"></div>
+                            <div class="history-panel-face text-body-medium" :class="panelBottomClass('point_1')" x-html="panelBottom('point_1')"></div>
                         </div>
                     </template>
                 </div>
                 <div class="history-panel">
                     <template x-if="phase === 'idle'">
-                        <div class="history-panel-face text-highlights" :class="panelColorClass('point_2') + ' ' + panelShapeClass('point_2')" x-html="display.point_2.current"></div>
+                        <div class="history-panel-face text-body-medium" :class="panelColorClass('point_2') + ' ' + panelShapeClass('point_2')" x-html="display.point_2.current"></div>
                     </template>
                     <template x-if="phase !== 'idle'">
                         <div class="history-panel-track" :class="panelTrackClass()" :style="panelDelayStyle('point_2')">
-                            <div class="history-panel-face text-highlights" :class="panelTopClass('point_2')" x-html="panelTop('point_2')"></div>
-                            <div class="history-panel-face text-highlights" :class="panelBottomClass('point_2')" x-html="panelBottom('point_2')"></div>
-                        </div>
-                    </template>
-                </div>
-                <div class="history-panel">
-                    <template x-if="phase === 'idle'">
-                        <div class="history-panel-face text-highlights" :class="panelColorClass('point_3') + ' ' + panelShapeClass('point_3')" x-html="display.point_3.current"></div>
-                    </template>
-                    <template x-if="phase !== 'idle'">
-                        <div class="history-panel-track" :class="panelTrackClass()" :style="panelDelayStyle('point_3')">
-                            <div class="history-panel-face text-highlights" :class="panelTopClass('point_3')" x-html="panelTop('point_3')"></div>
-                            <div class="history-panel-face text-highlights" :class="panelBottomClass('point_3')" x-html="panelBottom('point_3')"></div>
+                            <div class="history-panel-face text-body-medium" :class="panelTopClass('point_2')" x-html="panelTop('point_2')"></div>
+                            <div class="history-panel-face text-body-medium" :class="panelBottomClass('point_2')" x-html="panelBottom('point_2')"></div>
                         </div>
                     </template>
                 </div>

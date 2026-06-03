@@ -14,17 +14,18 @@ document.addEventListener('alpine:init', () => {
 		direction: 1,
 		timer: null,
 		display: {
+			title: { current: '', incoming: '' },
 			point_1: { current: '', incoming: '' },
 			point_2: { current: '', incoming: '' },
-			point_3: { current: '', incoming: '' },
 		},
 		init() {
 			const slides = Array.from(this.$el.querySelectorAll('[data-history-slide]'));
+			const wrap = (content, tag) => content ? `<${tag}>${content}</${tag}>` : '';
 			this.items = slides.map((slide) => ({
 				year: slide.dataset.year || '',
-				point_1: slide.querySelector('[data-history-point="point_1"]')?.innerHTML.trim() || '',
-				point_2: slide.querySelector('[data-history-point="point_2"]')?.innerHTML.trim() || '',
-				point_3: slide.querySelector('[data-history-point="point_3"]')?.innerHTML.trim() || '',
+				title: wrap(slide.querySelector('[data-history-point="title"]')?.innerHTML.trim(), 'h4'),
+				point_1: wrap(slide.querySelector('[data-history-point="point_1"]')?.innerHTML.trim(), 'div'),
+				point_2: wrap(slide.querySelector('[data-history-point="point_2"]')?.innerHTML.trim(), 'div'),
 			}));
 			this.years = this.items.map((item) => item.year);
 
@@ -36,13 +37,13 @@ document.addEventListener('alpine:init', () => {
 			this.displayIndex = 0;
 		},
 		syncDisplay(item) {
-			['point_1', 'point_2', 'point_3'].forEach((key) => {
+			['title', 'point_1', 'point_2'].forEach((key) => {
 				this.display[key].current = item[key] || '';
 				this.display[key].incoming = item[key] || '';
 			});
 		},
 		setIncoming(item) {
-			['point_1', 'point_2', 'point_3'].forEach((key) => {
+			['title', 'point_1', 'point_2'].forEach((key) => {
 				this.display[key].incoming = item[key] || '';
 			});
 		},
@@ -53,7 +54,7 @@ document.addEventListener('alpine:init', () => {
 			return this.direction === 1 ? this.display[key].incoming : this.display[key].current;
 		},
 		panelOffset(key) {
-			return Number(key.split('_')[1]) - 1;
+			return key === 'title' ? 0 : Number(key.split('_')[1]) - 1;
 		},
 		panelColorClass(key, itemIndex = this.displayIndex) {
 			const tones = [
