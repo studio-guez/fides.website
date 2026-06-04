@@ -67,8 +67,20 @@
                 {{ intro }}
             </div>
         </div>
-        <div class="relative pb-20">
-            <div class="max-w-8xl mx-auto px-base">
+        <div class="relative pb-20 -z-1"
+             x-data="{
+                 init() {
+                     const update = () => {
+                         const rect = this.$el.getBoundingClientRect();
+                         const scrolledPast = window.innerHeight - rect.top;
+                         const offset = Math.max(scrolledPast, 0) * 0.15;
+                         this.$refs.parallax.style.transform = 'translateY(-' + offset + 'px)';
+                     };
+                     window.addEventListener('scroll', update, { passive: true });
+                     update();
+                 }
+             }">
+            <div class="max-w-8xl mx-auto px-base" x-ref="parallax">
                 {{ partial:asset :image="intro_image:id" :alt_glide="intro_image:alt" preset="full" }}
             </div>
             <div class="absolute top-1/4 bottom-0 inset-x-0 w-full bg-gray-light -z-1"></div>
