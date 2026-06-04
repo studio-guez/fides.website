@@ -1,6 +1,6 @@
 tabs:
   main:
-    display: Contact/Adresse
+    display: Contact
     sections:
       -
         fields:
@@ -14,6 +14,23 @@ tabs:
             field:
               type: text
               display: E-mail
+  address:
+    display: Adresse
+    sections:
+      -
+        fields:
+          -
+            handle: name
+            field:
+              type: text
+              display: Nom
+              validate:
+                - required
+          -
+            handle: department
+            field:
+              type: text
+              display: Département
           -
             handle: street_address
             field:
@@ -92,3 +109,15 @@ tabs:
                             validate:
                               - required
                               - url
+  newsletter:
+    display: Newsletter
+    sections:
+      -
+        fields:
+          -
+            handle: newsletter_text
+            field:
+              type: text
+              display: 'Texte newsletter'
+              validate:
+                - required
