@@ -12,6 +12,16 @@ function raf(time) {
 }
 requestAnimationFrame(raf);
 
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+	anchor.addEventListener('click', e => {
+		const target = document.querySelector(anchor.getAttribute('href'));
+		if (target) {
+			e.preventDefault();
+			lenis.scrollTo(target);
+		}
+	});
+});
+
 document.addEventListener('alpine:init', () => {
 	Alpine.data('historyCarousel', () => ({
 		active: 0,
