@@ -81,6 +81,7 @@ tabs:
               min_files: 1
               type: assets
               display: Logo
+              instructions: 'PNG, JPG ou WebP. Recommandé : 512×512 px (1:1) pour Google schema.org.'
               validate:
                 - required
                 - 'mimes:png,webp,jpg,jpeg'

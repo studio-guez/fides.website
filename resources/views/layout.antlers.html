@@ -91,11 +91,13 @@
             "name": "{{ global_site:legal_name }}",
             "alternateName": "{{ global_site:site_name }}",
             "url": "{{ config:app:url }}"{{ if global_site:description }},
-            "description": "{{ global_site:description }}"{{ /if }}{{ global_site:logo_schema }},
+            "description": "{{ global_site:description }}"{{ /if }}{{ global_site:logo }},
             "logo": {
                 "@type": "ImageObject",
-                "url": "{{ url }}"
-            }{{ /global_site:logo_schema }},
+                "url": "{{ url }}",
+                "width": {{ width }},
+                "height": {{ height }}
+            }{{ /global_site:logo }},
             "foundingDate": "{{ global_site:founding_date }}",
             "areaServed": "{{ global_site:area_served }}",
             "address": {
