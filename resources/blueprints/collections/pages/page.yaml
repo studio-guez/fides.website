@@ -43,3 +43,7 @@ tabs:
               type: slug
               localizable: true
               validate: 'max:200'
+      -
+        display: SEO
+        fields:
+          - import: seo_base

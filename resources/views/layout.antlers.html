@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ site:short_locale }}">
+<html lang="{{ site:short_locale }}" class="scroll-smooth">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,6 +9,7 @@
         <meta property="og:title" content="{{ meta_title ?? title }}" />
         <meta property="og:site_name" content="{{ global_site:site_name }}" />
         <meta name="twitter:title" content="{{ meta_title ?? title }}">
+        <meta name="twitter:card" content="summary_large_image">
 
         {{ if meta_description }}
         <meta name="description" content="{{ meta_description }}" />
@@ -24,6 +25,7 @@
 
         <meta property="og:url" content="{{ permalink }}" />
         <meta property="og:type" content="website" />
+        <meta property="og:locale" content="{{ site:locale }}" />
 
         {{ if meta_image }}
         <meta property="og:image" content="{{ meta_image }}" />
@@ -82,9 +84,47 @@
 
         {{ yield:header_scripts }}
 
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "{{ global_site:legal_name }}",
+            "alternateName": "{{ global_site:site_name }}",
+            "url": "{{ config:app:url }}"{{ if global_site:description }},
+            "description": "{{ global_site:description }}"{{ /if }}{{ global_site:logo }},
+            "logo": {
+                "@type": "ImageObject",
+                "url": "{{ url }}",
+                "width": {{ width }},
+                "height": {{ height }}
+            }{{ /global_site:logo }},
+            "foundingDate": "{{ global_site:founding_date }}",
+            "areaServed": "{{ global_site:area_served }}",
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "{{ address_contact:street_address }}",
+                "postalCode": "{{ address_contact:postal_code }}",
+                "addressLocality": "{{ address_contact:city }}",
+                "addressCountry": "{{ address_contact:country_code }}"
+            }{{ if address_contact:email }},
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "email": "{{ address_contact:email }}",
+                "contactType": "customer service"
+            }{{ /if }}{{ if address_contact:phone }},
+            "telephone": "{{ address_contact:phone }}"{{ /if }}{{ if address_contact:social_networks }},
+            "sameAs": [
+                {{ address_contact:social_networks }}{{ unless first }},
+                {{ /unless }}"{{ link }}"{{ /address_contact:social_networks }}
+            ]{{ /if }}
+        }
+        </script>
+
         {{ yield:structured_data }}
     </head>
     <body class="font-sans bg-white text-black">
+        {{ partial:nav }}
         {{ template_content }}
+        {{ partial:footer }}
     </body>
 </html>

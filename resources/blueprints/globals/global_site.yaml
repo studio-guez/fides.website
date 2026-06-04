@@ -81,9 +81,10 @@ tabs:
               min_files: 1
               type: assets
               display: Logo
+              instructions: 'PNG, JPG ou WebP. Recommandé : 512×512 px (1:1) pour Google schema.org.'
               validate:
                 - required
-                - 'mimes:png,svg,webp,jpg,jpeg'
+                - 'mimes:png,webp,jpg,jpeg'
           -
             handle: legal_name
             field:
@@ -106,3 +107,10 @@ tabs:
               localizable: true
               validate:
                 - required
+          -
+            handle: description
+            field:
+              type: textarea
+              display: Description
+              instructions: "Description de l'organisation pour le schema.org."
+              localizable: true
