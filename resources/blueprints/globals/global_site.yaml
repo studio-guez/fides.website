@@ -83,7 +83,7 @@ tabs:
               display: Logo
               validate:
                 - required
-                - 'mimes:png,svg,webp,jpg,jpeg'
+                - 'mimes:png,webp,jpg,jpeg'
           -
             handle: legal_name
             field:
@@ -106,3 +106,10 @@ tabs:
               localizable: true
               validate:
                 - required
+          -
+            handle: description
+            field:
+              type: textarea
+              display: Description
+              instructions: "Description de l'organisation pour le schema.org."
+              localizable: true
