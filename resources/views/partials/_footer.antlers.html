@@ -1,0 +1,60 @@
+<footer>
+    <div class="bg-gray relative">
+        <div class="max-w-8xl mx-auto px-base pt-8 pb-16 text-white lg:grid lg:grid-cols-2 lg:gap-8 z-1">
+            <div class="space-y-[1lh] text-body-medium">
+                <div>
+                    {{ if address_contact:email }}
+                    <div>
+                        <a href="mailto:{{ address_contact:email }}" class="hover:text-orange transition-colors duration-300">{{ address_contact:email }}</a>
+                    </div>
+                    {{ /if }}
+                    {{ if address_contact:phone }}
+                    <div>
+                        <a href="tel:{{ address_contact:phone | replace: ' ', '' | replace: '(0)', '' }}" class="hover:text-orange transition-colors duration-300">{{ address_contact:phone }}</a>
+                    </div>
+                    {{ /if }}
+                </div>
+                <address class="not-italic">
+                    {{ if address_contact:google_maps_url }}
+                    <a href="{{ address_contact:google_maps_url }}" class="hover:text-orange transition-colors duration-300 block" target="_blank" rel="noopener">
+                    {{ /if }}
+                        <div>{{ address_contact:name }}</div>
+                        {{ if address_contact:department }}<div class="font-normal text-balance">{{ address_contact:department }}</div>{{ /if }}
+                        <div class="font-normal mt-[1lh]">{{ address_contact:street_address }}</div>
+                        <div class="font-normal">{{ address_contact:postal_code }} {{ address_contact:city }}</div>
+                        <div class="font-normal">{{ address_contact:country }}</div>
+                    {{ if address_contact:google_maps_url }}</a>{{ /if }}
+                </address>
+            </div>
+            <div class="space-y-[1lh] max-lg:mt-16 text-body-small">
+                {{ if address_contact:social_networks }}
+                <div>
+                    <h2 class="font-bold">Suivez-nous</h2>
+                    {{ address_contact:social_networks }}
+                    <div class="text-body-small">
+                        <a href="{{ link }}" class="hover:text-orange transition-colors duration-300 underline" target="_blank" rel="noopener">{{ title }}</a>
+                    </div>
+                    {{ /address_contact:social_networks }}
+                </div>
+                {{ /if }}
+                <div>
+                    <h2 class="font-bold">Autres liens</h2>
+                    {{ nav:footer }}
+                    <div class="text-body-small">
+                        <a href="{{ url }}" class="hover:text-orange transition-colors duration-300 underline">{{ title }}</a>
+                    </div>
+                    {{ /nav:footer }}
+                </div>
+            </div>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 452 339" aria-hidden="true" class="max-lg:ml-auto lg:absolute lg:right-0 lg:bottom-0 w-[calc(100%-2rem)] max-w-100">
+            <circle class="fill-orange" cx="56.69" cy="169.25" r="30"/>
+            <polygon class="fill-blue" points="226 113 113 226 113 113 226 0 226 113"/>
+            <rect class="fill-blue-light" x="113" y="226" width="113" height="113"/>
+            <polygon class="fill-blue-light" points="452 339 226 339 339 226 452 226 452 339"/>
+            <polygon class="fill-blue" points="339 226 226 339 226 226 339 113 339 226"/>
+            <rect class="fill-blue-light" y="226" width="113" height="113"/>
+            <polygon class="fill-blue" points="452 226 452 339 339 339 452 226"/>
+        </svg>
+    </div>
+</footer>
