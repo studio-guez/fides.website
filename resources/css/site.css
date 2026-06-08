@@ -1,0 +1,233 @@
+@import './fonts.css' layer(base);
+
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@source "../views";
+
+@theme {
+    --font-sans: 'CircularXX', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-black: #22272e;
+    --color-gray: #70706f;
+    --color-gray-light: #f1f1f1;
+    --color-white: #ffffff;
+    --color-blue: #4584a9;
+    --color-blue-light: #b9caea;
+    --color-orange: #eb672b;
+
+    --container-8xl: 90rem; /* 1440px */
+}
+
+@keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+@layer utilities {
+    .animate-marquee {
+        animation: marquee 90s linear infinite;
+        will-change: transform;
+    }
+    .paused {
+        animation-play-state: paused;
+    }
+    .px-base {
+        @apply px-8 lg:px-12;
+    }
+    .text-title-large{
+        @apply text-3xl/[1.2] sm:text-4xl/[1.15] lg:text-4xl/[1.15] xl:text-6xl/[1.15] font-black;
+    }
+    .text-title-medium {
+        @apply text-xl/[1.2] sm:text-2xl/[1.15] md:text-3xl/[1.15] font-black uppercase;
+    }
+    .text-title-small {
+        @apply text-base/[1.2] sm:text-lg/[1.15] md:text-2xl/[1.15] font-black uppercase;
+    }
+    .text-body-large {
+        @apply text-base/[1.2] sm:text-xl/[1.2] md:text-3xl/[1.2] font-medium;
+    }
+    .text-body-medium {
+        @apply text-base/[1.2] sm:text-lg/[1.2] md:text-2xl/[1.2] font-medium;
+    }
+    .text-body-small {
+        @apply text-base/[1.2] sm:text-lg/[1.2] md:text-xl/[1.2];
+    }
+    .text-cta {
+        @apply text-base md:text-lg font-bold;
+    }
+}
+
+@layer components {
+    .history-panel {
+        @apply relative overflow-hidden aspect-[3/2];
+    }
+    .history-panel-track {
+        @apply flex h-[200%] flex-col transition-transform duration-700 ease-in-out will-change-transform;
+    }
+    .history-panel-face {
+        @apply flex flex-1 items-center justify-center p-[15%] h-full;
+
+        p {
+            @apply mb-3;
+        }
+
+        ul, ol {
+            @apply list-outside;
+            p {
+                @apply inline;
+            }
+        }
+        ul {
+            @apply list-disc;
+        }
+        ol {
+            @apply list-decimal;
+        }
+    }
+    .history-1 {
+        clip-path: url(#history-1);
+        -webkit-clip-path: url(#history-1);
+    }
+    .history-2 {
+        clip-path: url(#history-2);
+        -webkit-clip-path: url(#history-2);
+    }
+    .history-3 {
+        clip-path: url(#history-3);
+        -webkit-clip-path: url(#history-3);
+    }
+    .history-4 {
+        clip-path: url(#history-4);
+        -webkit-clip-path: url(#history-4);
+    }
+    .card {
+        @apply relative cursor-pointer;
+        perspective: 100000px;
+    }
+    .card-inner {
+        @apply relative w-full;
+        display: grid;
+        transform-style: preserve-3d;
+        transition: transform 0.6s ease;
+        will-change: transform;
+    }
+    .card.is-flipped .card-inner {
+        transform: rotateY(180deg);
+    }
+    .card-recto,
+    .card-verso {
+        grid-area: 1 / 1;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .card-verso {
+        transform: rotateY(180deg);
+    }
+    .card-1 .card-recto {
+        @apply bg-blue-light max-md:rounded-tl-4xl;
+    }
+    .card-1 .card-verso {
+        @apply bg-blue-light max-md:rounded-tr-4xl;
+    }
+    .card-2 .card-recto {
+        @apply bg-blue text-white;
+    }
+    .card-2 .card-verso {
+        @apply bg-blue text-white;
+    }
+    .card-3 .card-recto {
+        @apply bg-blue text-white;
+    }
+    .card-3 .card-verso {
+        @apply bg-blue text-white;
+    }
+    .card-4 .card-recto {
+        @apply bg-orange text-white;
+    }
+    .card-4 .card-verso {
+        @apply bg-orange text-white;
+    }
+    .card-5 .card-recto {
+        @apply bg-blue-light;
+    }
+    .card-5 .card-verso {
+        @apply bg-blue-light;
+    }
+    .card-6 .card-recto {
+        @apply bg-blue text-white max-md:rounded-br-4xl;
+    }
+    .card-6 .card-verso {
+        @apply bg-blue text-white max-md:rounded-bl-4xl;
+    }
+    @media (width >= 48rem) {
+        .card {
+            aspect-ratio: 5 / 4;
+        }
+        .card-inner {
+            position: absolute;
+            inset: 0;
+            display: block;
+        }
+        .card-recto,
+        .card-verso {
+            position: absolute;
+            inset: 0;
+            grid-area: unset;
+        }
+        .card-1 .card-recto {
+            clip-path: url(#card-1);
+            -webkit-clip-path: url(#card-1);
+        }
+        .card-1 .card-verso {
+            clip-path: url(#card-1-flipped);
+            -webkit-clip-path: url(#card-1-flipped);
+        }
+        .card-2 .card-recto {
+            clip-path: url(#card-2);
+            -webkit-clip-path: url(#card-2);
+        }
+        .card-2 .card-verso {
+            clip-path: url(#card-2-flipped);
+            -webkit-clip-path: url(#card-2-flipped);
+        }
+        .card-3 .card-recto {
+            clip-path: url(#card-3);
+            -webkit-clip-path: url(#card-3);
+        }
+        .card-3 .card-verso {
+            clip-path: url(#card-3-flipped);
+            -webkit-clip-path: url(#card-3-flipped);
+        }
+        .card-4 .card-recto {
+            clip-path: url(#card-4);
+            -webkit-clip-path: url(#card-4);
+        }
+        .card-4 .card-verso {
+            clip-path: url(#card-4-flipped);
+            -webkit-clip-path: url(#card-4-flipped);
+        }
+        .card-5 .card-recto {
+            clip-path: url(#card-5);
+            -webkit-clip-path: url(#card-5);
+        }
+        .card-5 .card-verso {
+            clip-path: url(#card-5-flipped);
+            -webkit-clip-path: url(#card-5-flipped);
+        }
+        .card-6 .card-recto {
+            clip-path: url(#card-6);
+            -webkit-clip-path: url(#card-6);
+        }
+        .card-6 .card-verso {
+            clip-path: url(#card-6-flipped);
+            -webkit-clip-path: url(#card-6-flipped);
+        }
+    }
+}

@@ -1,0 +1,34 @@
+title: 'SEO Base'
+fields:
+  -
+    handle: meta_title
+    field:
+      type: text
+      display: 'Meta titre'
+      localizable: true
+  -
+    handle: meta_description
+    field:
+      type: textarea
+      display: 'Meta description'
+      localizable: true
+  -
+    handle: meta_keywords
+    field:
+      type: textarea
+      display: 'Meta mot-clés'
+      localizable: true
+      instructions: 'Séparer les mots-clés par des virgules'
+      instructions_position: 'beyond'
+  -
+    handle: meta_image
+    field:
+      container: assets
+      max_files: 1
+      min_files: 0
+      type: assets
+      display: 'Image OG'
+      localizable: false
+      always_save: false
+      validate:
+        - 'mimes:jpg,jpeg,png'

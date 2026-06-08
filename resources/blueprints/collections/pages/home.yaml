@@ -1,0 +1,828 @@
+title: Home
+tabs:
+  main:
+    display: Principal
+    sections:
+      -
+        display: Header
+        fields:
+          -
+            handle: header_title
+            field:
+              type: text
+              display: 'Titre header'
+              validate:
+                - required
+          -
+            handle: header_logo
+            field:
+              container: assets
+              restrict: true
+              max_files: 1
+              min_files: 1
+              type: assets
+              display: 'Logo header'
+              validate:
+                - required
+                - 'mimes:jpg,jpeg,png,webp,svg'
+          -
+            handle: header_image
+            field:
+              container: assets
+              restrict: true
+              max_files: 1
+              min_files: 1
+              type: assets
+              display: 'Image header'
+              validate:
+                - required
+                - 'mimes:jpg,jpeg,png,webp,svg'
+      -
+        display: Bandeaux
+        fields:
+          -
+            handle: banners_title
+            field:
+              type: text
+              display: Titre
+              instructions: "Ne s'affiche pas. Utile pour le SEO et les screen readers."
+              validate:
+                - required
+          -
+            handle: banner_1
+            field:
+              type: group
+              display: 'Bandeau 1'
+              collapsible: true
+              collapsed: true
+              fields:
+                -
+                  handle: text
+                  field:
+                    type: text
+                    display: Texte
+                -
+                  handle: link
+                  field:
+                    type: text
+                    display: Lien
+                    validate:
+                      - nullable
+                      - 'regex:/^(https?:\/\/|mailto:)/'
+                    instructions: 'https://example.com ou mailto:example@example.com'
+                    instructions_position: below
+          -
+            handle: banner_2
+            field:
+              type: group
+              display: 'Bandeau 2'
+              collapsible: true
+              collapsed: true
+              fields:
+                -
+                  handle: text
+                  field:
+                    type: text
+                    display: Texte
+                -
+                  handle: link
+                  field:
+                    type: text
+                    display: Lien
+                    validate:
+                      - nullable
+                      - 'regex:/^(https?:\/\/|mailto:)/'
+                    instructions: 'https://example.com ou mailto:example@example.com'
+                    instructions_position: below
+      -
+        display: Introduction
+        fields:
+          -
+            handle: intro_title
+            field:
+              type: text
+              display: Titre
+              instructions: "Ne s'affiche pas. Utile pour le SEO et les screen readers."
+              validate:
+                - required
+          -
+            handle: intro
+            field:
+              buttons:
+                - bold
+                - italic
+                - anchor
+                - underline
+                - strikethrough
+                - superscript
+                - subscript
+              smart_typography: true
+              link_noopener: true
+              link_noreferrer: true
+              target_blank: true
+              save_html: true
+              remove_empty_nodes: trim
+              type: bard
+              display: Introduction
+              validate:
+                - required
+          -
+            handle: intro_image
+            field:
+              container: assets
+              restrict: true
+              max_files: 1
+              min_files: 1
+              type: assets
+              display: 'Image introduction'
+              validate:
+                - required
+                - 'mimes:jpg,jpeg,png,webp,svg'
+  social_impact:
+    display: "Au service de l'impact social"
+    sections:
+      -
+        fields:
+          -
+            handle: social_impact_title
+            field:
+              type: text
+              display: Titre
+              validate:
+                - required
+      -
+        display: 'Colonne 1'
+        collapsible: true
+        collapsed: true
+        fields:
+          -
+            handle: social_impact_col_1_title
+            field:
+              type: text
+              display: Titre
+              validate:
+                - required
+          -
+            handle: social_impact_col_1_intro
+            field:
+              type: textarea
+              display: Introduction
+              validate:
+                - required
+          -
+            handle: social_impact_col_1_cta_points
+            field:
+              type: replicator
+              display: Points
+              validate:
+                - required
+              sets:
+                points:
+                  display: Points
+                  sets:
+                    point:
+                      display: Point
+                      fields:
+                        -
+                          handle: title
+                          field:
+                            type: text
+                            display: Titre
+                            validate:
+                              - required
+                        -
+                          handle: description
+                          field:
+                            type: textarea
+                            display: Description
+                            validate:
+                              - required
+          -
+            handle: social_impact_col_1_cta_text
+            field:
+              type: text
+              display: 'Texte CTA'
+              validate:
+                - required
+          -
+            handle: social_impact_col_1_cta_link
+            field:
+              type: text
+              display: 'Lien CTA'
+              validate:
+                - required
+                - 'regex:/^(https?:\/\/|mailto:)/'
+              instructions: 'https://example.com ou mailto:example@example.com'
+              instructions_position: below
+      -
+        display: 'Colonne 2'
+        collapsible: true
+        collapsed: true
+        fields:
+          -
+            handle: social_impact_col_2_title
+            field:
+              type: text
+              display: Titre
+              validate:
+                - required
+          -
+            handle: social_impact_col_2_intro
+            field:
+              type: textarea
+              display: Introduction
+              validate:
+                - required
+          -
+            handle: social_impact_col_2_cta_points
+            field:
+              type: replicator
+              display: Points
+              validate:
+                - required
+              sets:
+                nouveau_groupe_densembles:
+                  display: Points
+                  sets:
+                    nouvel_ensemble:
+                      display: Point
+                      fields:
+                        -
+                          handle: title
+                          field:
+                            type: text
+                            display: Titre
+                            validate:
+                              - required
+                        -
+                          handle: description
+                          field:
+                            type: textarea
+                            display: Description
+                            validate:
+                              - required
+          -
+            handle: social_impact_col_2_cta_text
+            field:
+              type: text
+              display: 'Texte CTA'
+              validate:
+                - required
+          -
+            handle: social_impact_col_2_cta_link
+            field:
+              type: text
+              display: 'Lien CTA'
+              validate:
+                - required
+                - 'regex:/^(https?:\/\/|mailto:)/'
+              instructions: 'https://example.com ou mailto:example@example.com'
+              instructions_position: below
+  realisations:
+    display: 'Des réalisations collectives'
+    sections:
+      -
+        fields:
+          -
+            handle: realisations_title
+            field:
+              type: text
+              display: Titre
+              validate:
+                - required
+      -
+        display: 'Carte 1'
+        collapsible: true
+        collapsed: true
+        fields:
+          -
+            handle: realisations_card_1_recto
+            field:
+              type: group
+              display: Recto
+              validate:
+                - required
+              fields:
+                -
+                  handle: title
+                  field:
+                    type: text
+                    display: Titre
+                    validate:
+                      - required
+                -
+                  handle: intro
+                  field:
+                    type: textarea
+                    display: Intro
+          -
+            handle: realisations_card_1_verso
+            field:
+              type: group
+              display: Verso
+              validate:
+                - required
+              fields:
+                -
+                  handle: title
+                  field:
+                    type: text
+                    display: Titre
+                -
+                  handle: description
+                  field:
+                    buttons:
+                      - bold
+                      - italic
+                      - anchor
+                      - underline
+                      - strikethrough
+                      - superscript
+                      - subscript
+                    smart_typography: true
+                    link_noopener: true
+                    link_noreferrer: true
+                    target_blank: true
+                    save_html: true
+                    remove_empty_nodes: trim
+                    type: bard
+                    display: Description
+                -
+                  handle: cta_text
+                  field:
+                    type: text
+                    display: 'Texte CTA'
+                -
+                  handle: cta_link
+                  field:
+                    type: text
+                    display: 'Lien CTA'
+                    validate:
+                      - nullable
+                      - 'regex:/^(https?:\/\/|mailto:)/'
+                    instructions: 'https://example.com ou mailto:example@example.com'
+                    instructions_position: below
+      -
+        display: 'Carte 2'
+        collapsible: true
+        collapsed: true
+        fields:
+          -
+            handle: realisations_card_2_recto
+            field:
+              type: group
+              display: Recto
+              validate:
+                - required
+              fields:
+                -
+                  handle: title
+                  field:
+                    type: text
+                    display: Titre
+                    validate:
+                      - required
+                -
+                  handle: intro
+                  field:
+                    type: textarea
+                    display: Intro
+          -
+            handle: realisations_card_2_verso
+            field:
+              type: group
+              display: Verso
+              validate:
+                - required
+              fields:
+                -
+                  handle: title
+                  field:
+                    type: text
+                    display: Titre
+                -
+                  handle: description
+                  field:
+                    buttons:
+                      - bold
+                      - italic
+                      - anchor
+                      - underline
+                      - strikethrough
+                      - superscript
+                      - subscript
+                    smart_typography: true
+                    link_noopener: true
+                    link_noreferrer: true
+                    target_blank: true
+                    save_html: true
+                    remove_empty_nodes: trim
+                    type: bard
+                    display: Description
+                -
+                  handle: cta_text
+                  field:
+                    type: text
+                    display: 'Texte CTA'
+                -
+                  handle: cta_link
+                  field:
+                    type: text
+                    display: 'Lien CTA'
+                    validate:
+                      - nullable
+                      - 'regex:/^(https?:\/\/|mailto:)/'
+                    instructions: 'https://example.com ou mailto:example@example.com'
+                    instructions_position: below
+      -
+        display: 'Carte 3'
+        collapsible: true
+        collapsed: true
+        fields:
+          -
+            handle: realisations_card_3_recto
+            field:
+              type: group
+              display: Recto
+              validate:
+                - required
+              fields:
+                -
+                  handle: title
+                  field:
+                    type: text
+                    display: Titre
+                    validate:
+                      - required
+                -
+                  handle: intro
+                  field:
+                    type: textarea
+                    display: Intro
+          -
+            handle: realisations_card_3_verso
+            field:
+              type: group
+              display: Verso
+              validate:
+                - required
+              fields:
+                -
+                  handle: title
+                  field:
+                    type: text
+                    display: Titre
+                -
+                  handle: description
+                  field:
+                    buttons:
+                      - bold
+                      - italic
+                      - anchor
+                      - underline
+                      - strikethrough
+                      - superscript
+                      - subscript
+                    smart_typography: true
+                    link_noopener: true
+                    link_noreferrer: true
+                    target_blank: true
+                    save_html: true
+                    remove_empty_nodes: trim
+                    type: bard
+                    display: Description
+                -
+                  handle: cta_text
+                  field:
+                    type: text
+                    display: 'Texte CTA'
+                -
+                  handle: cta_link
+                  field:
+                    type: text
+                    display: 'Lien CTA'
+                    validate:
+                      - nullable
+                      - 'regex:/^(https?:\/\/|mailto:)/'
+                    instructions: 'https://example.com ou mailto:example@example.com'
+                    instructions_position: below
+      -
+        display: 'Carte 4'
+        collapsible: true
+        collapsed: true
+        fields:
+          -
+            handle: realisations_card_4_recto
+            field:
+              type: group
+              display: Recto
+              validate:
+                - required
+              fields:
+                -
+                  handle: title
+                  field:
+                    type: text
+                    display: Titre
+                    validate:
+                      - required
+                -
+                  handle: intro
+                  field:
+                    type: textarea
+                    display: Intro
+          -
+            handle: realisations_card_4_verso
+            field:
+              type: group
+              display: Verso
+              validate:
+                - required
+              fields:
+                -
+                  handle: title
+                  field:
+                    type: text
+                    display: Titre
+                -
+                  handle: description
+                  field:
+                    buttons:
+                      - bold
+                      - italic
+                      - anchor
+                      - underline
+                      - strikethrough
+                      - superscript
+                      - subscript
+                    smart_typography: true
+                    link_noopener: true
+                    link_noreferrer: true
+                    target_blank: true
+                    save_html: true
+                    remove_empty_nodes: trim
+                    type: bard
+                    display: Description
+                -
+                  handle: cta_text
+                  field:
+                    type: text
+                    display: 'Texte CTA'
+                -
+                  handle: cta_link
+                  field:
+                    type: text
+                    display: 'Lien CTA'
+                    validate:
+                      - nullable
+                      - 'regex:/^(https?:\/\/|mailto:)/'
+                    instructions: 'https://example.com ou mailto:example@example.com'
+                    instructions_position: below
+      -
+        display: 'Carte 5'
+        collapsible: true
+        collapsed: true
+        fields:
+          -
+            handle: realisations_card_5_recto
+            field:
+              type: group
+              display: Recto
+              validate:
+                - required
+              fields:
+                -
+                  handle: title
+                  field:
+                    type: text
+                    display: Titre
+                    validate:
+                      - required
+                -
+                  handle: intro
+                  field:
+                    type: textarea
+                    display: Intro
+          -
+            handle: realisations_card_5_verso
+            field:
+              type: group
+              display: Verso
+              validate:
+                - required
+              fields:
+                -
+                  handle: title
+                  field:
+                    type: text
+                    display: Titre
+                -
+                  handle: description
+                  field:
+                    buttons:
+                      - bold
+                      - italic
+                      - anchor
+                      - underline
+                      - strikethrough
+                      - superscript
+                      - subscript
+                    smart_typography: true
+                    link_noopener: true
+                    link_noreferrer: true
+                    target_blank: true
+                    save_html: true
+                    remove_empty_nodes: trim
+                    type: bard
+                    display: Description
+                -
+                  handle: cta_text
+                  field:
+                    type: text
+                    display: 'Texte CTA'
+                -
+                  handle: cta_link
+                  field:
+                    type: text
+                    display: 'Lien CTA'
+                    validate:
+                      - nullable
+                      - 'regex:/^(https?:\/\/|mailto:)/'
+                    instructions: 'https://example.com ou mailto:example@example.com'
+                    instructions_position: below
+      -
+        display: 'Carte 6'
+        collapsible: true
+        collapsed: true
+        fields:
+          -
+            handle: realisations_card_6_recto
+            field:
+              type: group
+              display: Recto
+              validate:
+                - required
+              fields:
+                -
+                  handle: title
+                  field:
+                    type: text
+                    display: Titre
+                    validate:
+                      - required
+                -
+                  handle: intro
+                  field:
+                    type: textarea
+                    display: Intro
+          -
+            handle: realisations_card_6_verso
+            field:
+              type: group
+              display: Verso
+              validate:
+                - required
+              fields:
+                -
+                  handle: title
+                  field:
+                    type: text
+                    display: Titre
+                -
+                  handle: description
+                  field:
+                    buttons:
+                      - bold
+                      - italic
+                      - anchor
+                      - underline
+                      - strikethrough
+                      - superscript
+                      - subscript
+                    smart_typography: true
+                    link_noopener: true
+                    link_noreferrer: true
+                    target_blank: true
+                    save_html: true
+                    remove_empty_nodes: trim
+                    type: bard
+                    display: Description
+                -
+                  handle: cta_text
+                  field:
+                    type: text
+                    display: 'Texte CTA'
+                -
+                  handle: cta_link
+                  field:
+                    type: text
+                    display: 'Lien CTA'
+                    validate:
+                      - nullable
+                      - 'regex:/^(https?:\/\/|mailto:)/'
+                    instructions: 'https://example.com ou mailto:example@example.com'
+                    instructions_position: below
+  history:
+    display: Histoire
+    sections:
+      -
+        fields:
+          -
+            handle: history_title
+            field:
+              type: text
+              display: Titre
+              validate:
+                - required
+          -
+            handle: history_dates
+            field:
+              type: replicator
+              display: Dates
+              validate:
+                - required
+              sets:
+                dates:
+                  display: Dates
+                  sets:
+                    date:
+                      display: Date
+                      fields:
+                        -
+                          handle: year
+                          field:
+                            type: integer
+                            display: Année
+                            min: 1800
+                            max: 3000
+                            validate:
+                              - required
+                        -
+                          handle: title
+                          field:
+                            type: text
+                            display: Titre
+                        -
+                          handle: point_1
+                          field:
+                            buttons:
+                              - bold
+                              - italic
+                              - anchor
+                              - underline
+                              - strikethrough
+                              - superscript
+                              - subscript
+                              - unorderedlist
+                              - orderedlist
+                            smart_typography: true
+                            link_noopener: true
+                            link_noreferrer: true
+                            target_blank: true
+                            save_html: true
+                            remove_empty_nodes: trim
+                            type: bard
+                            display: 'Point 1'
+                        -
+                          handle: point_2
+                          field:
+                            buttons:
+                              - bold
+                              - italic
+                              - anchor
+                              - underline
+                              - strikethrough
+                              - superscript
+                              - subscript
+                              - unorderedlist
+                              - orderedlist
+                            smart_typography: true
+                            link_noopener: true
+                            link_noreferrer: true
+                            target_blank: true
+                            save_html: true
+                            remove_empty_nodes: trim
+                            type: bard
+                            display: 'Point 2'
+  sidebar:
+    display: Sidebar
+    sections:
+      -
+        fields:
+          -
+            handle: title
+            field:
+              type: text
+              required: true
+              validate:
+                - required
+          -
+            handle: slug
+            field:
+              type: slug
+              localizable: true
+              validate: 'max:200'
+      -
+        display: SEO
+        fields:
+          - import: seo_base
