@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="{{ site:short_locale }}" class="scroll-smooth">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>{{ if meta_title && meta_title !=='' }}{{ meta_title }}{{else}}{{if !is_homepage }}{{ title }} | {{ /if }}{{ global_site:site_name }}{{ /if }}</title>
+        <meta property="og:title" content="{{ meta_title ?? title }}" />
+        <meta property="og:site_name" content="{{ global_site:site_name }}" />
+        <meta name="twitter:title" content="{{ meta_title ?? title }}">
+        <meta name="twitter:card" content="summary_large_image">
+
+        {{ if meta_description }}
+        <meta name="description" content="{{ meta_description }}" />
+        <meta property="og:description" content="{{ meta_description }}" />
+        <meta name="twitter:description" content="{{ meta_description }}">
+        {{ /if }}
+
+        <meta name="copyright" content="(c) {{ global_site:site_name }}" />
+
+        {{ if meta_keywords }}
+        <meta name="keywords" content="{{ meta_keywords }}" />
+        {{ /if }}
+
+        <meta property="og:url" content="{{ permalink }}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="{{ site:locale }}" />
+
+        {{ if meta_image }}
+        <meta property="og:image" content="{{ meta_image }}" />
+        <meta name="twitter:image" content="{{ meta_image }}" />
+        {{ /if }}
+
+        {{ if config:app:env !== 'production' }}
+        <meta name="robots" content="noindex">
+        {{ /if }}
+
+        <link rel="canonical" href="{{permalink}}" />
+        {{ locales }}
+        <link rel="alternate" hreflang="{{ locale:full }}" href="{{ permalink }}" />
+        {{ /locales }}
+        {{ locales:fr }}
+        <link rel="alternate" hreflang="x-default" href="{{ permalink }}" />
+        {{ /locales:fr }}
+
+        {{ global_site:favicon_light_png }}
+        {{ asset :url="id" }}
+        <link rel="apple-touch-icon" sizes="57x57" href="{{ glide:id preset="favicon_57" }}">
+        <link rel="apple-touch-icon" sizes="60x60" href="{{ glide:id preset="favicon_60" }}">
+        <link rel="apple-touch-icon" sizes="72x72" href="{{ glide:id preset="favicon_72" }}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{{ glide:id preset="favicon_114" }}">
+        <link rel="apple-touch-icon" sizes="120x120" href="{{ glide:id preset="favicon_120" }}">
+        <link rel="apple-touch-icon" sizes="144x144" href="{{ glide:id preset="favicon_144" }}">
+        <link rel="apple-touch-icon" sizes="152x152" href="{{ glide:id preset="favicon_152" }}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ glide:id preset="favicon_180" }}">
+
+        <!-- Android Chrome Icons -->
+        <link rel="icon" type="image/png" sizes="192x192" href="{{ glide:id preset="favicon_192" }}">
+
+        <!-- Windows Tile Icon -->
+        <meta name="msapplication-TileImage" content="{{ glide:id preset="favicon_144" }}">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <!-- Favicon for various resolutions -->
+        <link rel="icon" href="{{ glide:id preset="favicon_32" }}" sizes="32x32" media="(prefers-color-scheme: light)">
+        <link rel="icon" href="{{ glide:id preset="favicon_16" }}" sizes="16x16" media="(prefers-color-scheme: light)">
+        {{ /asset }}
+        {{ /global_site:favicon_light_png }}
+
+        {{ global_site:favicon_dark_png }}
+        {{ asset :url="id" }}
+        <!-- Favicon for various resolutions -->
+        <link rel="icon" href="{{ glide:id preset="favicon_32" }}" sizes="32x32" media="(prefers-color-scheme: dark)">
+        <link rel="icon" href="{{ glide:id preset="favicon_16" }}" sizes="16x16" media="(prefers-color-scheme: dark)">
+        {{ /asset }}
+        {{ /global_site:favicon_dark_png }}
+
+        <!-- Safari Pinned Tab Icon -->
+        <link rel="mask-icon" href="{{ global_site:favicon_dark_svg }}" color="#101010" media="(prefers-color-scheme: dark)">
+        <link rel="mask-icon" href="{{ global_site:favicon_light_svg }}" color="#ffffff" media="(prefers-color-scheme: light)">
+
+        {{ vite src="resources/js/site.js|resources/css/site.css" }}
+        {{ yield:styles }}
+
+        {{ yield:header_scripts }}
+
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "{{ global_site:legal_name }}",
+            "alternateName": "{{ global_site:site_name }}",
+            "url": "{{ config:app:url }}"{{ if global_site:description }},
+            "description": "{{ global_site:description }}"{{ /if }}{{ global_site:logo }},
+            "logo": {
+                "@type": "ImageObject",
+                "url": "{{ url }}",
+                "width": {{ width }},
+                "height": {{ height }}
+            }{{ /global_site:logo }},
+            "foundingDate": "{{ global_site:founding_date }}",
+            "areaServed": "{{ global_site:area_served }}",
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "{{ address_contact:street_address }}",
+                "postalCode": "{{ address_contact:postal_code }}",
+                "addressLocality": "{{ address_contact:city }}",
+                "addressCountry": "{{ address_contact:country_code }}"
+            }{{ if address_contact:email }},
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "email": "{{ address_contact:email }}",
+                "contactType": "customer service"
+            }{{ /if }}{{ if address_contact:phone }},
+            "telephone": "{{ address_contact:phone }}"{{ /if }}{{ if address_contact:social_networks }},
+            "sameAs": [
+                {{ address_contact:social_networks }}{{ unless first }},
+                {{ /unless }}"{{ link }}"{{ /address_contact:social_networks }}
+            ]{{ /if }}
+        }
+        </script>
+
+        {{ yield:structured_data }}
+    </head>
+    <body class="font-sans bg-white text-black">
+        {{ partial:nav }}
+        {{ template_content }}
+        {{ partial:footer }}
+    </body>
+</html>

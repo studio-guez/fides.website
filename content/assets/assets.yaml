@@ -1,0 +1,21 @@
+title: Assets
+disk: assets
+validate:
+  - 'mimes:svg,png,webp,jpg,jpeg'
+warm_presets:
+  - full
+  - full_2x
+  - full_fallback
+  - full_fallback_2x
+  - half
+  - half_2x
+  - half_fallback
+  - half_fallback_2x
+  - third
+  - third_2x
+  - third_fallback
+  - third_fallback_2x
+  - thumbnail
+  - thumbnail_2x
+  - thumbnail_fallback
+  - thumbnail_fallback_2x

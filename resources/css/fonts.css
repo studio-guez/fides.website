@@ -1,0 +1,67 @@
+@font-face {
+    font-family: "CircularXX";
+    font-weight: 400;
+    src: url('../fonts/CircularXXWeb-Regular.woff2') format('woff2'),
+        url('../fonts/CircularXXWeb-Regular.woff') format('woff'),
+        url('../fonts/CircularXX-Regular.otf') format('opentype'),
+        url('../fonts/CircularXXTT-Regular.ttf') format('truetype');
+    font-display: block;
+}
+@font-face {
+    font-family: "CircularXX";
+    font-weight: 400;
+    font-style: italic;
+    src: url('../fonts/CircularXXWeb-Italic.woff2') format('woff2'),
+        url('../fonts/CircularXXWeb-Italic.woff') format('woff'),
+        url('../fonts/CircularXX-Italic.otf') format('opentype'),
+        url('../fonts/CircularXXTT-Italic.ttf') format('truetype');
+    font-display: block;
+}
+@font-face {
+    font-family: "CircularXX";
+    font-weight: 500;
+    src: url('../fonts/CircularXXWeb-Medium.woff2') format('woff2'),
+        url('../fonts/CircularXXWeb-Medium.woff') format('woff'),
+        url('../fonts/CircularXX-Medium.otf') format('opentype'),
+        url('../fonts/CircularXXTT-Medium.ttf') format('truetype');
+    font-display: block;
+}
+@font-face {
+    font-family: "CircularXX";
+    font-weight: 500;
+    font-style: italic;
+    src: url('../fonts/CircularXXWeb-MediumItalic.woff2') format('woff2'),
+        url('../fonts/CircularXXWeb-MediumItalic.woff') format('woff'),
+        url('../fonts/CircularXX-MediumItalic.otf') format('opentype'),
+        url('../fonts/CircularXXTT-MediumItalic.ttf') format('truetype');
+    font-display: block;
+}
+@font-face {
+    font-family: "CircularXX";
+    font-weight: 700;
+    src: url('../fonts/CircularXXWeb-Bold.woff2') format('woff2'),
+        url('../fonts/CircularXXWeb-Bold.woff') format('woff'),
+        url('../fonts/CircularXX-Bold.otf') format('opentype'),
+        url('../fonts/CircularXXTT-Bold.ttf') format('truetype');
+    font-display: block;
+}
+@font-face {
+    font-family: "CircularXX";
+    font-weight: 700;
+    font-style: italic;
+    src: url('../fonts/CircularXXWeb-BoldItalic.woff2') format('woff2'),
+        url('../fonts/CircularXXWeb-BoldItalic.woff') format('woff'),
+        url('../fonts/CircularXX-BoldItalic.otf') format('opentype'),
+        url('../fonts/CircularXXTT-BoldItalic.ttf') format('truetype');
+    font-display: block;
+}
+@font-face {
+    font-family: "CircularXX";
+    font-weight: 900;
+    src: url('../fonts/CircularXXWeb-Black.woff2') format('woff2'),
+        url('../fonts/CircularXXWeb-Black.woff') format('woff'),
+        url('../fonts/CircularXX-Black.otf') format('opentype'),
+        url('../fonts/CircularXXTT-Black.ttf') format('truetype');
+    font-display: block;
+}
+
