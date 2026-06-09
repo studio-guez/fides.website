@@ -1,8 +1,11 @@
 name: Deploy
 
 on:
-  push:
+  workflow_run:
+    workflows: [CI]
     branches: [main, preprod]
+    types: [completed]
+  push:
     tags: ['v*']
   workflow_dispatch:
     inputs:
@@ -31,6 +34,9 @@ jobs:
   build-image:
     name: Build & push image
     runs-on: ubuntu-24.04
+    if: >
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     timeout-minutes: 30
