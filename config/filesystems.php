@@ -41,7 +41,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/') . '/storage',
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
@@ -64,7 +64,7 @@ return [
         'favicons' => [
             'driver' => 'local',
             'root' => storage_path('app/public/favicons'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/') . '/storage/favicons',
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage/favicons',
             'visibility' => 'public',
             'throw' => false,
         ],
@@ -72,7 +72,7 @@ return [
         'assets' => [
             'driver' => 'local',
             'root' => storage_path('app/public/assets'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/') . '/storage/assets',
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage/assets',
             'visibility' => 'public',
             'throw' => false,
         ],
