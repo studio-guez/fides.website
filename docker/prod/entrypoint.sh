@@ -12,6 +12,17 @@ find .content-image -maxdepth 2 -name '*.yaml' | while read -r src; do
   install -Dm644 -- "$src" "content/${rel}"
 done
 
+# Overlay shared public/ files (e.g. robots.txt) from the host if present.
+# Files in $SHARED_PATH/public/ override the git-tracked defaults baked into
+# the image. If the shared directory is empty or absent the image version is used.
+if [ -d ".shared-public" ]; then
+  find .shared-public -maxdepth 1 -type f | while read -r src; do
+    rel="${src#.shared-public/}"
+    echo "[entrypoint] overlaying public/${rel} from shared"
+    install -Dm644 -- "$src" "public/${rel}"
+  done
+fi
+
 # Ensure SQLite file exists. The host bind-mount may be empty on first boot.
 if [ ! -f database/database.sqlite ]; then
   echo "[entrypoint] creating empty SQLite database file"

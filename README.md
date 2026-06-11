@@ -118,6 +118,9 @@ $DEPLOY_PATH/                            # e.g. /srv/fides (preprod and prod use
     ├── content/                        # real-content sub-dirs bind-mounted (CP-editable)
     │                                   # config YAMLs (content/**/*) live in the image
     ├── users/                          # bind-mounted into app container (CP-editable)
+    ├── public/                         # host overrides for public/ files (optional)
+    │   ├── robots.txt                  # shadows the git-tracked default baked into the image
+    │   └── .htaccess                   # shadows the git-tracked default baked into the image
     ├── current-tag.txt                 # image tag currently running
     ├── last-tag.txt                    # previous tag, for rollback
     └── backups/db-*.sqlite             # nightly DB backups
@@ -158,9 +161,9 @@ sudo -u deploy sqlite3 /srv/fides/shared/database/database.sqlite \
   "PRAGMA journal_mode=WAL;"
 chown -R 1000:1000 /srv/fides/shared/{database,storage,content,users}
 
-# Environment-specific .env (copy + edit from .env.example, generate APP_KEY, etc.)
-sudo -u deploy install -m 640 /dev/null /srv/fides/shared/.env
-sudo -u deploy nano /srv/fides/shared/.env
+# The deploy workflow seeds shared/.env (from .env.example) and shared/public/robots.txt
+# automatically on first deploy. After that, edit shared/.env with real values:
+nano /srv/fides/shared/.env
 
 # Authenticate the server to GHCR for image pulls
 echo "$GHCR_PAT" | sudo -u deploy docker login ghcr.io -u <gh-user> --password-stdin
@@ -190,6 +193,44 @@ loopback port. Example sketches:
 If `8080` collides with something else on a given server, set
 `APP_HTTP_PORT` in that environment's shell or in `/srv/fides/shared/.env`
 before bringing the stack up.
+
+### Manual deploy (when CI/CD SSH step is unavailable)
+
+If the firewall blocks the GitHub Actions runner from reaching the server directly,
+you can trigger the same sequence manually after the image has been pushed to GHCR:
+
+```bash
+ssh deploy@<server>
+cd /srv/fides/current
+
+# Pick the tag from the GitHub Actions "build & push" step output
+export APP_IMAGE_TAG=preprod-sha-<sha7>    # or sha-<sha7> for production
+export SHARED_PATH=/srv/fides/shared
+
+# Pull the new image
+docker compose -f docker/compose/compose.prod.yaml pull
+
+# Run migrations (one-shot container against the shared DB)
+docker run --rm \
+  --env-file "${SHARED_PATH}/.env" \
+  -e RUN_MIGRATIONS=true \
+  -v "${SHARED_PATH}/database/database.sqlite:/var/www/html/database/database.sqlite" \
+  ghcr.io/studio-guez/fides.website:${APP_IMAGE_TAG} \
+  php artisan migrate --force
+
+# Replace the running containers
+APP_IMAGE_TAG=${APP_IMAGE_TAG} \
+SHARED_PATH=${SHARED_PATH} \
+docker compose -f docker/compose/compose.prod.yaml up -d
+```
+
+> **Note:** if the `app-public` volume needs refreshing (CSS/JS changed), drop it first:
+> ```bash
+> docker compose -f docker/compose/compose.prod.yaml down -v
+> docker compose -f docker/compose/compose.prod.yaml up -d
+> ```
+
+---
 
 ### What happens on `git push`
 
@@ -238,6 +279,34 @@ in `$DEPLOY_PATH/shared/.env` on each target server — **never** in workflow
 files or git. Use a different `APP_KEY` and different external credentials
 per environment.
 
+### Seeding shared files
+
+The deploy workflow (`remote-deploy` action) bootstraps the shared directory
+automatically on every deploy. Each step is a no-op when the target already exists:
+
+| Target on host | Source |
+|---|---|
+| `$SHARED_PATH/.env` | `.env.example` — edit with real values before the stack starts |
+| `$SHARED_PATH/public/robots.txt` | `public/robots.txt` (git-tracked default) |
+| `$SHARED_PATH/public/.htaccess` | `public/.htaccess` (git-tracked default) |
+| `$SHARED_PATH/{database,storage,content,users,public}/` | created as empty directories |
+
+**`robots.txt` — git-tracked default, host-overridable**
+
+The git-tracked `public/robots.txt` is baked into every image and used automatically.
+If `$SHARED_PATH/public/robots.txt` exists on the host, the container entrypoint
+overlays it onto `public/robots.txt` on every start, so you can customise it per
+environment (e.g. `Disallow: /` on preprod) without rebuilding.
+
+**`.env` — bootstrapped from `.env.example`**
+
+The compose file mounts `$SHARED_PATH/.env` as `env_file`; the stack refuses to start
+if the file is missing. On first deploy the workflow copies `.env.example` as a
+starting point so the full list of required variables is visible. Never commit real
+secrets to git.
+
+---
+
 ### Running the production image locally
 
 You can smoke-test the built image without any reverse proxy:
@@ -254,9 +323,11 @@ image boots, runs migrations and caches. For a full local end-to-end test of
 the compose stack, run the compose file against a throwaway shared dir:
 
 ```bash
-mkdir -p /tmp/fides-shared/{database,storage,content,users,backups}
+mkdir -p /tmp/fides-shared/{database,storage,content,users,public,backups}
 touch /tmp/fides-shared/database/database.sqlite
 cp .env.example /tmp/fides-shared/.env   # then edit APP_KEY etc.
+cp public/robots.txt /tmp/fides-shared/public/robots.txt
+cp public/.htaccess /tmp/fides-shared/public/.htaccess
 
 APP_IMAGE_TAG=latest \
 SHARED_PATH=/tmp/fides-shared \

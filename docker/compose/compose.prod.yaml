@@ -43,6 +43,10 @@ services:
       # The entrypoint overlays content/**/* config YAMLs from the image on each
       # start, so collection/global/locale additions never require compose changes.
       - ${SHARED_PATH:-/srv/fides/shared}/content:/var/www/html/content
+      # Optional host overrides for public/ files (e.g. robots.txt).
+      # Files placed here shadow the git-tracked defaults baked into the image.
+      # The deploy workflow seeds this directory automatically on first deploy.
+      - ${SHARED_PATH:-/srv/fides/shared}/public:/var/www/html/.shared-public:ro
       # Mode B: uncomment to persist users/ on-host (outside the image).
       # Requires $SHARED_PATH/users to exist with UID 1000 before starting.
       # - ${SHARED_PATH:-/srv/fides/shared}/users:/var/www/html/users
