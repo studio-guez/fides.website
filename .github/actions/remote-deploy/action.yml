@@ -99,6 +99,37 @@ runs:
         tar -xzf "/tmp/compose-\$RELEASE_ID.tgz" -C "\$RELEASE_DIR"
         rm -f "/tmp/compose-\$RELEASE_ID.tgz"
 
+        # ── Shared directory bootstrap (idempotent) ──────────────────────────
+        # Creates missing subdirectories, seeds .env from .env.example, and
+        # copies robots.txt and .htaccess into shared/public/ — each step is a
+        # no-op when the target already exists.
+        mkdir -p \
+          "\$SHARED_DIR/storage/app/public" \
+          "\$SHARED_DIR/storage/framework/cache/data" \
+          "\$SHARED_DIR/storage/framework/sessions" \
+          "\$SHARED_DIR/storage/framework/views" \
+          "\$SHARED_DIR/storage/logs" \
+          "\$SHARED_DIR/content" \
+          "\$SHARED_DIR/users" \
+          "\$SHARED_DIR/public"
+
+        if [ ! -f "\$SHARED_DIR/.env" ]; then
+          echo "[deploy] \$SHARED_DIR/.env not found – copying .env.example (edit before next restart)"
+          cp "\$RELEASE_DIR/.env.example" "\$SHARED_DIR/.env"
+          chmod 640 "\$SHARED_DIR/.env"
+        fi
+
+        if [ ! -f "\$SHARED_DIR/public/robots.txt" ]; then
+          echo "[deploy] \$SHARED_DIR/public/robots.txt not found – copying from release"
+          cp "\$RELEASE_DIR/public/robots.txt" "\$SHARED_DIR/public/robots.txt"
+        fi
+
+        if [ ! -f "\$SHARED_DIR/public/.htaccess" ]; then
+          echo "[deploy] \$SHARED_DIR/public/.htaccess not found – copying from release"
+          cp "\$RELEASE_DIR/public/.htaccess" "\$SHARED_DIR/public/.htaccess"
+        fi
+        # ── End bootstrap ────────────────────────────────────────────────────
+
         # Login to GHCR (idempotent)
         echo "\$GHCR_TOKEN" | docker login ghcr.io -u "\$GHCR_USER" --password-stdin
 
