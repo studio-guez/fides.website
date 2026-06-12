@@ -128,6 +128,15 @@ runs:
           echo "[deploy] \$SHARED_DIR/public/.htaccess not found – copying from release"
           cp "\$RELEASE_DIR/public/.htaccess" "\$SHARED_DIR/public/.htaccess"
         fi
+
+        # Fix ownership — www-data inside containers must be able to write
+        # to storage, database, and content. .env is re-owned to the SSH user
+        # (via numeric UID) so the docker CLI can read it for --env-file.
+        docker run --rm \
+          -v "\$SHARED_DIR:/shared" \
+          --user root \
+          "\$IMAGE_REF" \
+          sh -c "chown -R www-data:www-data /shared/storage /shared/database /shared/content /shared/users /shared/public /shared/auth /shared/backups && chown \$(id -u):\$(id -g) /shared/.env"
         # ── End bootstrap ────────────────────────────────────────────────────
 
         # Login to GHCR (idempotent)
