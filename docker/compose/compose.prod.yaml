@@ -22,6 +22,7 @@
 #   * $DEPLOY_PATH/shared/storage                    (host UID 1000)
 #   * $DEPLOY_PATH/shared/content                    (host UID 1000)
 #   * $DEPLOY_PATH/shared/users                      (host UID 1000, Mode B only — see compose file)
+#   * $DEPLOY_PATH/shared/auth/                      (optional — add auth.conf + .htpasswd for Basic Auth)
 #   * A reverse proxy on the host forwarding the public domain to
 #     127.0.0.1:${APP_HTTP_PORT:-8080}
 name: fides
@@ -62,6 +63,9 @@ services:
       - ../prod/nginx.conf:/etc/nginx/nginx.conf:ro
       # Read-only view of the public/ tree seeded by the `app` service above.
       - app-public:/var/www/html/public:ro
+      # Optional Basic Auth: drop auth.conf + .htpasswd in shared/auth/ to
+      # activate on preprod. Leave the directory empty on production.
+      - ${SHARED_PATH:-/srv/fides/shared}/auth:/etc/nginx/auth:ro
     # The host-level reverse proxy (out of scope for this repo) should forward
     # public HTTPS traffic to this port on the loopback interface.
     ports:

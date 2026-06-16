@@ -121,6 +121,9 @@ $DEPLOY_PATH/                            # e.g. /srv/fides (preprod and prod use
     ├── public/                         # host overrides for public/ files (optional)
     │   ├── robots.txt                  # shadows the git-tracked default baked into the image
     │   └── .htaccess                   # shadows the git-tracked default baked into the image
+    ├── auth/                           # optional Basic Auth (preprod only)
+    │   ├── auth.conf                   # nginx include activating auth_basic
+    │   └── .htpasswd                   # bcrypt/apr1 credentials file
     ├── current-tag.txt                 # image tag currently running
     ├── last-tag.txt                    # previous tag, for rollback
     └── backups/db-*.sqlite             # nightly DB backups
@@ -337,6 +340,39 @@ docker compose -f docker/compose/compose.prod.yaml up
 
 Then browse to <http://127.0.0.1:8080>.
 
+
+### Preprod HTTP Basic Auth
+
+The nginx container mounts `$SHARED_PATH/auth/` into `/etc/nginx/auth/` (read-only).
+nginx's glob `include /etc/nginx/auth/*.conf` silently matches nothing when the
+directory is empty — so production gets no auth by default.
+
+To password-protect the preprod environment, SSH into the preprod server and run once:
+
+```bash
+# 1. Generate the htpasswd file (no extra packages needed — openssl is always available)
+printf '%s:%s\n' "fides" "$(openssl passwd -apr1 'your-password')" \
+  > /srv/fides/shared/auth/.htpasswd
+chmod 640 /srv/fides/shared/auth/.htpasswd
+
+# 2. Create the nginx config that activates Basic Auth
+cat > /srv/fides/shared/auth/auth.conf <<'EOF'
+auth_basic "Preprod";
+auth_basic_user_file /etc/nginx/auth/.htpasswd;
+EOF
+
+# 3. Reload nginx (no restart needed)
+docker compose -f /srv/fides/current/docker/compose/compose.prod.yaml exec nginx nginx -s reload
+```
+
+To **disable** auth: remove the files and reload.
+```bash
+rm /srv/fides/shared/auth/auth.conf /srv/fides/shared/auth/.htpasswd
+docker compose -f /srv/fides/current/docker/compose/compose.prod.yaml exec nginx nginx -s reload
+```
+
+The `.htpasswd` and `auth.conf` files persist across deploys (they live in `shared/auth/`,
+outside any release directory) and require no image rebuild.
 
 ### Rollback
 
