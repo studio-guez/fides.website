@@ -18,10 +18,10 @@
 #
 # Requires on the target server:
 #   * $DEPLOY_PATH/shared/.env                       (chmod 640)
-#   * $DEPLOY_PATH/shared/database/database.sqlite   (host UID 1000)
-#   * $DEPLOY_PATH/shared/storage                    (host UID 1000)
-#   * $DEPLOY_PATH/shared/content                    (host UID 1000)
-#   * $DEPLOY_PATH/shared/users                      (host UID 1000, Mode B only — see compose file)
+#   * $DEPLOY_PATH/shared/database/database.sqlite   (host UID 33 / www-data)
+#   * $DEPLOY_PATH/shared/storage                    (host UID 33 / www-data)
+#   * $DEPLOY_PATH/shared/content                    (host UID 33 / www-data)
+#   * $DEPLOY_PATH/shared/users                      (host UID 33 / www-data, Mode B only — see compose file)
 #   * $DEPLOY_PATH/shared/auth/                      (optional — add auth.conf + .htpasswd for Basic Auth)
 #   * A reverse proxy on the host forwarding the public domain to
 #     127.0.0.1:${APP_HTTP_PORT:-8080}
