@@ -23,6 +23,12 @@ if [ -d ".shared-public" ]; then
   done
 fi
 
+# Ensure the public/storage -> storage/app/public symlink exists so nginx can
+# serve /storage/* assets. The link is excluded from the image build context
+# (.dockerignore) and gitignored, so it never ships in the image; recreate it on
+# every boot against the bind-mounted storage volume. Idempotent.
+ln -sfn /var/www/html/storage/app/public public/storage
+
 # Ensure SQLite file exists. The host bind-mount may be empty on first boot.
 if [ ! -f database/database.sqlite ]; then
   echo "[entrypoint] creating empty SQLite database file"
