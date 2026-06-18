@@ -68,7 +68,7 @@ services:
     # The host-level reverse proxy (out of scope for this repo) should forward
     # public HTTPS traffic to this port on the loopback interface.
     ports:
-      - "127.0.0.1:${APP_HTTP_PORT:-8080}:80"
+      - "0.0.0.0:${APP_HTTP_PORT:-8080}:80"
     networks:
       - internal
 
