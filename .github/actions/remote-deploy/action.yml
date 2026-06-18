@@ -111,7 +111,8 @@ runs:
           "\$SHARED_DIR/storage/logs" \
           "\$SHARED_DIR/content" \
           "\$SHARED_DIR/users" \
-          "\$SHARED_DIR/public"
+          "\$SHARED_DIR/public" \
+          "\$SHARED_DIR/auth"
 
         if [ ! -f "\$SHARED_DIR/.env" ]; then
           echo "[deploy] \$SHARED_DIR/.env not found – copying .env.example (edit before next restart)"
