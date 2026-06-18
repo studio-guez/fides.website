@@ -1,4 +1,30 @@
-# admin:
-#   title: Administrator
-#   permissions:
-#     - super
+admin:
+  title: Admin
+  permissions:
+    - 'access cp'
+    - 'view pages entries'
+    - 'edit pages entries'
+    - 'edit other authors pages entries'
+    - 'view footer nav'
+    - 'edit footer nav'
+    - 'view menu nav'
+    - 'edit menu nav'
+    - 'edit address_contact globals'
+    - 'edit global_site globals'
+    - 'view assets assets'
+    - 'upload assets assets'
+    - 'edit assets assets'
+    - 'rename assets assets'
+    - 'delete assets assets'
+    - 'view favicons assets'
+    - 'upload favicons assets'
+    - 'edit favicons assets'
+    - 'rename favicons assets'
+    - 'delete favicons assets'
+    - 'view users'
+    - 'edit users'
+    - 'create users'
+    - 'delete users'
+    - 'change passwords'
+    - 'assign roles'
+    - 'access cache utility'
