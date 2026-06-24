@@ -63,13 +63,20 @@
 
 @layer components {
     .history-panel {
-        @apply relative overflow-hidden aspect-[3/2];
+        @apply relative overflow-hidden lg:aspect-[3/2] max-lg:aspect-[2/1];
+    }
+    .history-panel:nth-child(1) .history-panel-face {
+        @apply max-lg:rounded-tl-4xl;
+    }
+    .history-panel:nth-child(3) .history-panel-face {
+        @apply max-lg:rounded-br-4xl;
     }
     .history-panel-track {
         @apply flex h-[200%] flex-col transition-transform duration-700 ease-in-out will-change-transform;
     }
     .history-panel-face {
-        @apply flex flex-1 items-center justify-center p-[15%] h-full;
+        @apply flex flex-1 items-center justify-center p-7.5
+         lg:p-[15%] h-full;
 
         p {
             @apply mb-3;
@@ -88,21 +95,23 @@
             @apply list-decimal;
         }
     }
-    .history-1 {
-        clip-path: url(#history-1);
-        -webkit-clip-path: url(#history-1);
-    }
-    .history-2 {
-        clip-path: url(#history-2);
-        -webkit-clip-path: url(#history-2);
-    }
-    .history-3 {
-        clip-path: url(#history-3);
-        -webkit-clip-path: url(#history-3);
-    }
-    .history-4 {
+    @media (width >= 64rem) {
+        .history-1 {
+            clip-path: url(#history-1);
+            -webkit-clip-path: url(#history-1);
+        }
+        .history-2 {
+            clip-path: url(#history-2);
+            -webkit-clip-path: url(#history-2);
+        }
+        .history-3 {
+            clip-path: url(#history-3);
+            -webkit-clip-path: url(#history-3);
+        }
+        .history-4 {
         clip-path: url(#history-4);
         -webkit-clip-path: url(#history-4);
+        }
     }
     .card {
         @apply relative cursor-pointer;
@@ -131,10 +140,10 @@
         transform: rotateY(180deg);
     }
     .card-1 .card-recto {
-        @apply bg-blue-light max-md:rounded-tl-4xl;
+        @apply bg-blue-light max-lg:rounded-tl-4xl;
     }
     .card-1 .card-verso {
-        @apply bg-blue-light max-md:rounded-tr-4xl;
+        @apply bg-blue-light max-lg:rounded-tr-4xl;
     }
     .card-2 .card-recto {
         @apply bg-blue text-white;
@@ -161,12 +170,12 @@
         @apply bg-blue-light;
     }
     .card-6 .card-recto {
-        @apply bg-blue text-white max-md:rounded-br-4xl;
+        @apply bg-blue text-white max-lg:rounded-br-4xl;
     }
     .card-6 .card-verso {
-        @apply bg-blue text-white max-md:rounded-bl-4xl;
+        @apply bg-blue text-white max-lg:rounded-bl-4xl;
     }
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
         .card {
             aspect-ratio: 5 / 4;
         }
