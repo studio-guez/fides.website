@@ -2,7 +2,12 @@
     <div class="bg-gray-light">
         <div class="max-w-8xl mx-auto px-base py-20 lg:flex lg:items-center lg:justify-center gap-16">
             <h2 class="text-body-medium max-lg:mb-4">{{ address_contact:newsletter_text }}</h2>
-            <input type="email" placeholder="Votre email" class="text-body-medium px-8 py-3 bg-white rounded-full lg:min-w-2xl max-w-full max-lg:w-full focus:outline-none focus:ring-2 focus:ring-orange focus:border-transparent">
+            <div class="flex items-center focus-within:ring-2 focus-within:ring-orange focus-within:border-transparent bg-white rounded-full lg:min-w-2xl max-w-full max-lg:w-full pl-8 pr-3 py-3">
+                <input type="email" placeholder="Votre email" class="grow text-body-medium pr-8 focus:outline-none">
+                <button class="bg-orange flex items-center justify-center rounded-full w-8 h-8 shrink-0 cursor-pointer" aria-label="S'inscrire à la newsletter" title="S'inscrire à la newsletter">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.07 19.25" fill="none"  stroke-miterlimit="10" stroke-width="3" class="stroke-white h-5"><polyline points="1.72 18.19 9.95 9.95 1.06 1.06"/></svg>
+                </button>
+            </div>
         </div>
     </div>
     <div class="bg-gray relative">
