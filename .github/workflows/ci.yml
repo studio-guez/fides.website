@@ -186,7 +186,7 @@ jobs:
     name: Deploy to preproduction
     needs: build-image
     if: needs.build-image.outputs.target == 'preprod'
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, fides, docker]
     timeout-minutes: 15
     environment: preprod
     concurrency:
