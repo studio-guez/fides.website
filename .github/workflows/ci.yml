@@ -254,7 +254,7 @@ jobs:
           docker run --rm \
             --env-file "$SHARED_DIR/.env" \
             --entrypoint php \
-            -v "$SHARED_DIR/database/database.sqlite:/var/www/html/database/database.sqlite" \
+            -v "$SHARED_DIR/database:/var/www/html/database" \
             -v "$SHARED_DIR/storage:/var/www/html/storage" \
              "$IMAGE_REF" \
               artisan migrate --force
