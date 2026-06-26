@@ -199,13 +199,30 @@ jobs:
           name: compose-${{ needs.build-image.outputs.release_id }}
           path: /tmp
 
-      - name: Inspect current Fides release
-        run: |
-          cd /data/docker/instances/staging.fondationfides.ch/current
-          pwd
-          ls -la
-          ls -la docker/compose
-          docker compose -f docker/compose/compose.prod.yaml config --services
+      - name: Deploy preprod to CI staging
+        env:
+          DEPLOY_PATH: /data/docker/instances/staging.fondationfides-ci.ch
+          COMPOSE_PROJECT_NAME: fides-ci
+          GHCR_USER: ${{ secrets.GHCR_PULL_USER || github.actor }}
+          GHCR_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+          IMAGE_TAG: ${{ needs.build-image.outputs.image_tag }}
+          RELEASE_ID: ${{ needs.build-image.outputs.release_id }}
+          REPO: ${{ github.repository }}
+          BUNDLE_PATH: /tmp/compose-bundle.tgz
+      run: |
+        set -euo pipefail
+
+          IMAGE_REF="ghcr.io/${REPO}:${IMAGE_TAG}"
+          RELEASE_DIR="$DEPLOY_PATH/releases/$RELEASE_ID"
+          SHARED_DIR="$DEPLOY_PATH/shared"
+          CURRENT="$DEPLOY_PATH/current"
+
+          mkdir -p "$RELEASE_DIR" "$SHARED_DIR/backups" "$SHARED_DIR/database" "$SHARED_DIR/storage"
+          tar -xzf "$BUNDLE_PATH" -C "$RELEASE_DIR"
+
+          echo "Release prepared:"
+          ls -la "$RELEASE_DIR"
+          docker pull "$IMAGE_REF"
 
   # ---------------------------------------------------------------------------
   # Production deploy.
