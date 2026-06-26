@@ -222,6 +222,8 @@ jobs:
 
           echo "Release prepared:"
           ls -la "$RELEASE_DIR"
+
+          echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
           docker pull "$IMAGE_REF"
 
   # ---------------------------------------------------------------------------
