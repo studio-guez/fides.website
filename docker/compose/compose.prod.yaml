@@ -35,7 +35,7 @@ services:
     env_file:
       - ${SHARED_PATH:-/srv/fides/shared}/.env
     volumes:
-      - ${SHARED_PATH:-/srv/fides/shared}/database/database.sqlite:/var/www/html/database/database.sqlite
+      - ${SHARED_PATH:-/srv/fides/shared}/database:/var/www/html/database
       - ${SHARED_PATH:-/srv/fides/shared}/storage:/var/www/html/storage
       # Shared with nginx so static assets (incl. /build, /vendor/statamic) are served.
       # Docker seeds this named volume from THIS container's image on first start,
