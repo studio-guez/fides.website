@@ -209,8 +209,8 @@ jobs:
           RELEASE_ID: ${{ needs.build-image.outputs.release_id }}
           REPO: ${{ github.repository }}
           BUNDLE_PATH: /tmp/compose-bundle.tgz
-      run: |
-        set -euo pipefail
+        run: |
+          set -euo pipefail
 
           IMAGE_REF="ghcr.io/${REPO}:${IMAGE_TAG}"
           RELEASE_DIR="$DEPLOY_PATH/releases/$RELEASE_ID"
