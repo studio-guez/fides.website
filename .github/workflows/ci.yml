@@ -205,7 +205,8 @@ jobs:
           whoami
           hostname
           docker ps
-          ls -la /opt/docker
+          ls -la /data/docker/instances
+          find /data/docker/instances -maxdepth 2 -name "compose.yml" -o -name "docker-compose.yml"
 
   # ---------------------------------------------------------------------------
   # Production deploy.
