@@ -199,20 +199,13 @@ jobs:
           name: compose-${{ needs.build-image.outputs.release_id }}
           path: /tmp
 
-      - name: Remote deploy (preprod)
-        uses: ./.github/actions/remote-deploy
-        with:
-          ssh_host:         ${{ secrets.SSH_HOST }}
-          ssh_user:         ${{ secrets.SSH_USER }}
-          ssh_port:         ${{ secrets.SSH_PORT }}
-          ssh_private_key:  ${{ secrets.SSH_PRIVATE_KEY }}
-          ssh_known_hosts:  ${{ secrets.SSH_KNOWN_HOSTS }}
-          deploy_path:      ${{ secrets.DEPLOY_PATH }}
-          ghcr_user:        ${{ secrets.GHCR_PULL_USER || github.actor }}
-          ghcr_token:       ${{ secrets.GHCR_PULL_TOKEN }}
-          image_tag:        ${{ needs.build-image.outputs.image_tag }}
-          release_id:       ${{ needs.build-image.outputs.release_id }}
-          bundle_path:      /tmp/compose-bundle.tgz
+      - name: Test local deploy access
+        run: |
+          echo "Runner OK"
+          whoami
+          hostname
+          docker ps
+          ls -la /opt/docker
 
   # ---------------------------------------------------------------------------
   # Production deploy.
