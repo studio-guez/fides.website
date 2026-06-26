@@ -226,11 +226,25 @@ jobs:
           echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
           docker pull "$IMAGE_REF"
 
+          mkdir -p \
+            "$SHARED_DIR/storage/app/public" \
+            "$SHARED_DIR/storage/framework/cache/data" \
+            "$SHARED_DIR/storage/framework/sessions" \
+            "$SHARED_DIR/storage/framework/views" \
+            "$SHARED_DIR/storage/logs" \
+            "$SHARED_DIR/database" \
+            "$SHARED_DIR/content" \
+            "$SHARED_DIR/users" \
+            "$SHARED_DIR/public" \
+            "$SHARED_DIR/auth" \
+            "$SHARED_DIR/backups"
+
           docker run --rm \
           -v "$SHARED_DIR:/shared" \
           --user root \
           "$IMAGE_REF" \
           sh -c "chown -R www-data:www-data /shared/storage /shared/database /shared/content /shared/users /shared/public /shared/auth /shared/backups && chown $(id -u):$(id -g) /shared/.env"
+
 
           docker run --rm \
             --env-file "$SHARED_DIR/.env" \
@@ -252,8 +266,8 @@ jobs:
           SHARED_PATH="$SHARED_DIR" \
           APP_HTTP_PORT="${APP_HTTP_PORT:-8085}" \
           docker compose \
-          -f "$CURRENT/docker/compose/compose.prod.yaml" \
-          up -d --remove-orphans
+            -f "$CURRENT/docker/compose/compose.prod.yaml" \
+            up -d --remove-orphans
 
   # ---------------------------------------------------------------------------
   # Production deploy.
