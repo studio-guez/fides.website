@@ -245,6 +245,11 @@ jobs:
           "$IMAGE_REF" \
           sh -c "chown -R www-data:www-data /shared/storage /shared/database /shared/content /shared/users /shared/public /shared/auth /shared/backups && chown $(id -u):$(id -g) /shared/.env"
 
+          mkdir -p "$SHARED_DIR/database"
+          touch "$SHARED_DIR/database/database.sqlite"
+          chown -R 33:33 "$SHARED_DIR/database"
+          chmod 775 "$SHARED_DIR/database"
+          chmod 664 "$SHARED_DIR/database/database.sqlite"
 
           docker run --rm \
             --env-file "$SHARED_DIR/.env" \
