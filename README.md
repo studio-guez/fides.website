@@ -217,7 +217,7 @@ docker compose -f docker/compose/compose.prod.yaml pull
 docker run --rm \
   --env-file "${SHARED_PATH}/.env" \
   -e RUN_MIGRATIONS=true \
-  -v "${SHARED_PATH}/database/database.sqlite:/var/www/html/database/database.sqlite" \
+  -v "${SHARED_PATH}/database:/var/www/html/database" \
   ghcr.io/studio-guez/fides.website:${APP_IMAGE_TAG} \
   php artisan migrate --force
 
@@ -316,7 +316,7 @@ You can smoke-test the built image without any reverse proxy:
 
 ```bash
 docker run --rm \
-  -v $(pwd)/database/database.sqlite:/var/www/html/database/database.sqlite \
+  -v $(pwd)/database:/var/www/html/database \
   ghcr.io/studio-guez/fides.website:latest
 ```
 
