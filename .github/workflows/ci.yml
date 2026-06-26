@@ -226,6 +226,35 @@ jobs:
           echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
           docker pull "$IMAGE_REF"
 
+          docker run --rm \
+          -v "$SHARED_DIR:/shared" \
+          --user root \
+          "$IMAGE_REF" \
+          sh -c "chown -R www-data:www-data /shared/storage /shared/database /shared/content /shared/users /shared/public /shared/auth /shared/backups && chown $(id -u):$(id -g) /shared/.env"
+
+          docker run --rm \
+            --env-file "$SHARED_DIR/.env" \
+            --entrypoint php \
+            -v "$SHARED_DIR/database/database.sqlite:/var/www/html/database/database.sqlite" \
+            -v "$SHARED_DIR/storage:/var/www/html/storage" \
+             "$IMAGE_REF" \
+              artisan migrate --force
+
+          ln -sfn "$RELEASE_DIR" "$DEPLOY_PATH/current.tmp"
+          mv -Tf "$DEPLOY_PATH/current.tmp" "$CURRENT"
+
+          docker volume rm fides-ci_app-public 2>/dev/null || true
+
+          APP_HTTP_PORT=$(grep -E '^APP_HTTP_PORT=' "$SHARED_DIR/.env" | cut -d= -f2 | tr -d '[:space:]"'"'"')
+
+          COMPOSE_PROJECT_NAME="fides-ci" \
+          APP_IMAGE_TAG="$IMAGE_TAG" \
+          SHARED_PATH="$SHARED_DIR" \
+          APP_HTTP_PORT="${APP_HTTP_PORT:-8085}" \
+          docker compose \
+          -f "$CURRENT/docker/compose/compose.prod.yaml" \
+          up -d --remove-orphans
+
   # ---------------------------------------------------------------------------
   # Production deploy.
   # ---------------------------------------------------------------------------
