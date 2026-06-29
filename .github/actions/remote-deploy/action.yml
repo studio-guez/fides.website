@@ -130,6 +130,22 @@ runs:
           cp "\$RELEASE_DIR/public/.htaccess" "\$SHARED_DIR/public/.htaccess"
         fi
 
+        # Guard: the container entrypoint can create database.sqlite as a directory
+        # on a botched first run (no file → Docker bind-mount auto-creates a dir).
+        # Remove the rogue directory and seed a proper empty file before migrations.
+        # Must run before the ownership-fix docker run so that run can chown the
+        # newly-seeded file to www-data in the same pass.
+        [ -d "\$SHARED_DIR/database/database.sqlite" ] && rm -rf "\$SHARED_DIR/database/database.sqlite"
+        if [ ! -f "\$SHARED_DIR/database/database.sqlite" ]; then
+          touch "\$SHARED_DIR/database/database.sqlite"
+          chmod 664 "\$SHARED_DIR/database/database.sqlite"
+        fi
+
+        # Login to GHCR — must precede any docker run/pull that references
+        # \$IMAGE_REF so the daemon can authenticate on a fresh host or when
+        # the tag is not yet in the local cache.
+        echo "\$GHCR_TOKEN" | docker login ghcr.io -u "\$GHCR_USER" --password-stdin
+
         # Fix ownership — www-data inside containers must be able to write
         # to storage, database, and content. .env is re-owned to the SSH user
         # (via numeric UID) so the docker CLI can read it for --env-file.
@@ -139,19 +155,6 @@ runs:
           "\$IMAGE_REF" \
           sh -c "chown -R www-data:www-data /shared/storage /shared/database /shared/content /shared/users /shared/public /shared/auth /shared/backups && chown \$(id -u):\$(id -g) /shared/.env"
         # ── End bootstrap ────────────────────────────────────────────────────
-
-        # Guard: the container entrypoint can create database.sqlite as a directory
-        # on a botched first run (no file → Docker bind-mount auto-creates a dir).
-        # Remove the rogue directory and seed a proper empty file before migrations.
-        [ -d "\$SHARED_DIR/database/database.sqlite" ] && rm -rf "\$SHARED_DIR/database/database.sqlite"
-        if [ ! -f "\$SHARED_DIR/database/database.sqlite" ]; then
-          touch "\$SHARED_DIR/database/database.sqlite"
-          chown 33:33 "\$SHARED_DIR/database/database.sqlite"
-          chmod 664 "\$SHARED_DIR/database/database.sqlite"
-        fi
-
-        # Login to GHCR (idempotent)
-        echo "\$GHCR_TOKEN" | docker login ghcr.io -u "\$GHCR_USER" --password-stdin
 
         # Pre-flight DB backup (online-safe)
         TS=\$(date -u +%Y%m%dT%H%M%SZ)
