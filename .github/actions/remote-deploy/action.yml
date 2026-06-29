@@ -194,7 +194,7 @@ runs:
         # hardcoding a specific deploy root. APP_HTTP_PORT is read from
         # shared/.env so each environment can use a different loopback port
         # (e.g. 8080 on prod, 8081 on preprod) without workflow changes.
-        APP_HTTP_PORT=\$(grep -E '^APP_HTTP_PORT=' "\$SHARED_DIR/.env" | cut -d= -f2 | tr -d '[:space:]"'"'"')
+        APP_HTTP_PORT=\$(grep -E '^APP_HTTP_PORT=' "\$SHARED_DIR/.env" | cut -d= -f2 | tr -d '[:space:]"'"'")
         APP_IMAGE_TAG="\$IMAGE_TAG" \
         SHARED_PATH="\$SHARED_DIR" \
         APP_HTTP_PORT="\${APP_HTTP_PORT:-8080}" \
