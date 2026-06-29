@@ -243,7 +243,7 @@ jobs:
           -v "$SHARED_DIR:/shared" \
           --user root \
           "$IMAGE_REF" \
-          sh -c "chown -R www-data:www-data /shared/storage /shared/database /shared/content /shared/users /shared/public /shared/auth /shared/backups && chown $(id -u):$(id -g) /shared/.env"
+          sh -c "chown -R www-data:www-data /shared/storage /shared/database /shared/content /shared/users /shared/public /shared/auth /shared/backups /shared/.env"
 
           mkdir -p "$SHARED_DIR/database"
           touch "$SHARED_DIR/database/database.sqlite"
@@ -264,7 +264,7 @@ jobs:
 
           docker volume rm fides-ci_app-public 2>/dev/null || true
 
-          APP_HTTP_PORT=$(grep -E '^APP_HTTP_PORT=' "$SHARED_DIR/.env" | cut -d= -f2 | tr -d '[:space:]"'"'"')
+          APP_HTTP_PORT=$(grep -E '^APP_HTTP_PORT=' "$SHARED_DIR/.env" | cut -d= -f2 | tr -d '[:space:]"')
 
           COMPOSE_PROJECT_NAME="fides-ci" \
           APP_IMAGE_TAG="$IMAGE_TAG" \
