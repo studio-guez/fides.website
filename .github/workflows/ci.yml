@@ -207,7 +207,7 @@ jobs:
           image_tag:            ${{ needs.build-image.outputs.image_tag }}
           release_id:           ${{ needs.build-image.outputs.release_id }}
           bundle_path:          /tmp/compose-bundle.tgz
-          compose_project_name: fides-ci
+          compose_project_name: ${{ secrets.COMPOSE_PROJECT_NAME }}
 
   # ---------------------------------------------------------------------------
   # Production deploy.
