@@ -113,18 +113,6 @@ runs:
         # Pull new image
         docker pull "$IMAGE_REF"
 
-        # Seed users from image if none exist yet (first deploy only).
-        # On subsequent deploys the bind-mounted shared/users is used as-is so
-        # CP-created accounts and password changes are never overwritten.
-        if [ -z "$(find "$SHARED_DIR/users" -name '*.yaml' 2>/dev/null | head -1)" ]; then
-          echo "[deploy] seeding shared/users from image"
-          docker run --rm \
-            -v "$SHARED_DIR/users:/shared/users" \
-            --user root \
-            "$IMAGE_REF" \
-            sh -c "find /var/www/html/users -maxdepth 1 -name '*.yaml' -exec cp {} /shared/users/ \; && chown -R www-data:www-data /shared/users"
-        fi
-
         # Record previous tag for one-line rollback
         if [ -f "$SHARED_DIR/current-tag.txt" ]; then
           cp "$SHARED_DIR/current-tag.txt" "$SHARED_DIR/last-tag.txt"
