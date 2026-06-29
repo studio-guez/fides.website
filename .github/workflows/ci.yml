@@ -200,7 +200,7 @@ jobs:
 
       - name: Deploy preprod to CI staging
         env:
-          DEPLOY_PATH: /data/docker/instances/staging.fondationfides-ci.ch
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
           COMPOSE_PROJECT_NAME: fides-ci
           GHCR_USER: ${{ secrets.GHCR_PULL_USER || github.actor }}
           GHCR_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
