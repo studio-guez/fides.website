@@ -104,8 +104,9 @@ runs:
         # Pre-flight DB backup (online-safe)
         TS=$(date -u +%Y%m%dT%H%M%SZ)
         if [ -f "$SHARED_DIR/database/database.sqlite" ]; then
-          sqlite3 "$SHARED_DIR/database/database.sqlite" \
-            ".backup '$SHARED_DIR/backups/db-$TS.sqlite'"
+          python3 "$GITHUB_ACTION_PATH/sqlite_backup.py" \
+            "$SHARED_DIR/database/database.sqlite" \
+            "$SHARED_DIR/backups/db-$TS.sqlite"
           ls -1t "$SHARED_DIR/backups"/db-*.sqlite | tail -n +31 | xargs -r rm --
         fi
 
