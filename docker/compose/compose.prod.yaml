@@ -21,7 +21,7 @@
 #   * $DEPLOY_PATH/shared/database/database.sqlite   (host UID 33 / www-data)
 #   * $DEPLOY_PATH/shared/storage                    (host UID 33 / www-data)
 #   * $DEPLOY_PATH/shared/content                    (host UID 33 / www-data)
-#   * $DEPLOY_PATH/shared/users                      (host UID 33 / www-data, Mode B only — see compose file)
+#   * $DEPLOY_PATH/shared/users                      (host UID 33 / www-data)
 #   * $DEPLOY_PATH/shared/auth/                      (optional — add auth.conf + .htpasswd for Basic Auth)
 #   * A reverse proxy on the host forwarding the public domain to
 #     127.0.0.1:${APP_HTTP_PORT:-8080}
@@ -48,9 +48,9 @@ services:
       # Files placed here shadow the git-tracked defaults baked into the image.
       # The deploy workflow seeds this directory automatically on first deploy.
       - ${SHARED_PATH:-/srv/fides/shared}/public:/var/www/html/.shared-public:ro
-      # Mode B: uncomment to persist users/ on-host (outside the image).
-      # Requires $SHARED_PATH/users to exist with UID 1000 before starting.
-      # - ${SHARED_PATH:-/srv/fides/shared}/users:/var/www/html/users
+      # Persist users/ on the host so accounts survive image rebuilds.
+      # The deploy workflow seeds this directory from the image on first deploy.
+      - ${SHARED_PATH:-/srv/fides/shared}/users:/var/www/html/users
     networks:
       - internal
 
