@@ -14,7 +14,7 @@ Statamic 6 site for fides.website.
 - **TLS / public routing:** handled OUTSIDE this repository by a reverse proxy installed directly on each target server (e.g. system Nginx, Caddy, or Traefik). This project only publishes the app on a loopback port; the host-level reverse proxy terminates TLS and forwards traffic to it.
 - **Frontend:** Vite + Tailwind (built in CI, baked into the production image)
 - **CI:** GitHub Actions, SQLite-backed
-- **Deploy:** GitHub Actions → build image → push to GHCR → SSH → `docker compose up -d`. Two environments: `preprod` branch → preproduction server, `main` branch → production server.
+- **Deploy:** GitHub Actions → build image → push to GHCR → self-hosted runner on target server → `docker compose up -d`. Two environments: `preprod` branch → preproduction server, `main` branch → production server.
 
 ## Local development
 
@@ -99,8 +99,8 @@ Docker, the application stack above, and the host-level reverse proxy.
 Each environment uses its own GitHub Environment (`preprod` / `production`)
 to store secrets. Production secrets are never visible to the preprod job
 and vice versa. Both deploys reuse a single build job (`build-image`) so the
-image is built once per push; only the SSH/deploy step is split per
-environment.
+image is built once per push; only the deploy step is split per environment,
+each running on a self-hosted runner registered on the corresponding server.
 
 `workflow_dispatch` accepts a `target` input (`preprod` or `production`) for
 one-off manual deploys.
@@ -142,7 +142,7 @@ in that environment's secrets if different.
 As root on Ubuntu 24.04:
 
 ```bash
-apt update && apt install -y ca-certificates curl gnupg sqlite3 rsync
+apt update && apt install -y ca-certificates curl gnupg sqlite3 rsync python3
 install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
   | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
@@ -170,7 +170,17 @@ nano /srv/fides/shared/.env
 
 # Authenticate the server to GHCR for image pulls
 echo "$GHCR_PAT" | sudo -u deploy docker login ghcr.io -u <gh-user> --password-stdin
+
+# Register the GitHub Actions self-hosted runner (repeat for each environment)
+# Download the runner package from: Settings → Actions → Runners → New self-hosted runner
+# Follow the instructions shown there, then install as a service:
+sudo ./svc.sh install deploy   # run as the deploy user
+sudo ./svc.sh start
 ```
+
+The runner must be registered with the label matching the workflow:
+- preprod job: `self-hosted`, `fides`, `docker`
+- production job: `self-hosted`, `fides-prod`, `docker`
 
 Generate an `APP_KEY` once and paste it into the environment's `.env`:
 
@@ -197,10 +207,10 @@ If `8080` collides with something else on a given server, set
 `APP_HTTP_PORT` in that environment's shell or in `/srv/fides/shared/.env`
 before bringing the stack up.
 
-### Manual deploy (when CI/CD SSH step is unavailable)
+### Manual deploy (when CI/CD is unavailable)
 
-If the firewall blocks the GitHub Actions runner from reaching the server directly,
-you can trigger the same sequence manually after the image has been pushed to GHCR:
+If the runner is offline or you need to deploy out-of-band, you can trigger
+the same sequence manually after the image has been pushed to GHCR:
 
 ```bash
 ssh deploy@<server>
@@ -244,11 +254,12 @@ docker compose -f docker/compose/compose.prod.yaml up -d
      - `main` branch (or `v*` tag) → tags `sha-<sha7>` and `latest`
    - `deploy-preprod` runs **only** for `preprod` (uses the `preprod` GitHub Environment).
    - `deploy-production` runs **only** for `main` / `v*` (uses the `production` GitHub Environment).
-3. The chosen deploy job uploads the small compose bundle (`docker/compose/`,
-   `docker/prod/`) to its target server via SSH and extracts it into a new
-   release directory.
+3. The chosen deploy job runs directly on a self-hosted runner registered on
+   the target server. It extracts the compose bundle (`docker/compose/`,
+   `docker/prod/`, `.env.example`, `public/robots.txt`, `public/.htaccess`)
+   into a new release directory.
 4. On the target server:
-   - SQLite is backed up with `sqlite3 .backup`.
+   - SQLite is backed up online-safely via Python's built-in `sqlite3` module.
    - The new image is `docker pull`-ed.
    - `php artisan migrate --force` runs in a one-shot container against the
      shared SQLite file.
@@ -267,15 +278,10 @@ environment-appropriate values:
 
 | Secret              | Scope                 | Purpose                                                              |
 | ------------------- | --------------------- | -------------------------------------------------------------------- |
-| `SSH_HOST`          | per environment       | Target server hostname/IP                                            |
-| `SSH_USER`          | per environment       | usually `deploy`                                                     |
-| `SSH_PORT`          | per environment       | usually `22`                                                         |
-| `SSH_PRIVATE_KEY`   | per environment       | ed25519 deploy key authorised on that server only                    |
-| `SSH_KNOWN_HOSTS`   | per environment       | Pinned host key entry — run `ssh-keyscan -H <host>` to obtain it    |
 | `DEPLOY_PATH`       | per environment       | e.g. `/srv/fides`                                                    |
-| `GHCR_PULL_TOKEN`   | per environment       | PAT with `read:packages`, used by the server to pull                 |
+| `GHCR_PULL_TOKEN`   | per environment       | PAT with `read:packages`, used by the runner to pull from GHCR      |
 | `GHCR_PULL_USER`    | per environment (opt) | GHCR username for the pull token (defaults to actor)                 |
-| `COMPOSER_AUTH`     | repository (optional) | JSON for private Composer packages, used at build time               |
+| `COMPOSER_AUTH`     | repository (optional) | JSON for private Composer packages, used at build time
 
 All app secrets (`APP_KEY`, mail credentials, Statamic license, etc.) live
 in `$DEPLOY_PATH/shared/.env` on each target server — **never** in workflow
