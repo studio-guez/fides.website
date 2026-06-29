@@ -284,7 +284,7 @@ per environment.
 
 ### Seeding shared files
 
-The deploy workflow (`remote-deploy` action) bootstraps the shared directory
+The deploy workflow (`deploy` action) bootstraps the shared directory
 automatically on every deploy. Each step is a no-op when the target already exists:
 
 | Target on host | Source |
@@ -435,7 +435,7 @@ off-site choice).
 ├── compose.yaml            # Laravel Sail (local dev only)
 ├── .github/
 │   ├── actions/
-│   │   └── remote-deploy/  # composite action: SSH + deploy a built image
+│   │   └── deploy/  # composite action: SSH + deploy a built image
 │   └── workflows/
 │       ├── ci.yml
 │       └── deploy.yml      # build once, then deploy-preprod OR deploy-production

@@ -199,7 +199,7 @@ jobs:
           path: /tmp
 
       - name: Deploy to preproduction
-        uses: ./.github/actions/remote-deploy
+        uses: ./.github/actions/deploy
         with:
           deploy_path:          ${{ secrets.DEPLOY_PATH }}
           ghcr_user:            ${{ secrets.GHCR_PULL_USER || github.actor }}
@@ -230,7 +230,7 @@ jobs:
           path: /tmp
 
       - name: Deploy to production
-        uses: ./.github/actions/remote-deploy
+        uses: ./.github/actions/deploy
         with:
           deploy_path:          ${{ secrets.DEPLOY_PATH }}
           ghcr_user:            ${{ secrets.GHCR_PULL_USER || github.actor }}
