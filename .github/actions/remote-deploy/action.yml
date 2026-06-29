@@ -140,6 +140,16 @@ runs:
           sh -c "chown -R www-data:www-data /shared/storage /shared/database /shared/content /shared/users /shared/public /shared/auth /shared/backups && chown \$(id -u):\$(id -g) /shared/.env"
         # ── End bootstrap ────────────────────────────────────────────────────
 
+        # Guard: the container entrypoint can create database.sqlite as a directory
+        # on a botched first run (no file → Docker bind-mount auto-creates a dir).
+        # Remove the rogue directory and seed a proper empty file before migrations.
+        [ -d "\$SHARED_DIR/database/database.sqlite" ] && rm -rf "\$SHARED_DIR/database/database.sqlite"
+        if [ ! -f "\$SHARED_DIR/database/database.sqlite" ]; then
+          touch "\$SHARED_DIR/database/database.sqlite"
+          chown 33:33 "\$SHARED_DIR/database/database.sqlite"
+          chmod 664 "\$SHARED_DIR/database/database.sqlite"
+        fi
+
         # Login to GHCR (idempotent)
         echo "\$GHCR_TOKEN" | docker login ghcr.io -u "\$GHCR_USER" --password-stdin
 
