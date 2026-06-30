@@ -121,3 +121,24 @@ tabs:
               display: 'Texte newsletter'
               validate:
                 - required
+          -
+            handle: newsletter_placeholder
+            field:
+              type: text
+              display: 'Placeholder champ email'
+              validate:
+                - required
+          -
+            handle: newsletter_success_text
+            field:
+              type: text
+              display: 'Message de succès'
+              validate:
+                - required
+          -
+            handle: newsletter_error_text
+            field:
+              type: text
+              display: "Message d'erreur"
+              validate:
+                - required

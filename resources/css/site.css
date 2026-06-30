@@ -239,4 +239,8 @@
             -webkit-clip-path: url(#card-6-flipped);
         }
     }
+
+    .inf-message{
+        @apply text-red-500;
+    }
 }
