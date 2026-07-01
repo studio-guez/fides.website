@@ -89,7 +89,16 @@ runs:
           chmod 664 "$SHARED_DIR/database/database.sqlite"
         fi
 
-        # Login to GHCR
+        # Login to GHCR.
+        # Use a throw-away Docker config directory so that any host-level
+        # credential helper (pass, secretservice, …) configured in
+        # ~/.docker/config.json does not intercept the login and ask for an
+        # interactive TTY.  All subsequent docker commands in this shell
+        # inherit DOCKER_CONFIG and therefore use the same authenticated
+        # session; the directory is cleaned up automatically on exit.
+        export DOCKER_CONFIG
+        DOCKER_CONFIG=$(mktemp -d)
+        trap 'rm -rf "$DOCKER_CONFIG"' EXIT
         echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
 
         # Fix ownership — www-data inside containers must be able to write
