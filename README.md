@@ -105,6 +105,14 @@ each running on a self-hosted runner registered on the corresponding server.
 `workflow_dispatch` accepts a `target` input (`preprod` or `production`) for
 one-off manual deploys.
 
+```bash
+# Trigger a manual deploy to preproduction
+gh workflow run ci.yml --ref preprod -f target=preprod
+
+# Trigger a manual deploy to production
+gh workflow run ci.yml --ref main -f target=production
+```
+
 ### Layout on each target server
 
 ```
