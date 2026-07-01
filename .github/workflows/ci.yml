@@ -218,7 +218,7 @@ jobs:
     if: needs.build-image.outputs.target == 'production'
     runs-on: [self-hosted, fides, production, docker]
     timeout-minutes: 15
-    environment: production
+    environment: prod
     concurrency:
       group: deploy-production
       cancel-in-progress: false
