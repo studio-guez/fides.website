@@ -190,11 +190,54 @@ The runner must be registered with the label matching the workflow:
 - preprod job: `self-hosted`, `fides`, `docker`
 - production job: `self-hosted`, `fides-prod`, `docker`
 
-Generate an `APP_KEY` once and paste it into the environment's `.env`:
+Generate an `APP_KEY` once and paste it into the environment's `.env`
+(`latest` for production, `preprod` for preproduction):
 
 ```bash
-docker run --rm ghcr.io/studio-guez/fides.website:latest \
+sudo -u deploy docker run --rm ghcr.io/studio-guez/fides.website:<latest|preprod> \
   php artisan key:generate --show
+```
+
+### First deploy
+
+After triggering the first deploy (push to `preprod` / `main`, or via
+`gh workflow run`), the pipeline seeds `shared/.env` from `.env.example` and
+starts the stack. The app won't be fully operational until you fill in real
+values. SSH in and follow these steps:
+
+```bash
+ssh deploy@<server>
+
+# Set these once for the whole session.
+# APP_IMAGE_TAG: use "latest" on production, "preprod" on preproduction.
+export DEPLOY_PATH=<deploy_path>
+export SHARED_PATH="$DEPLOY_PATH/shared"
+export APP_IMAGE_TAG=latest          # or: preprod
+export COMPOSE_PROJECT_NAME=fides    # or your project name
+alias dc="docker compose -f $DEPLOY_PATH/current/docker/compose/compose.prod.yaml"
+
+# 1. Create the first Statamic admin user.
+dc exec app php artisan statamic:make:user
+
+# 2. Generate APP_KEY — must use --show because the container has no writable .env.
+dc exec app php artisan key:generate --show
+# → copy the "base64:..." output
+
+# 3. Fill in the real environment values.
+#    At minimum: APP_KEY (from above), APP_URL, APP_ENV, and any mail / licence keys.
+nano "$SHARED_PATH/.env"
+
+# 4. Restart the app container so it picks up the new env.
+dc restart app
+
+# 5. Re-warm the caches (the first boot used the placeholder .env).
+dc exec app sh -c "
+    php artisan config:cache &&
+    php artisan route:cache &&
+    php artisan view:cache &&
+    php artisan event:cache &&
+    php artisan statamic:stache:warm
+  "
 ```
 
 ### Host-level reverse proxy (out of scope for this repo)
@@ -222,27 +265,18 @@ the same sequence manually after the image has been pushed to GHCR:
 
 ```bash
 ssh deploy@<server>
-cd /srv/fides/current
 
-# Pick the tag from the GitHub Actions "build & push" step output
-export APP_IMAGE_TAG=preprod-sha-<sha7>    # or sha-<sha7> for production
-export SHARED_PATH=/srv/fides/shared
+export DEPLOY_PATH=<deploy_path>
+export SHARED_PATH="$DEPLOY_PATH/shared"
+export APP_IMAGE_TAG=latest          # or: preprod
+export COMPOSE_PROJECT_NAME=fides
+alias dc="docker compose -f $DEPLOY_PATH/current/docker/compose/compose.prod.yaml"
 
 # Pull the new image
-docker compose -f docker/compose/compose.prod.yaml pull
-
-# Run migrations (one-shot container against the shared DB)
-docker run --rm \
-  --env-file "${SHARED_PATH}/.env" \
-  -e RUN_MIGRATIONS=true \
-  -v "${SHARED_PATH}/database:/var/www/html/database" \
-  ghcr.io/studio-guez/fides.website:${APP_IMAGE_TAG} \
-  php artisan migrate --force
+dc pull
 
 # Replace the running containers
-APP_IMAGE_TAG=${APP_IMAGE_TAG} \
-SHARED_PATH=${SHARED_PATH} \
-docker compose -f docker/compose/compose.prod.yaml up -d
+dc up -d
 ```
 
 > **Note:** if the `app-public` volume needs refreshing (CSS/JS changed), drop it first:
