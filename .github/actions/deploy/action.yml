@@ -70,7 +70,7 @@ runs:
         if [ ! -f "$SHARED_DIR/.env" ]; then
           echo "[deploy] $SHARED_DIR/.env not found – copying .env.example (edit before next restart)"
           cp "$RELEASE_DIR/.env.example" "$SHARED_DIR/.env"
-          chmod 640 "$SHARED_DIR/.env"
+          chmod 660 "$SHARED_DIR/.env"
         fi
 
         if [ ! -f "$SHARED_DIR/public/robots.txt" ]; then
@@ -107,7 +107,7 @@ runs:
           -v "$SHARED_DIR:/shared" \
           --user root \
           "$IMAGE_REF" \
-          sh -c "chown -R www-data:www-data /shared/storage /shared/database /shared/content /shared/users /shared/public /shared/auth /shared/backups /shared/.env"
+          sh -c "chown www-data:www-data /shared && chmod 775 /shared && chown -R www-data:www-data /shared/storage /shared/database /shared/content /shared/users /shared/public /shared/auth /shared/backups /shared/.env && chmod -R g+w /shared/storage /shared/database /shared/content /shared/users && chmod 660 /shared/.env"
         # ── End bootstrap ────────────────────────────────────────────────────
 
         # Pre-flight DB backup (online-safe)
