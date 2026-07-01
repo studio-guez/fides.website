@@ -185,7 +185,7 @@ jobs:
     name: Deploy to preproduction
     needs: build-image
     if: needs.build-image.outputs.target == 'preprod'
-    runs-on: [self-hosted, fides, docker]
+    runs-on: [self-hosted, fides, preprod, docker]
     timeout-minutes: 15
     environment: preprod
     concurrency:
@@ -216,7 +216,7 @@ jobs:
     name: Deploy to production
     needs: build-image
     if: needs.build-image.outputs.target == 'production'
-    runs-on: [self-hosted, fides-prod, docker]
+    runs-on: [self-hosted, fides, production, docker]
     timeout-minutes: 15
     environment: production
     concurrency:
