@@ -107,7 +107,7 @@ runs:
           -v "$SHARED_DIR:/shared" \
           --user root \
           "$IMAGE_REF" \
-          sh -c "chown www-data:www-data /shared && chmod 775 /shared && chown -R www-data:www-data /shared/storage /shared/database /shared/content /shared/users /shared/public /shared/auth /shared/backups /shared/.env && chmod -R g+w /shared/storage /shared/database /shared/content /shared/users && chmod 660 /shared/.env"
+          sh -c "chown www-data:www-data /shared && chmod 775 /shared && chown -R www-data:www-data /shared/storage /shared/database /shared/content /shared/users /shared/public /shared/auth /shared/backups /shared/.env && chmod -R g+w /shared/storage /shared/database /shared/content /shared/users /shared/auth && chmod 660 /shared/.env"
         # ── End bootstrap ────────────────────────────────────────────────────
 
         # Pre-flight DB backup (online-safe)
@@ -162,6 +162,30 @@ runs:
         docker compose \
           -f "$CURRENT/docker/compose/compose.prod.yaml" \
           up -d --remove-orphans
+
+        # Re-apply group-write after the app has had a chance to create
+        # runtime directories (statamic stache, storage sub-dirs, etc.).
+        # Without this, directories created by the container with the default
+        # umask (022) end up as 755 and block rsync / manual syncs run as a
+        # user in the www-data group.
+        docker run --rm \
+          -v "$SHARED_DIR:/shared" \
+          --user root \
+          "$IMAGE_REF" \
+          sh -c "chmod -R g+w /shared/storage /shared/content /shared/users /shared/auth"
+
+        # Post-boot cache warm
+        COMPOSE_PROJECT_NAME="$COMPOSE_PROJECT_NAME" \
+        APP_IMAGE_TAG="$IMAGE_TAG" \
+        SHARED_PATH="$SHARED_DIR" \
+        docker compose -f "$CURRENT/docker/compose/compose.prod.yaml" exec -T app sh -c "
+          php artisan statamic:static:clear && \
+          php artisan config:cache && \
+          php artisan route:cache && \
+          php artisan view:cache && \
+          php artisan event:cache && \
+          php artisan statamic:stache:warm
+        "
 
         # Prune
         docker image prune -f --filter "until=168h"
