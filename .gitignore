@@ -1,8 +1,8 @@
 *.log
 .DS_Store
 .env
-.env.backup
-.env.production
+.env.*
+!.env.example
 .phpactor.json
 .phpunit.result.cache
 /.codex
@@ -31,6 +31,19 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Credentials & key material — never commit
+*.pem
+*.key
+*.p12
+*.pfx
+*.ppk
+.htpasswd
+id_rsa
+id_ed25519
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
 
 deploy.md
 manual-docker-pull.md
