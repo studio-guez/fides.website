@@ -192,13 +192,13 @@ runs:
 
         # Prune old tagged app images. The dangling-only prune above never
         # removes tagged sha-* images, so they accumulate on every deploy and
-        # eventually fill the disk. Keep the 5 most recent images (newest first,
-        # which includes the one just deployed) so rollbacks stay possible.
+        # eventually fill the disk. Keep the 5 most recent sha images so
+        # rollbacks stay possible. The +7 accounts for the single floating tag
+        # (latest/preprod) that shares a row with the newest image.
         docker images "ghcr.io/${REPO}" --format '{{.Tag}}' \
           | { grep -vx '<none>' || true; } \
-          | tail -n +6 \
+          | tail -n +7 \
           | while read -r tag; do
               docker rmi "ghcr.io/${REPO}:$tag" 2>/dev/null || true
             done
-
         ls -1dt "$DEPLOY_PATH/releases"/* | tail -n +6 | xargs -r rm -rf
