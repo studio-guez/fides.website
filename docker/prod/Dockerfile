@@ -31,7 +31,7 @@ RUN npm run build
 ############################
 # Stage 3: Runtime (php-fpm)
 ############################
-FROM php:8.4.27-fpm-bookworm AS runtime
+FROM php:8.4-fpm-bookworm AS runtime
 
 ARG WWWUSER=1000
 ARG WWWGROUP=1000
